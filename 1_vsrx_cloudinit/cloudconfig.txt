@@ -1,0 +1,17 @@
+#cloud-config
+write_files:
+  - content: |
+      configure
+      set system services netconf ssh
+      set interfaces ge-0/0/0 unit 0 family inet address 172.18.2.1/24
+      set interfaces ge-0/0/1 unit 0 family inet address 172.18.3.1/24
+      set security zones security-zone untrust interfaces ge-0/0/0.0 host-inbound-traffic system-services all
+      set security zones security-zone untrust interfaces ge-0/0/0.0 host-inbound-traffic protocols all
+      set security zones security-zone trust interfaces ge-0/0/1.0 host-inbound-traffic system-services all
+      set security zones security-zone trust interfaces ge-0/0/1.0 host-inbound-traffic protocols all
+      set security policies default-policy permit-all
+      commit 
+    path: /var/tmp/vsrx_config
+
+runcmd:
+  - cli < /var/tmp/vsrx_config
