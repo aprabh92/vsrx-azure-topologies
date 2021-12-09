@@ -13,3 +13,13 @@ Below configurations examples are covered in this directory
 - configuring policies 
     - from match conditions and then actions 
     - match conditions for community 
+
+## TO try using 
+1. generate the provider based on the config.toml and xpath_srx.xml file added in the directory
+2. edit the terraform.tfvars file accordingly to match your setup
+3. follow the below terraform steps
+    - terraform init
+    - terraform plan
+    - terraform apply --auto-approve
+
+Note: edit the resources accordingly to suit your env and configurations. This directoy only provides a sample config.
