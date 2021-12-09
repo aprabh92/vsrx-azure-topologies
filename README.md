@@ -31,4 +31,5 @@ contains 3 directories
 
 This is to test cloud init . Brings up a vSRX with custom_data flag enabled to pass configs into vsrx during bootup.
 
-                  
+## JTAF configs
+The JTAF specific configs are placed here to build the junos provider to configure vSRX                  
