@@ -1,0 +1,763 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module name="junos-es-conf-switch-options"
+        xmlns="urn:ietf:params:xml:ns:yang:yin:1"
+        xmlns:jc-switch-options="http://yang.juniper.net/junos-es/conf/switch-options"
+        xmlns:jt="http://yang.juniper.net/junos/common/types"
+        xmlns:jc="http://yang.juniper.net/junos-es/conf/root">
+  <namespace uri="http://yang.juniper.net/junos-es/conf/switch-options"/>
+  <prefix value="jc-switch-options"/>
+  <import module="junos-common-types">
+    <prefix value="jt"/>
+    <revision-date date="2019-01-01"/>
+  </import>
+  <import module="junos-es-conf-root">
+    <prefix value="jc"/>
+    <revision-date date="2019-01-01"/>
+  </import>
+  <organization>
+    <text>Juniper Networks, Inc.</text>
+  </organization>
+  <contact>
+    <text>yang-support@juniper.net</text>
+  </contact>
+  <description>
+    <text>Junos switch-options configuration module</text>
+  </description>
+  <revision date="2019-01-01">
+    <description>
+      <text>Junos: 21.3R1.9</text>
+    </description>
+  </revision>
+  <augment target-node="/jc:configuration">
+    <uses name="switch-options-group"/>
+  </augment>
+  <augment target-node="/jc:configuration/jc:groups">
+    <uses name="switch-options-group"/>
+  </augment>
+  <grouping name="switch-options-group">
+    <container name="switch-options">
+      <description>
+        <text>Options for default routing-instance of type virtual-switch</text>
+      </description>
+      <uses name="juniper-def-rtb-switch-options"/>
+    </container>
+  </grouping>
+  <grouping name="juniper-def-rtb-switch-options">
+    <description>
+      <text>Bridge option configuration</text>
+    </description>
+    <uses name="apply-advanced"/>
+    <container name="mac-table-size">
+      <description>
+        <text>Size of MAC address forwarding table</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <leaf name="limit">
+        <description>
+          <text>Maximum number of MAC addresses</text>
+        </description>
+        <type name="union">
+          <type name="string">
+            <pattern value="&lt;.*&gt;|$.*"/>
+          </type>
+          <type name="uint32"/>
+        </type>
+      </leaf>
+      <leaf name="packet-action">
+        <description>
+          <text>Action when MAC limit is reached</text>
+        </description>
+        <type name="enumeration">
+          <enum name="none">
+            <description>
+              <text>Forward the packet</text>
+            </description>
+          </enum>
+          <enum name="drop">
+            <description>
+              <text>Drop packets and do not learn. Default is forward</text>
+            </description>
+          </enum>
+        </type>
+      </leaf>
+    </container>
+    <container name="mac-ip-table-size">
+      <description>
+        <text>Size of MAC+IP bindings table</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <leaf name="limit">
+        <description>
+          <text>Maximum number of MAC+IP bindings</text>
+        </description>
+        <type name="union">
+          <type name="string">
+            <pattern value="&lt;.*&gt;|$.*"/>
+          </type>
+          <type name="uint32"/>
+        </type>
+      </leaf>
+    </container>
+    <container name="interface-mac-limit">
+      <description>
+        <text>Maximum MAC address learned per interface</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <leaf name="limit">
+        <description>
+          <text>Maximum number of MAC addresses per interface</text>
+        </description>
+        <type name="union">
+          <type name="string">
+            <pattern value="&lt;.*&gt;|$.*"/>
+          </type>
+          <type name="uint32"/>
+        </type>
+      </leaf>
+      <leaf name="packet-action">
+        <description>
+          <text>Action when MAC limit is reached</text>
+        </description>
+        <type name="enumeration">
+          <enum name="none">
+            <description>
+              <text>Forward the packet</text>
+            </description>
+          </enum>
+          <enum name="drop">
+            <description>
+              <text>Drop packets and do not learn. Default is forward</text>
+            </description>
+          </enum>
+          <enum name="log">
+            <description>
+              <text>Do not drop the packet but generate an alarm, an SNMP trap or a system log entry</text>
+            </description>
+          </enum>
+          <enum name="shutdown">
+            <description>
+              <text>Disable the interface and generate an alarm, an SNMP trap or a system log entry</text>
+            </description>
+          </enum>
+          <enum name="drop-and-log">
+            <description>
+              <text>Drop the packet and generate an alarm, an SNMP trap or a system log entry</text>
+            </description>
+          </enum>
+        </type>
+      </leaf>
+    </container>
+    <container name="interface-mac-ip-limit">
+      <description>
+        <text>Maximum MAC+IP bindings learned per interface</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <leaf name="limit">
+        <description>
+          <text>Maximum number of MAC+IP bindings per interface</text>
+        </description>
+        <type name="union">
+          <type name="string">
+            <pattern value="&lt;.*&gt;|$.*"/>
+          </type>
+          <type name="uint32"/>
+        </type>
+      </leaf>
+    </container>
+    <container name="mac-notification">
+      <presence value="enable mac-notification"/>
+      <description>
+        <text>MAC notification options</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <leaf name="notification-interval">
+        <description>
+          <text>Interval for sending MAC notifications</text>
+        </description>
+        <default value="30"/>
+        <units name="seconds"/>
+        <type name="union">
+          <type name="string">
+            <pattern value="&lt;.*&gt;|$.*"/>
+          </type>
+          <type name="uint32">
+            <range value="1 .. 60"/>
+          </type>
+        </type>
+      </leaf>
+    </container>
+    <leaf name="mac-table-aging-time">
+      <description>
+        <text>Delay for discarding MAC address if no updates are received</text>
+      </description>
+      <units name="seconds"/>
+      <type name="union">
+        <type name="string">
+          <pattern value="&lt;.*&gt;|$.*"/>
+        </type>
+        <type name="uint32"/>
+      </type>
+    </leaf>
+    <leaf name="no-mac-learning">
+      <description>
+        <text>Disable dynamic MAC address learning</text>
+      </description>
+      <type name="empty"/>
+    </leaf>
+    <leaf name="no-normalization">
+      <description>
+        <text>Disable vlan id normalization for interfaces</text>
+      </description>
+      <type name="empty"/>
+    </leaf>
+    <leaf name="mac-statistics">
+      <description>
+        <text>Enable MAC address statistics</text>
+      </description>
+      <type name="empty"/>
+    </leaf>
+    <container name="mib">
+      <presence value="enable mib"/>
+      <description>
+        <text>Snmp mib options</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <container name="dot1q-mib">
+        <presence value="enable dot1q-mib"/>
+        <description>
+          <text>Dot1q MIB configuration options</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <leaf name="port-list">
+          <description>
+            <text>Port list for staticegressports and staticuntaggedports MIB</text>
+          </description>
+          <type name="enumeration">
+            <enum name="bit-map">
+              <description>
+                <text>Port list is represented in bit-map format</text>
+              </description>
+            </enum>
+            <enum name="string">
+              <description>
+                <text>Port list is represented in string format</text>
+              </description>
+            </enum>
+          </type>
+        </leaf>
+      </container>
+    </container>
+    <container name="static-rvtep-mac">
+      <description>
+        <text>Configure Static MAC and remote VxLAN tunnel endpoint entries</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <list name="mac">
+        <key value="mac_addr remote-vtep"/>
+        <description>
+          <text>Unicast MAC address</text>
+        </description>
+        <leaf name="mac_addr">
+          <type name="jt:mac-unicast"/>
+        </leaf>
+        <leaf name="remote-vtep">
+          <description>
+            <text>Configure static remote VXLAN tunnel endpoints</text>
+          </description>
+          <type name="jt:ipaddr"/>
+        </leaf>
+      </list>
+    </container>
+    <leaf name="service-id">
+      <description>
+        <text>Service ID required if multi-chassis AE is part of a bridge-domain</text>
+      </description>
+      <type name="union">
+        <type name="string">
+          <pattern value="&lt;.*&gt;|$.*"/>
+        </type>
+        <type name="uint32">
+          <range value="1 .. 65535"/>
+        </type>
+      </type>
+    </leaf>
+    <leaf name="ovsdb-managed">
+      <description>
+        <text>All vxlan bridge domains in routing instance are remote managed</text>
+      </description>
+      <type name="empty"/>
+    </leaf>
+    <container name="vtep-source-interface">
+      <description>
+        <text>Source layer-3 IFL for VXLAN</text>
+      </description>
+      <leaf name="interface-name">
+        <type name="union">
+          <type name="jt:interface-name"/>
+          <type name="string">
+            <pattern value="&lt;.*&gt;|$.*"/>
+          </type>
+        </type>
+      </leaf>
+      <choice name="family">
+        <case name="case_1">
+          <container name="inet">
+            <presence value="enable inet"/>
+            <description>
+              <text>IPv4 source</text>
+            </description>
+            <uses name="apply-advanced"/>
+          </container>
+        </case>
+        <case name="case_2">
+          <container name="inet6">
+            <presence value="enable inet6"/>
+            <description>
+              <text>IPv6 source</text>
+            </description>
+            <uses name="apply-advanced"/>
+          </container>
+        </case>
+      </choice>
+    </container>
+    <container name="vtep-remote-interface">
+      <description>
+        <text>Remote VTEP interface</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <list name="remote-ip">
+        <key value="name"/>
+        <ordered-by value="user"/>
+        <description>
+          <text>Remote VTEP IP address</text>
+        </description>
+        <leaf name="name">
+          <description>
+            <text>IP address</text>
+          </description>
+          <type name="jt:ipv4addr"/>
+        </leaf>
+        <uses name="apply-advanced"/>
+        <leaf name="dynamic-profile">
+          <description>
+            <text>Define associate dynamic profile</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+      </list>
+      <container name="default">
+        <description>
+          <text>To all remote vtep interface</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <leaf name="dynamic-profile">
+          <description>
+            <text>Define associate dynamic profile</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+      </container>
+    </container>
+    <list name="interface">
+      <key value="name"/>
+      <ordered-by value="user"/>
+      <description>
+        <text>Interface for configuring bridge-options</text>
+      </description>
+      <leaf name="name">
+        <description>
+          <text>Interface name</text>
+        </description>
+        <type name="union">
+          <type name="jt:interface-name"/>
+          <type name="string">
+            <pattern value="&lt;.*&gt;|$.*"/>
+          </type>
+        </type>
+      </leaf>
+      <uses name="apply-advanced"/>
+      <container name="interface-mac-limit">
+        <description>
+          <text>Maximum number of MAC addresses learned on the interface</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <leaf name="limit">
+          <description>
+            <text>Maximum number of MAC addresses per interface</text>
+          </description>
+          <type name="union">
+            <type name="string">
+              <pattern value="&lt;.*&gt;|$.*"/>
+            </type>
+            <type name="uint32"/>
+          </type>
+        </leaf>
+        <leaf name="disable">
+          <description>
+            <text>Disable interface for interface-mac-limit</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+        <leaf name="packet-action">
+          <description>
+            <text>Action when MAC limit is reached</text>
+          </description>
+          <type name="enumeration">
+            <enum name="none">
+              <description>
+                <text>Forward the packet</text>
+              </description>
+            </enum>
+            <enum name="drop">
+              <description>
+                <text>Drop packets and do not learn. Default is forward</text>
+              </description>
+            </enum>
+            <enum name="log">
+              <description>
+                <text>Do not drop the packet but generate an alarm, an SNMP trap or a system log entry</text>
+              </description>
+            </enum>
+            <enum name="shutdown">
+              <description>
+                <text>Disable the interface and generate an alarm, an SNMP trap or a system log entry</text>
+              </description>
+            </enum>
+            <enum name="drop-and-log">
+              <description>
+                <text>Drop the packet and generate an alarm, an SNMP trap or a system log entry</text>
+              </description>
+            </enum>
+          </type>
+        </leaf>
+      </container>
+      <container name="interface-mac-ip-limit">
+        <description>
+          <text>Maximum number of MAC+IP bindings learned on the interface</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <leaf name="limit">
+          <description>
+            <text>Maximum number of MAC+IP bindings per interface</text>
+          </description>
+          <type name="union">
+            <type name="string">
+              <pattern value="&lt;.*&gt;|$.*"/>
+            </type>
+            <type name="uint32"/>
+          </type>
+        </leaf>
+      </container>
+      <leaf name="no-mac-learning">
+        <description>
+          <text>Disable dynamic MAC address learning</text>
+        </description>
+        <type name="empty"/>
+      </leaf>
+      <leaf name="mac-pinning">
+        <description>
+          <text>Enable MAC pinning</text>
+        </description>
+        <type name="empty"/>
+      </leaf>
+      <leaf name="no-mac-notification">
+        <description>
+          <text>Disable mac notification on this interface</text>
+        </description>
+        <type name="empty"/>
+      </leaf>
+    </list>
+    <leaf-list name="remote-vtep-list">
+      <description>
+        <text>Configure static remote VXLAN tunnel endpoints</text>
+      </description>
+      <type name="jt:ipaddr"/>
+      <max-elements value="1024"/>
+    </leaf-list>
+    <leaf name="interface-shutdown-action">
+      <description>
+        <text>Interface shutdown mode for Storm-Control/Mac-Limit/Mac-Move-limit scenario</text>
+      </description>
+      <type name="enumeration">
+        <enum name="soft-shutdown">
+          <description>
+            <text>Soft-shutdown restricts data-packets while control-packets are still received</text>
+          </description>
+        </enum>
+        <enum name="hard-shutdown">
+          <description>
+            <text>Hard-shutdown restricts all packets, port will not be operational</text>
+          </description>
+        </enum>
+      </type>
+    </leaf>
+    <leaf-list name="remote-vtep-v6-list">
+      <description>
+        <text>Configurate static IPv6 remote VXLAN tunnel endpoints</text>
+      </description>
+      <type name="jt:ipv6addr"/>
+      <max-elements value="1024"/>
+    </leaf-list>
+    <container name="route-distinguisher">
+      <description>
+        <text>Route distinguisher for this instance</text>
+      </description>
+      <leaf name="rd-type">
+        <description>
+          <text>Number in (16 bit:32 bit) or (32 bit 'L':16 bit) or (IP address:16 bit) format</text>
+        </description>
+        <type name="string"/>
+      </leaf>
+    </container>
+    <leaf-list name="vrf-import">
+      <ordered-by value="user"/>
+      <description>
+        <text>Import policy for VRF instance RIBs</text>
+      </description>
+      <type name="jt:policy-algebra"/>
+    </leaf-list>
+    <leaf-list name="vrf-export">
+      <ordered-by value="user"/>
+      <description>
+        <text>Export policy for VRF instance RIBs</text>
+      </description>
+      <type name="jt:policy-algebra"/>
+    </leaf-list>
+    <container name="vrf-target">
+      <description>
+        <text>VRF target community configuration</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <leaf name="community">
+        <description>
+          <text>Target community to use in import and export</text>
+        </description>
+        <type name="string"/>
+      </leaf>
+      <leaf name="import">
+        <description>
+          <text>Target community to use when filtering on import</text>
+        </description>
+        <type name="string"/>
+      </leaf>
+      <leaf name="export">
+        <description>
+          <text>Target community to use when marking routes on export</text>
+        </description>
+        <type name="string"/>
+      </leaf>
+      <container name="auto">
+        <description>
+          <text>Auto derive import and export target community from BGP AS &amp; L2</text>
+        </description>
+        <presence value="enable auto"/>
+        <uses name="juniper-def-rtb-auto-import-as"/>
+      </container>
+    </container>
+    <container name="redundant-trunk-group">
+      <description>
+        <text>Redundant trunk group</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <list name="group">
+        <key value="name"/>
+        <ordered-by value="user"/>
+        <description>
+          <text>Name of Redundant trunk group</text>
+        </description>
+        <leaf name="name">
+          <description>
+            <text>RTG name</text>
+          </description>
+          <type name="string">
+            <length value="1 .. 63"/>
+          </type>
+        </leaf>
+        <uses name="apply-advanced"/>
+        <leaf name="preempt-cutover-timer">
+          <description>
+            <text>Hold timer for primary interface before preempting secondary interface</text>
+          </description>
+          <units name="seconds"/>
+          <type name="union">
+            <type name="string">
+              <pattern value="&lt;.*&gt;|$.*"/>
+            </type>
+            <type name="uint16">
+              <range value="1 .. 600"/>
+            </type>
+          </type>
+        </leaf>
+        <leaf name="description">
+          <description>
+            <text>Text description of the RTG</text>
+          </description>
+          <type name="string">
+            <length value="1 .. 127"/>
+          </type>
+        </leaf>
+        <list name="interface">
+          <key value="name"/>
+          <description>
+            <text>Interfaces that are part of this redundant trunk group</text>
+          </description>
+          <leaf name="name">
+            <description>
+              <text>Interface name</text>
+            </description>
+            <type name="union">
+              <type name="jt:interface-name"/>
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+            </type>
+          </leaf>
+          <uses name="apply-advanced"/>
+          <leaf name="primary">
+            <description>
+              <text>Set Primary Redundant Trunk Group interface</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+        </list>
+      </list>
+    </container>
+    <container name="voip">
+      <description>
+        <text>Voice-over-IP configuration</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <list name="interface">
+        <key value="name"/>
+        <ordered-by value="user"/>
+        <description>
+          <text>Enable voice over IP on this port</text>
+        </description>
+        <leaf name="name">
+          <type name="string"/>
+        </leaf>
+        <uses name="apply-advanced"/>
+        <leaf name="vlan">
+          <description>
+            <text>VLAN for voice over IP</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+        <leaf name="forwarding-class">
+          <description>
+            <text>Forwarding class</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+      </list>
+    </container>
+    <container name="unknown-unicast-forwarding">
+      <description>
+        <text>Set interface for forwarding of unknown unicast packets</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <list name="vlan">
+        <key value="name"/>
+        <description>
+          <text>VLAN for the unknown unicast packets</text>
+        </description>
+        <leaf name="name">
+          <description>
+            <text>VLAN name or VLAN Tag (1..4095)</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+        <uses name="apply-advanced"/>
+        <leaf name="interface">
+          <description>
+            <text>Interface to send unknown unicast packets for the VLAN</text>
+          </description>
+          <type name="union">
+            <type name="jt:interface-name"/>
+            <type name="string">
+              <pattern value="&lt;.*&gt;|$.*"/>
+            </type>
+          </type>
+        </leaf>
+      </list>
+    </container>
+  </grouping>
+  <grouping name="apply-advanced">
+    <description>
+      <text>Apply advanced configuration logic</text>
+    </description>
+    <leaf-list name="apply-groups">
+      <ordered-by value="user"/>
+      <description>
+        <text>Groups from which to inherit configuration data</text>
+      </description>
+      <type name="string"/>
+    </leaf-list>
+    <leaf-list name="apply-groups-except">
+      <ordered-by value="user"/>
+      <description>
+        <text>Don't inherit configuration data from these groups</text>
+      </description>
+      <type name="string"/>
+    </leaf-list>
+    <list name="apply-macro">
+      <key value="name"/>
+      <ordered-by value="user"/>
+      <description>
+        <text>Macro and parameters for commit script expansion</text>
+      </description>
+      <uses name="apply-macro-type"/>
+    </list>
+  </grouping>
+  <grouping name="apply-macro-type">
+    <description>
+      <text>Macro data for commit-script expansion</text>
+    </description>
+    <leaf name="name">
+      <description>
+        <text>Name of the macro to be expanded</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <list name="data">
+      <key value="name"/>
+      <uses name="macro-data-type"/>
+    </list>
+  </grouping>
+  <grouping name="juniper-def-rtb-auto-import-as">
+    <uses name="apply-advanced"/>
+    <list name="import-as">
+      <key value="name"/>
+      <description>
+        <text>AS to auto import for a list of VNI ids</text>
+      </description>
+      <leaf name="name">
+        <description>
+          <text> Autonomous system number in plain number or 'higher 16bits'.'Lower 16 bits' (asdot notation) format</text>
+        </description>
+        <type name="string"/>
+      </leaf>
+      <uses name="apply-advanced"/>
+      <leaf-list name="vni-list">
+        <description>
+          <text>List of VNI identifiers or all</text>
+        </description>
+        <type name="string"/>
+      </leaf-list>
+    </list>
+  </grouping>
+  <grouping name="macro-data-type">
+    <leaf name="name">
+      <description>
+        <text>Keyword part of the keyword-value pair</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <leaf name="value">
+      <description>
+        <text>Value part of the keyword-value pair</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+  </grouping>
+</module>

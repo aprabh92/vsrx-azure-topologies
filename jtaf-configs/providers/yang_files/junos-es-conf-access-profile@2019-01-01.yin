@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module name="junos-es-conf-access-profile"
+        xmlns="urn:ietf:params:xml:ns:yang:yin:1"
+        xmlns:jc-access-profile="http://yang.juniper.net/junos-es/conf/access-profile"
+        xmlns:jt="http://yang.juniper.net/junos/common/types"
+        xmlns:jc="http://yang.juniper.net/junos-es/conf/root">
+  <namespace uri="http://yang.juniper.net/junos-es/conf/access-profile"/>
+  <prefix value="jc-access-profile"/>
+  <import module="junos-common-types">
+    <prefix value="jt"/>
+    <revision-date date="2019-01-01"/>
+  </import>
+  <import module="junos-es-conf-root">
+    <prefix value="jc"/>
+    <revision-date date="2019-01-01"/>
+  </import>
+  <organization>
+    <text>Juniper Networks, Inc.</text>
+  </organization>
+  <contact>
+    <text>yang-support@juniper.net</text>
+  </contact>
+  <description>
+    <text>Junos access-profile configuration module</text>
+  </description>
+  <revision date="2019-01-01">
+    <description>
+      <text>Junos: 21.3R1.9</text>
+    </description>
+  </revision>
+  <augment target-node="/jc:configuration">
+    <uses name="access-profile-group"/>
+  </augment>
+  <augment target-node="/jc:configuration/jc:groups">
+    <uses name="access-profile-group"/>
+  </augment>
+  <grouping name="access-profile-group">
+    <container name="access-profile">
+      <description>
+        <text>Access profile for this instance</text>
+      </description>
+      <leaf name="access-profile-name">
+        <description>
+          <text>Profile name</text>
+        </description>
+        <type name="string"/>
+      </leaf>
+    </container>
+  </grouping>
+</module>

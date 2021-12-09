@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module name="junos-common-types"
+        xmlns="urn:ietf:params:xml:ns:yang:yin:1"
+        xmlns:jt="http://yang.juniper.net/junos/common/types">
+  <namespace uri="http://yang.juniper.net/junos/common/types"/>
+  <prefix value="jt"/>
+  <organization>
+    <text>Juniper Networks, Inc.</text>
+  </organization>
+  <contact>
+    <text>yang-support@juniper.net</text>
+  </contact>
+  <description>
+    <text>This module contains definitions for Junos YANG types.</text>
+  </description>
+  <revision date="2019-01-01">
+    <description>
+      <text>Junos: 21.3R1.9</text>
+    </description>
+  </revision>
+  <typedef name="daemon">
+    <type name="string"/>
+  </typedef>
+  <typedef name="filename">
+    <type name="string"/>
+  </typedef>
+  <typedef name="client-filename">
+    <type name="string"/>
+  </typedef>
+  <typedef name="hostname">
+    <type name="string"/>
+  </typedef>
+  <typedef name="ipaddr">
+    <type name="string"/>
+  </typedef>
+  <typedef name="sysid">
+    <type name="string"/>
+  </typedef>
+  <typedef name="interface-device">
+    <type name="string"/>
+  </typedef>
+  <typedef name="ddl-bits">
+    <type name="string"/>
+  </typedef>
+  <typedef name="isoaddr">
+    <type name="string"/>
+  </typedef>
+  <typedef name="ipprefix">
+    <type name="string"/>
+  </typedef>
+  <typedef name="ipprefix-mandatory">
+    <type name="string"/>
+  </typedef>
+  <typedef name="interface-unit">
+    <type name="string"/>
+  </typedef>
+  <typedef name="ipaddr-or-interface">
+    <type name="string"/>
+  </typedef>
+  <typedef name="areaid">
+    <type name="string"/>
+  </typedef>
+  <typedef name="interface-name">
+    <type name="string"/>
+  </typedef>
+  <typedef name="community">
+    <type name="string"/>
+  </typedef>
+  <typedef name="interface-wildcard">
+    <type name="string"/>
+  </typedef>
+  <typedef name="unreadable">
+    <type name="string"/>
+  </typedef>
+  <typedef name="ipprefix-optional">
+    <type name="string"/>
+  </typedef>
+  <typedef name="policy-algebra">
+    <type name="string"/>
+  </typedef>
+  <typedef name="regular-expression">
+    <type name="string"/>
+  </typedef>
+  <typedef name="group-glob">
+    <type name="string"/>
+  </typedef>
+  <typedef name="atm-vci">
+    <type name="string"/>
+  </typedef>
+  <typedef name="ipprefix-only">
+    <type name="string"/>
+  </typedef>
+  <typedef name="ipv4addr">
+    <type name="string"/>
+  </typedef>
+  <typedef name="ipv4prefix">
+    <type name="string"/>
+  </typedef>
+  <typedef name="ipv4prefix-mandatory">
+    <type name="string"/>
+  </typedef>
+  <typedef name="ipv4addr-or-interface">
+    <type name="string"/>
+  </typedef>
+  <typedef name="ipv4prefix-optional">
+    <type name="string"/>
+  </typedef>
+  <typedef name="ipv4prefix-only">
+    <type name="string"/>
+  </typedef>
+  <typedef name="ipv6addr">
+    <type name="string"/>
+  </typedef>
+  <typedef name="ipv6prefix">
+    <type name="string"/>
+  </typedef>
+  <typedef name="ipv6prefix-mandatory">
+    <type name="string"/>
+  </typedef>
+  <typedef name="ipv6addr-or-interface">
+    <type name="string"/>
+  </typedef>
+  <typedef name="ipv6prefix-optional">
+    <type name="string"/>
+  </typedef>
+  <typedef name="ipv6prefix-only">
+    <type name="string"/>
+  </typedef>
+  <typedef name="interface-device-wildcard">
+    <type name="string"/>
+  </typedef>
+  <typedef name="time">
+    <type name="string"/>
+  </typedef>
+  <typedef name="mac-addr">
+    <type name="string"/>
+  </typedef>
+  <typedef name="mac-addr-prefix">
+    <type name="string"/>
+  </typedef>
+  <typedef name="mac-unicast">
+    <type name="string"/>
+  </typedef>
+  <typedef name="mac-unicast-prefix">
+    <type name="string"/>
+  </typedef>
+  <typedef name="mac-multicast">
+    <type name="string"/>
+  </typedef>
+  <typedef name="mac-multicast-prefix">
+    <type name="string"/>
+  </typedef>
+  <typedef name="mpls-label">
+    <type name="string"/>
+  </typedef>
+  <typedef name="unsigned-float">
+    <type name="string"/>
+  </typedef>
+  <typedef name="isoprefix">
+    <type name="string"/>
+  </typedef>
+  <typedef name="isosysid">
+    <type name="string"/>
+  </typedef>
+  <typedef name="string-huge">
+    <type name="string"/>
+  </typedef>
+  <typedef name="variable">
+    <type name="string"/>
+  </typedef>
+  <typedef name="glob-variable">
+    <type name="string"/>
+  </typedef>
+  <typedef name="vlan-range">
+    <type name="string"/>
+  </typedef>
+  <typedef name="interface-range-wild">
+    <type name="string"/>
+  </typedef>
+  <typedef name="fc-addr">
+    <type name="string"/>
+  </typedef>
+  <typedef name="wwn">
+    <type name="string"/>
+  </typedef>
+  <typedef name="logfilename">
+    <type name="string"/>
+  </typedef>
+  <typedef name="range">
+    <type name="string"/>
+  </typedef>
+  <typedef name="esi">
+    <type name="string"/>
+  </typedef>
+  <typedef name="time-of-day">
+    <type name="string"/>
+  </typedef>
+  <typedef name="date">
+    <type name="string"/>
+  </typedef>
+  <typedef name="ipaddr-scoped">
+    <type name="string"/>
+  </typedef>
+</module>

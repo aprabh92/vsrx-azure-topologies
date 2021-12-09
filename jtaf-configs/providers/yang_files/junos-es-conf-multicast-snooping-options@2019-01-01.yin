@@ -1,0 +1,508 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module name="junos-es-conf-multicast-snooping-options"
+        xmlns="urn:ietf:params:xml:ns:yang:yin:1"
+        xmlns:jc-multicast-snooping-options="http://yang.juniper.net/junos-es/conf/multicast-snooping-options"
+        xmlns:jt="http://yang.juniper.net/junos/common/types"
+        xmlns:jc="http://yang.juniper.net/junos-es/conf/root">
+  <namespace uri="http://yang.juniper.net/junos-es/conf/multicast-snooping-options"/>
+  <prefix value="jc-multicast-snooping-options"/>
+  <import module="junos-common-types">
+    <prefix value="jt"/>
+    <revision-date date="2019-01-01"/>
+  </import>
+  <import module="junos-es-conf-root">
+    <prefix value="jc"/>
+    <revision-date date="2019-01-01"/>
+  </import>
+  <organization>
+    <text>Juniper Networks, Inc.</text>
+  </organization>
+  <contact>
+    <text>yang-support@juniper.net</text>
+  </contact>
+  <description>
+    <text>Junos multicast-snooping-options configuration module</text>
+  </description>
+  <revision date="2019-01-01">
+    <description>
+      <text>Junos: 21.3R1.9</text>
+    </description>
+  </revision>
+  <augment target-node="/jc:configuration">
+    <uses name="multicast-snooping-options-group"/>
+  </augment>
+  <augment target-node="/jc:configuration/jc:groups">
+    <uses name="multicast-snooping-options-group"/>
+  </augment>
+  <grouping name="multicast-snooping-options-group">
+    <container name="multicast-snooping-options">
+      <description>
+        <text>Multicast snooping option configuration</text>
+      </description>
+      <uses name="juniper-multicast-snooping-options"/>
+    </container>
+  </grouping>
+  <grouping name="juniper-multicast-snooping-options">
+    <uses name="apply-advanced"/>
+    <container name="options">
+      <description>
+        <text>Miscellaneous options</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <container name="syslog">
+        <description>
+          <text>Set system logging level</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <container name="level">
+          <description>
+            <text>Logging level</text>
+          </description>
+          <leaf name="emergency">
+            <description>
+              <text>Emergency level</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="alert">
+            <description>
+              <text>Alert level</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="critical">
+            <description>
+              <text>Critical level</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="error">
+            <description>
+              <text>Error level</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="warning">
+            <description>
+              <text>Warning level</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="notice">
+            <description>
+              <text>Notice level</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="info">
+            <description>
+              <text>Informational level</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="debug">
+            <description>
+              <text>Debugging level</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+        </container>
+        <leaf name="upto">
+          <description>
+            <text>Log up to a particular logging level</text>
+          </description>
+          <type name="enumeration">
+            <enum name="emergency">
+              <description>
+                <text>Emergency level</text>
+              </description>
+            </enum>
+            <enum name="alert">
+              <description>
+                <text>Alert level</text>
+              </description>
+            </enum>
+            <enum name="critical">
+              <description>
+                <text>Critical level</text>
+              </description>
+            </enum>
+            <enum name="error">
+              <description>
+                <text>Error level</text>
+              </description>
+            </enum>
+            <enum name="warning">
+              <description>
+                <text>Warning level</text>
+              </description>
+            </enum>
+            <enum name="notice">
+              <description>
+                <text>Notice level</text>
+              </description>
+            </enum>
+            <enum name="info">
+              <description>
+                <text>Informational level</text>
+              </description>
+            </enum>
+            <enum name="debug">
+              <description>
+                <text>Debugging level</text>
+              </description>
+            </enum>
+          </type>
+        </leaf>
+        <leaf name="mark">
+          <description>
+            <text>Periodically mark the trace file</text>
+          </description>
+          <units name="seconds"/>
+          <type name="union">
+            <type name="int32"/>
+            <type name="string">
+              <pattern value="&lt;.*&gt;|$.*"/>
+            </type>
+          </type>
+        </leaf>
+      </container>
+    </container>
+    <container name="traceoptions">
+      <description>
+        <text>Multicast snooping trace options</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <container name="file">
+        <description>
+          <text>Trace file options</text>
+        </description>
+        <leaf name="filename">
+          <description>
+            <text>Name of file in which to write trace information</text>
+          </description>
+          <type name="string">
+            <length value="1 .. 1024"/>
+          </type>
+        </leaf>
+        <leaf name="replace">
+          <description>
+            <text>Replace trace file rather than appending to it</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+        <leaf name="size">
+          <description>
+            <text>Maximum trace file size</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+        <leaf name="files">
+          <description>
+            <text>Maximum number of trace files</text>
+          </description>
+          <default value="10"/>
+          <type name="union">
+            <type name="string">
+              <pattern value="&lt;.*&gt;|$.*"/>
+            </type>
+            <type name="uint32">
+              <range value="2 .. 1000"/>
+            </type>
+          </type>
+        </leaf>
+        <leaf name="no-stamp">
+          <description>
+            <text>Do not timestamp trace file</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+        <choice name="world-readable-choice">
+          <leaf name="world-readable">
+            <description>
+              <text>Allow any user to read the log file</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="no-world-readable">
+            <description>
+              <text>Don't allow any user to read the log file</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+        </choice>
+      </container>
+      <list name="flag">
+        <key value="name"/>
+        <ordered-by value="user"/>
+        <description>
+          <text>Tracing parameters</text>
+        </description>
+        <leaf name="name">
+          <type name="enumeration">
+            <enum name="parse">
+              <description>
+                <text>Trace configuration parsing</text>
+              </description>
+            </enum>
+            <enum name="config-internal">
+              <description>
+                <text>Trace configuration internals</text>
+              </description>
+            </enum>
+            <enum name="route">
+              <description>
+                <text>Trace routing information</text>
+              </description>
+            </enum>
+            <enum name="normal">
+              <description>
+                <text>Trace normal events</text>
+              </description>
+            </enum>
+            <enum name="general">
+              <description>
+                <text>Trace general events</text>
+              </description>
+            </enum>
+            <enum name="state">
+              <description>
+                <text>Trace state transitions</text>
+              </description>
+            </enum>
+            <enum name="policy">
+              <description>
+                <text>Trace policy processing</text>
+              </description>
+            </enum>
+            <enum name="task">
+              <description>
+                <text>Trace routing protocol task processing</text>
+              </description>
+            </enum>
+            <enum name="timer">
+              <description>
+                <text>Trace routing protocol timer processing</text>
+              </description>
+            </enum>
+            <enum name="all">
+              <description>
+                <text>Trace everything</text>
+              </description>
+            </enum>
+          </type>
+        </leaf>
+        <leaf name="disable">
+          <description>
+            <text>Disable this trace flag</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </list>
+    </container>
+    <container name="forwarding-cache">
+      <description>
+        <text>Multicast forwarding cache</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <container name="threshold">
+        <description>
+          <text>Threshold</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <leaf name="suppress">
+          <description>
+            <text>Suppress threshold</text>
+          </description>
+          <type name="union">
+            <type name="string">
+              <pattern value="&lt;.*&gt;|$.*"/>
+            </type>
+            <type name="uint32">
+              <range value="1 .. 200000"/>
+            </type>
+          </type>
+        </leaf>
+        <leaf name="reuse">
+          <description>
+            <text>Reuse threshold</text>
+          </description>
+          <type name="union">
+            <type name="string">
+              <pattern value="&lt;.*&gt;|$.*"/>
+            </type>
+            <type name="uint32">
+              <range value="1 .. 200000"/>
+            </type>
+          </type>
+        </leaf>
+      </container>
+    </container>
+    <leaf-list name="flood-groups">
+      <ordered-by value="user"/>
+      <description>
+        <text>Groups for which the traffic will be flooded</text>
+      </description>
+      <type name="jt:ipaddr"/>
+    </leaf-list>
+    <container name="host-outbound-traffic">
+      <description>
+        <text>Host generated protocol packets</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <leaf name="forwarding-class">
+        <description>
+          <text>Forwarding class name</text>
+        </description>
+        <type name="string"/>
+      </leaf>
+      <leaf name="dot1p">
+        <description>
+          <text>Dot1p bits</text>
+        </description>
+        <type name="union">
+          <type name="string">
+            <pattern value="&lt;.*&gt;|$.*"/>
+          </type>
+          <type name="uint32">
+            <range value="0 .. 7"/>
+          </type>
+        </type>
+      </leaf>
+    </container>
+    <container name="graceful-restart">
+      <description>
+        <text>Configure graceful restart attributes</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <choice name="enable-disable">
+        <case name="case_1">
+          <leaf name="disable">
+            <description>
+              <text>Disable graceful restart</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+        </case>
+      </choice>
+      <leaf name="restart-duration">
+        <description>
+          <text>Maximum time for graceful restart to finish</text>
+        </description>
+        <default value="180"/>
+        <units name="seconds"/>
+        <type name="union">
+          <type name="string">
+            <pattern value="&lt;.*&gt;|$.*"/>
+          </type>
+          <type name="uint32">
+            <range value="0 .. 300"/>
+          </type>
+        </type>
+      </leaf>
+    </container>
+    <leaf name="ignore-stp-topology-change">
+      <description>
+        <text>Don't process stp topology change</text>
+      </description>
+      <type name="empty"/>
+    </leaf>
+    <container name="multichassis-lag-replicate-state">
+      <presence value="enable multichassis-lag-replicate-state"/>
+      <description>
+        <text>Enable multichassis lag replication</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <leaf name="suppress-report">
+        <description>
+          <text>Enable mclag report suppression</text>
+        </description>
+        <type name="empty"/>
+      </leaf>
+    </container>
+    <container name="oism">
+      <description>
+        <text>Optimized inter subnet multicast options</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <leaf name="install-star-g-routes">
+        <description>
+          <text>Install (*,G) multicast routes in data plane</text>
+        </description>
+        <type name="empty"/>
+      </leaf>
+    </container>
+    <leaf name="nexthop-hold-time">
+      <description>
+        <text>Nexthop hold time in milliseconds</text>
+      </description>
+      <units name="milliseconds"/>
+      <type name="union">
+        <type name="string">
+          <pattern value="&lt;.*&gt;|$.*"/>
+        </type>
+        <type name="uint32">
+          <range value="1 .. 1000"/>
+        </type>
+      </type>
+    </leaf>
+  </grouping>
+  <grouping name="apply-advanced">
+    <description>
+      <text>Apply advanced configuration logic</text>
+    </description>
+    <leaf-list name="apply-groups">
+      <ordered-by value="user"/>
+      <description>
+        <text>Groups from which to inherit configuration data</text>
+      </description>
+      <type name="string"/>
+    </leaf-list>
+    <leaf-list name="apply-groups-except">
+      <ordered-by value="user"/>
+      <description>
+        <text>Don't inherit configuration data from these groups</text>
+      </description>
+      <type name="string"/>
+    </leaf-list>
+    <list name="apply-macro">
+      <key value="name"/>
+      <ordered-by value="user"/>
+      <description>
+        <text>Macro and parameters for commit script expansion</text>
+      </description>
+      <uses name="apply-macro-type"/>
+    </list>
+  </grouping>
+  <grouping name="apply-macro-type">
+    <description>
+      <text>Macro data for commit-script expansion</text>
+    </description>
+    <leaf name="name">
+      <description>
+        <text>Name of the macro to be expanded</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <list name="data">
+      <key value="name"/>
+      <uses name="macro-data-type"/>
+    </list>
+  </grouping>
+  <grouping name="macro-data-type">
+    <leaf name="name">
+      <description>
+        <text>Keyword part of the keyword-value pair</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <leaf name="value">
+      <description>
+        <text>Value part of the keyword-value pair</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+  </grouping>
+</module>

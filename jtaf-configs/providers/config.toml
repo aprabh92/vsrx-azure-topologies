@@ -1,0 +1,5 @@
+yangDir = "/Users/aprabh/vsrx-topologies-tf/jtaf-configs/providers/yang_files"
+providerDir = "/Users/aprabh/vsrx-topologies-tf/jtaf-configs/providers/provider"
+xpathPath = "/Users/aprabh/vsrx-topologies-tf/jtaf-configs/providers/xpath_srx.xml"
+fileType = "both"
+providerName = "vsrx"

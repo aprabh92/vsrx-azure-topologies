@@ -1,0 +1,3513 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module name="junos-es-conf-snmp"
+        xmlns="urn:ietf:params:xml:ns:yang:yin:1"
+        xmlns:jc-snmp="http://yang.juniper.net/junos-es/conf/snmp"
+        xmlns:jt="http://yang.juniper.net/junos/common/types"
+        xmlns:jc="http://yang.juniper.net/junos-es/conf/root">
+  <namespace uri="http://yang.juniper.net/junos-es/conf/snmp"/>
+  <prefix value="jc-snmp"/>
+  <import module="junos-common-types">
+    <prefix value="jt"/>
+    <revision-date date="2019-01-01"/>
+  </import>
+  <import module="junos-es-conf-root">
+    <prefix value="jc"/>
+    <revision-date date="2019-01-01"/>
+  </import>
+  <organization>
+    <text>Juniper Networks, Inc.</text>
+  </organization>
+  <contact>
+    <text>yang-support@juniper.net</text>
+  </contact>
+  <description>
+    <text>Junos snmp configuration module</text>
+  </description>
+  <revision date="2019-01-01">
+    <description>
+      <text>Junos: 21.3R1.9</text>
+    </description>
+  </revision>
+  <augment target-node="/jc:configuration">
+    <uses name="snmp-group"/>
+  </augment>
+  <augment target-node="/jc:configuration/jc:groups">
+    <uses name="snmp-group"/>
+  </augment>
+  <grouping name="snmp-group">
+    <container name="snmp">
+      <description>
+        <text>Simple Network Management Protocol configuration</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <leaf name="system-name">
+        <description>
+          <text>System name override</text>
+        </description>
+        <type name="string"/>
+      </leaf>
+      <leaf name="description">
+        <description>
+          <text>System description</text>
+        </description>
+        <type name="string"/>
+      </leaf>
+      <leaf name="location">
+        <description>
+          <text>Physical location of system</text>
+        </description>
+        <type name="string"/>
+      </leaf>
+      <leaf name="contact">
+        <description>
+          <text>Contact information for administrator</text>
+        </description>
+        <type name="string"/>
+      </leaf>
+      <leaf-list name="interface">
+        <ordered-by value="user"/>
+        <description>
+          <text>Restrict SNMP requests to interfaces</text>
+        </description>
+        <type name="union">
+          <type name="jt:interface-name"/>
+          <type name="string">
+            <pattern value="&lt;.*&gt;|$.*"/>
+          </type>
+        </type>
+      </leaf-list>
+      <container name="filter-interfaces">
+        <presence value="enable filter-interfaces"/>
+        <description>
+          <text>List of interfaces that needs to be filtered</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <list name="interfaces">
+          <key value="name"/>
+          <ordered-by value="user"/>
+          <description>
+            <text>Filter specified interfaces</text>
+          </description>
+          <leaf name="name">
+            <type name="string"/>
+          </leaf>
+          <uses name="apply-advanced"/>
+        </list>
+        <leaf name="all-internal-interfaces">
+          <description>
+            <text>Filter all internal interfaces</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </container>
+      <leaf name="if-count-with-filter-interfaces">
+        <description>
+          <text>Filter interfaces config for ifNumber and ipv6Interfaces</text>
+        </description>
+        <type name="empty"/>
+      </leaf>
+      <leaf name="filter-duplicates">
+        <description>
+          <text>Filter requests with duplicate source address/port and request ID</text>
+        </description>
+        <type name="empty"/>
+      </leaf>
+      <container name="nonvolatile">
+        <description>
+          <text>Configure the handling of nonvolatile SNMP Set requests</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <leaf name="commit-delay">
+          <description>
+            <text>Delay between affirmative SNMP Set reply and start of commit</text>
+          </description>
+          <default value="5"/>
+          <units name="seconds"/>
+          <type name="union">
+            <type name="uint32"/>
+            <type name="string">
+              <pattern value="&lt;.*&gt;|$.*"/>
+            </type>
+          </type>
+        </leaf>
+      </container>
+      <container name="v3">
+        <description>
+          <text>SNMPv3 configuration information</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <container name="usm">
+          <description>
+            <text>User-based security model (USM) information</text>
+          </description>
+          <uses name="apply-advanced"/>
+          <container name="local-engine">
+            <description>
+              <text>Local engine user configuration</text>
+            </description>
+            <uses name="apply-advanced"/>
+            <list name="user">
+              <key value="name"/>
+              <ordered-by value="user"/>
+              <description>
+                <text>SNMPv3 USM user information</text>
+              </description>
+              <uses name="v3-user-config"/>
+            </list>
+          </container>
+          <list name="remote-engine">
+            <key value="name"/>
+            <ordered-by value="user"/>
+            <description>
+              <text>Remote engine user configuration</text>
+            </description>
+            <leaf name="name">
+              <description>
+                <text>Remote engine id (Hex format)</text>
+              </description>
+              <type name="string"/>
+            </leaf>
+            <uses name="apply-advanced"/>
+            <list name="user">
+              <key value="name"/>
+              <ordered-by value="user"/>
+              <description>
+                <text>SNMPv3 USM user information</text>
+              </description>
+              <uses name="v3-user-config"/>
+            </list>
+          </list>
+        </container>
+        <container name="vacm">
+          <description>
+            <text>View-based access control model (VACM) information</text>
+          </description>
+          <uses name="apply-advanced"/>
+          <container name="security-to-group">
+            <description>
+              <text>Assigns security names to group</text>
+            </description>
+            <uses name="apply-advanced"/>
+            <list name="security-model">
+              <key value="name"/>
+              <ordered-by value="user"/>
+              <description>
+                <text>Security model context for group assignment</text>
+              </description>
+              <leaf name="name">
+                <description>
+                  <text>SNMPv3 security-to-group model name</text>
+                </description>
+                <type name="enumeration">
+                  <enum name="usm">
+                    <description>
+                      <text>User-based security model</text>
+                    </description>
+                  </enum>
+                  <enum name="v1">
+                    <description>
+                      <text>SNMPv1 model</text>
+                    </description>
+                  </enum>
+                  <enum name="v2c">
+                    <description>
+                      <text>SNMPv2c model</text>
+                    </description>
+                  </enum>
+                </type>
+              </leaf>
+              <uses name="apply-advanced"/>
+              <list name="security-name">
+                <key value="name"/>
+                <ordered-by value="user"/>
+                <description>
+                  <text>Security name to assign to group</text>
+                </description>
+                <leaf name="name">
+                  <description>
+                    <text>Security name</text>
+                  </description>
+                  <type name="string">
+                    <length value="1 .. 32"/>
+                  </type>
+                </leaf>
+                <uses name="apply-advanced"/>
+                <leaf name="group">
+                  <description>
+                    <text>Group to which to assign security name</text>
+                  </description>
+                  <type name="string">
+                    <length value="1 .. 32"/>
+                  </type>
+                </leaf>
+              </list>
+            </list>
+          </container>
+          <container name="access">
+            <description>
+              <text>Specify SNMP access limits</text>
+            </description>
+            <uses name="apply-advanced"/>
+            <list name="group">
+              <key value="name"/>
+              <ordered-by value="user"/>
+              <description>
+                <text>Group access configuration</text>
+              </description>
+              <leaf name="name">
+                <description>
+                  <text>SNMPv3 VACM group name</text>
+                </description>
+                <type name="string">
+                  <length value="1 .. 32"/>
+                </type>
+              </leaf>
+              <uses name="apply-advanced"/>
+              <container name="default-context-prefix">
+                <description>
+                  <text>Default context-prefix access configuration</text>
+                </description>
+                <uses name="apply-advanced"/>
+                <list name="security-model">
+                  <key value="name"/>
+                  <ordered-by value="user"/>
+                  <description>
+                    <text>Security model access configuration</text>
+                  </description>
+                  <uses name="security-model-access"/>
+                </list>
+              </container>
+              <list name="context-prefix">
+                <key value="name"/>
+                <ordered-by value="user"/>
+                <description>
+                  <text>Context-prefix access configuration</text>
+                </description>
+                <leaf name="name">
+                  <description>
+                    <text>SNMPv3 VACM context prefix</text>
+                  </description>
+                  <type name="string"/>
+                </leaf>
+                <uses name="apply-advanced"/>
+                <list name="security-model">
+                  <key value="name"/>
+                  <ordered-by value="user"/>
+                  <description>
+                    <text>Security model access configuration</text>
+                  </description>
+                  <uses name="security-model-access"/>
+                </list>
+              </list>
+            </list>
+          </container>
+        </container>
+        <list name="target-address">
+          <key value="name"/>
+          <ordered-by value="user"/>
+          <description>
+            <text>Identifies notification targets as well as allowed management stations</text>
+          </description>
+          <leaf name="name">
+            <description>
+              <text>SNMP target address name</text>
+            </description>
+            <type name="string">
+              <length value="1 .. 32"/>
+            </type>
+          </leaf>
+          <uses name="apply-advanced"/>
+          <leaf name="address">
+            <description>
+              <text>SNMP target address</text>
+            </description>
+            <type name="jt:ipaddr"/>
+          </leaf>
+          <leaf name="port">
+            <description>
+              <text>SNMP target port number</text>
+            </description>
+            <default value="162"/>
+            <type name="union">
+              <type name="uint16"/>
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+            </type>
+          </leaf>
+          <leaf name="timeout">
+            <description>
+              <text>Acknowledgment timeout for confirmed SNMP notifications</text>
+            </description>
+            <default value="15"/>
+            <units name="seconds"/>
+            <type name="union">
+              <type name="uint32"/>
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+            </type>
+          </leaf>
+          <leaf name="retry-count">
+            <description>
+              <text>Maximum retry count for confirmed SNMP notifications</text>
+            </description>
+            <default value="3"/>
+            <type name="union">
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+              <type name="uint32">
+                <range value="0 .. 255"/>
+              </type>
+            </type>
+          </leaf>
+          <leaf name="tag-list">
+            <description>
+              <text>SNMP tag list used to select target addresses</text>
+            </description>
+            <type name="string">
+              <length value="0 .. 255"/>
+            </type>
+          </leaf>
+          <leaf name="address-mask">
+            <description>
+              <text>Mask range of addresses for community string access control.</text>
+            </description>
+            <type name="jt:ipaddr"/>
+          </leaf>
+          <leaf name="routing-instance">
+            <description>
+              <text>Routing instance for trap destination</text>
+            </description>
+            <type name="string"/>
+          </leaf>
+          <leaf name="logical-system">
+            <description>
+              <text>Logical-system name for trap destination</text>
+            </description>
+            <type name="string"/>
+          </leaf>
+          <leaf name="target-parameters">
+            <description>
+              <text>SNMPv3 target parameter name in the target parameters table</text>
+            </description>
+            <type name="string">
+              <length value="1 .. 32"/>
+            </type>
+          </leaf>
+        </list>
+        <list name="target-parameters">
+          <key value="name"/>
+          <ordered-by value="user"/>
+          <description>
+            <text>Parameters and filter name used when sending notifications</text>
+          </description>
+          <leaf name="name">
+            <description>
+              <text>SNMPv3 target parameters name</text>
+            </description>
+            <type name="string">
+              <length value="1 .. 32"/>
+            </type>
+          </leaf>
+          <uses name="apply-advanced"/>
+          <container name="parameters">
+            <description>
+              <text>Parameters used when sending notifications</text>
+            </description>
+            <uses name="apply-advanced"/>
+            <leaf name="message-processing-model">
+              <description>
+                <text>The message processing model to be used when generating SNMP notifications</text>
+              </description>
+              <type name="enumeration">
+                <enum name="v1">
+                  <description>
+                    <text>SNMPv1 model</text>
+                  </description>
+                </enum>
+                <enum name="v2c">
+                  <description>
+                    <text>SNMPv2c model</text>
+                  </description>
+                </enum>
+                <enum name="v3">
+                  <description>
+                    <text>SNMPv3 model</text>
+                  </description>
+                </enum>
+              </type>
+            </leaf>
+            <leaf name="security-model">
+              <description>
+                <text>Security-model used when generating SNMP notifications</text>
+              </description>
+              <type name="enumeration">
+                <enum name="usm">
+                  <description>
+                    <text>User-based security model</text>
+                  </description>
+                </enum>
+                <enum name="v1">
+                  <description>
+                    <text>SNMPv1 model</text>
+                  </description>
+                </enum>
+                <enum name="v2c">
+                  <description>
+                    <text>SNMPv2c model</text>
+                  </description>
+                </enum>
+              </type>
+            </leaf>
+            <leaf name="security-level">
+              <description>
+                <text>Security-level used when generating SNMP notifications</text>
+              </description>
+              <type name="enumeration">
+                <enum name="none">
+                  <description>
+                    <text>None (noAuthNoPriv)</text>
+                  </description>
+                </enum>
+                <enum name="authentication">
+                  <description>
+                    <text>Authentication (authNoPriv)</text>
+                  </description>
+                </enum>
+                <enum name="privacy">
+                  <description>
+                    <text>Privacy and authentication (authPriv)</text>
+                  </description>
+                </enum>
+              </type>
+            </leaf>
+            <leaf name="security-name">
+              <description>
+                <text>Security name used when generating SNMP notifications</text>
+              </description>
+              <type name="string">
+                <length value="1 .. 32"/>
+              </type>
+            </leaf>
+          </container>
+          <container name="notify-filter">
+            <description>
+              <text>Notify filter to apply to notifications</text>
+            </description>
+            <leaf name="filter">
+              <description>
+                <text>Filter name to apply to notifications</text>
+              </description>
+              <type name="string">
+                <length value="1 .. 32"/>
+              </type>
+            </leaf>
+          </container>
+        </list>
+        <list name="notify">
+          <key value="name"/>
+          <ordered-by value="user"/>
+          <description>
+            <text>Used to select management targets for notifications as well as the type of notifications</text>
+          </description>
+          <leaf name="name">
+            <description>
+              <text>Notify name</text>
+            </description>
+            <type name="string">
+              <length value="1 .. 32"/>
+            </type>
+          </leaf>
+          <uses name="apply-advanced"/>
+          <leaf name="type">
+            <description>
+              <text>Notification type</text>
+            </description>
+            <default value="trap"/>
+            <type name="enumeration">
+              <enum name="trap">
+                <description>
+                  <text>SNMP trap</text>
+                </description>
+              </enum>
+              <enum name="inform">
+                <description>
+                  <text>Inform request</text>
+                </description>
+              </enum>
+            </type>
+          </leaf>
+          <leaf name="tag">
+            <description>
+              <text>Notifications will be sent to all targets configured with this tag</text>
+            </description>
+            <type name="string">
+              <length value="0 .. 255"/>
+            </type>
+          </leaf>
+        </list>
+        <list name="notify-filter">
+          <key value="name"/>
+          <ordered-by value="user"/>
+          <description>
+            <text>Filters to apply to SNMP notifications</text>
+          </description>
+          <leaf name="name">
+            <description>
+              <text>SNMP profile name in the notify filter table</text>
+            </description>
+            <type name="string">
+              <length value="1 .. 32"/>
+            </type>
+          </leaf>
+          <uses name="apply-advanced"/>
+          <list name="oid">
+            <key value="name"/>
+            <ordered-by value="user"/>
+            <description>
+              <text>OID include/exclude list</text>
+            </description>
+            <leaf name="name">
+              <description>
+                <text>OID to include/exclude from notify filter</text>
+              </description>
+              <type name="string"/>
+            </leaf>
+            <choice name="filter-action">
+              <case name="case_1">
+                <leaf name="include">
+                  <description>
+                    <text>Include this OID in the notify filter</text>
+                  </description>
+                  <type name="empty"/>
+                </leaf>
+              </case>
+              <case name="case_2">
+                <leaf name="exclude">
+                  <description>
+                    <text>Exclude this OID from the notify filter</text>
+                  </description>
+                  <type name="empty"/>
+                </leaf>
+              </case>
+            </choice>
+          </list>
+        </list>
+        <leaf name="management-routing-instance">
+          <description>
+            <text>Enable SNMPv3 access for all routing instances from this default context</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+        <list name="snmp-community">
+          <key value="name"/>
+          <ordered-by value="user"/>
+          <description>
+            <text>SNMP community and view-based access control model configuration</text>
+          </description>
+          <leaf name="name">
+            <description>
+              <text>Unique index value in this community table entry</text>
+            </description>
+            <type name="string">
+              <length value="1 .. 32"/>
+            </type>
+          </leaf>
+          <uses name="apply-advanced"/>
+          <leaf name="community-name">
+            <description>
+              <text>SNMPv1/v2c community name (default is same as community-index)</text>
+            </description>
+            <type name="jt:unreadable"/>
+          </leaf>
+          <leaf name="security-name">
+            <description>
+              <text>Security name used when performing access control</text>
+            </description>
+            <type name="string">
+              <length value="1 .. 32"/>
+            </type>
+          </leaf>
+          <leaf name="context">
+            <description>
+              <text>Context used when performing access control</text>
+            </description>
+            <type name="string">
+              <length value="0 .. 32"/>
+            </type>
+          </leaf>
+          <leaf name="tag">
+            <description>
+              <text>Tag identifier for set of targets allowed to use this community string</text>
+            </description>
+            <type name="string">
+              <length value="0 .. 255"/>
+            </type>
+          </leaf>
+        </list>
+      </container>
+      <list name="proxy">
+        <key value="name"/>
+        <ordered-by value="user"/>
+        <description>
+          <text>SNMP proxy configuration</text>
+        </description>
+        <leaf name="name">
+          <description>
+            <text>Unique proxy name</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+        <uses name="apply-advanced"/>
+        <leaf name="device-name">
+          <description>
+            <text>Satellite/Proxied Device name or IP address</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+        <choice name="version">
+          <case name="case_1">
+            <container name="version-v1">
+              <description>
+                <text>For v1 proxy configuration define snmp-community</text>
+              </description>
+              <uses name="comm-object"/>
+            </container>
+          </case>
+          <case name="case_2">
+            <container name="version-v2c">
+              <description>
+                <text>For v2c proxy configuration define snmp-community</text>
+              </description>
+              <uses name="comm-object"/>
+            </container>
+          </case>
+          <case name="case_3">
+            <container name="version-v3">
+              <description>
+                <text>For v3 proxy configuration define security-name</text>
+              </description>
+              <uses name="sec-object"/>
+            </container>
+          </case>
+        </choice>
+        <list name="routing-instance">
+          <key value="name"/>
+          <ordered-by value="user"/>
+          <description>
+            <text>Associate routing-instance name for proxy forwarding</text>
+          </description>
+          <leaf name="name">
+            <description>
+              <text>Routing-instance name for proxy forwarding</text>
+            </description>
+            <type name="string"/>
+          </leaf>
+          <uses name="apply-advanced"/>
+        </list>
+        <list name="logical-system">
+          <key value="name"/>
+          <ordered-by value="user"/>
+          <description>
+            <text>Associate logical-system name for proxy forwarding</text>
+          </description>
+          <leaf name="name">
+            <description>
+              <text>Associate logical-system name for proxy forwarding</text>
+            </description>
+            <type name="string"/>
+          </leaf>
+          <uses name="apply-advanced"/>
+          <list name="routing-instance">
+            <key value="name"/>
+            <ordered-by value="user"/>
+            <description>
+              <text>Associate routing-instance name for proxy forwarding</text>
+            </description>
+            <leaf name="name">
+              <description>
+                <text>Routing-instance name for proxy forwarding</text>
+              </description>
+              <type name="string"/>
+            </leaf>
+            <uses name="apply-advanced"/>
+          </list>
+        </list>
+      </list>
+      <container name="subagent">
+        <description>
+          <text>SNMP subagent configuration</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <container name="tcp">
+          <presence value="enable tcp"/>
+          <description>
+            <text>Allow SNMP subagent tcp connection</text>
+          </description>
+          <uses name="apply-advanced"/>
+          <container name="routing-instance">
+            <description>
+              <text>Specify routing-instance name for tcp connection</text>
+            </description>
+            <uses name="apply-advanced"/>
+            <leaf name="default">
+              <description>
+                <text>Allow connections over default routing-instance</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+          </container>
+        </container>
+      </container>
+      <container name="engine-id">
+        <description>
+          <text>SNMPv3 engine ID</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <choice name="engine-id-choice">
+          <case name="case_1">
+            <leaf name="use-mac-address">
+              <description>
+                <text>Uses management interface MAC Address for the engine ID</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+          </case>
+          <case name="case_2">
+            <leaf name="use-default-ip-address">
+              <description>
+                <text>Use default IP address for the engine ID</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+          </case>
+          <case name="case_3">
+            <leaf name="local">
+              <description>
+                <text>Local engine ID</text>
+              </description>
+              <type name="string"/>
+            </leaf>
+          </case>
+        </choice>
+      </container>
+      <container name="access">
+        <description>
+          <text>SNMPv3 access information</text>
+        </description>
+        <status value="deprecated"/>
+        <uses name="apply-advanced"/>
+        <list name="user">
+          <key value="name"/>
+          <ordered-by value="user"/>
+          <description>
+            <text>SNMPv3 USM user information</text>
+          </description>
+          <leaf name="name">
+            <description>
+              <text>SNMPv3 USM username</text>
+            </description>
+            <type name="string"/>
+          </leaf>
+          <uses name="apply-advanced"/>
+          <leaf name="authentication-type">
+            <description>
+              <text>SNMPv3 USM authentication type</text>
+            </description>
+            <type name="enumeration">
+              <enum name="none">
+                <description>
+                  <text>No authentication</text>
+                </description>
+              </enum>
+              <enum name="md5">
+                <description>
+                  <text>MD5 hash algorithm</text>
+                </description>
+              </enum>
+              <enum name="sha">
+                <description>
+                  <text>SHA hash algorithm</text>
+                </description>
+              </enum>
+            </type>
+          </leaf>
+          <leaf name="authentication-password">
+            <description>
+              <text>SNMPv3 USM authentication password</text>
+            </description>
+            <type name="jt:unreadable"/>
+          </leaf>
+          <leaf name="privacy-type">
+            <description>
+              <text>SNMPv3 USM privacy type</text>
+            </description>
+            <type name="enumeration">
+              <enum name="none">
+                <description>
+                  <text>No privacy</text>
+                </description>
+              </enum>
+              <enum name="des">
+                <description>
+                  <text>DES algorithm</text>
+                </description>
+              </enum>
+            </type>
+          </leaf>
+          <leaf name="privacy-password">
+            <description>
+              <text>SNMPv3 USM privacy password</text>
+            </description>
+            <type name="jt:unreadable"/>
+          </leaf>
+          <list name="clients">
+            <key value="name"/>
+            <ordered-by value="user"/>
+            <description>
+              <text>List of source address prefix ranges to accept</text>
+            </description>
+            <leaf name="name">
+              <description>
+                <text>Address or prefix</text>
+              </description>
+              <type name="jt:ipprefix"/>
+            </leaf>
+            <leaf name="restrict">
+              <description>
+                <text>Deny access</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+          </list>
+        </list>
+        <list name="group">
+          <key value="name"/>
+          <ordered-by value="user"/>
+          <description>
+            <text>SNMPv3 USM group information</text>
+          </description>
+          <leaf name="name">
+            <description>
+              <text>SNMPv3 USM group name</text>
+            </description>
+            <type name="string"/>
+          </leaf>
+          <uses name="apply-advanced"/>
+          <leaf-list name="user">
+            <ordered-by value="user"/>
+            <description>
+              <text>SNMPv3 USM username</text>
+            </description>
+            <type name="string"/>
+          </leaf-list>
+          <leaf name="model">
+            <description>
+              <text>SNMPv3 security model</text>
+            </description>
+            <type name="enumeration">
+              <enum name="usm">
+                <description>
+                  <text>User-based security model</text>
+                </description>
+              </enum>
+            </type>
+          </leaf>
+        </list>
+        <list name="context">
+          <key value="name"/>
+          <ordered-by value="user"/>
+          <description>
+            <text>SNMPv3 context information</text>
+          </description>
+          <leaf name="name">
+            <description>
+              <text>SNMPv3 context name</text>
+            </description>
+            <type name="string"/>
+          </leaf>
+          <uses name="apply-advanced"/>
+          <leaf name="description">
+            <description>
+              <text>SNMPv3 context description</text>
+            </description>
+            <type name="string"/>
+          </leaf>
+          <list name="group">
+            <key value="name"/>
+            <ordered-by value="user"/>
+            <description>
+              <text>Access group</text>
+            </description>
+            <leaf name="name">
+              <description>
+                <text>SNMPv3 USM group name</text>
+              </description>
+              <type name="string"/>
+            </leaf>
+            <uses name="apply-advanced"/>
+            <leaf name="model">
+              <description>
+                <text>SNMPv3 security model</text>
+              </description>
+              <type name="enumeration">
+                <enum name="usm">
+                  <description>
+                    <text>User-based security model</text>
+                  </description>
+                </enum>
+              </type>
+            </leaf>
+            <leaf name="security-level">
+              <description>
+                <text>SNMPv3 security level</text>
+              </description>
+              <type name="enumeration">
+                <enum name="none">
+                  <description>
+                    <text>None: NoAuthNoPriv</text>
+                  </description>
+                </enum>
+                <enum name="authentication">
+                  <description>
+                    <text>Authentication: AuthNoPriv</text>
+                  </description>
+                </enum>
+                <enum name="privacy">
+                  <description>
+                    <text>Privacy: AuthPriv</text>
+                  </description>
+                </enum>
+              </type>
+            </leaf>
+            <leaf name="read-view">
+              <description>
+                <text>Read view name</text>
+              </description>
+              <type name="string"/>
+            </leaf>
+            <leaf name="write-view">
+              <description>
+                <text>Write view name</text>
+              </description>
+              <type name="string"/>
+            </leaf>
+          </list>
+        </list>
+      </container>
+      <list name="view">
+        <key value="name"/>
+        <ordered-by value="user"/>
+        <description>
+          <text>Define MIB views</text>
+        </description>
+        <leaf name="name">
+          <description>
+            <text>MIB view name</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+        <uses name="apply-advanced"/>
+        <list name="oid">
+          <key value="name"/>
+          <ordered-by value="user"/>
+          <description>
+            <text>OID include/exclude list</text>
+          </description>
+          <leaf name="name">
+            <description>
+              <text>OID to include or exclude from view</text>
+            </description>
+            <type name="string"/>
+          </leaf>
+          <choice name="view-action">
+            <case name="case_1">
+              <leaf name="include">
+                <description>
+                  <text>Include this OID in the view</text>
+                </description>
+                <type name="empty"/>
+              </leaf>
+            </case>
+            <case name="case_2">
+              <leaf name="exclude">
+                <description>
+                  <text>Exclude this OID from the view</text>
+                </description>
+                <type name="empty"/>
+              </leaf>
+            </case>
+          </choice>
+        </list>
+      </list>
+      <list name="client-list">
+        <key value="name"/>
+        <ordered-by value="user"/>
+        <description>
+          <text>Client list</text>
+        </description>
+        <leaf name="name">
+          <description>
+            <text>The name for the client list</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+        <uses name="apply-advanced"/>
+        <list name="client-address-list">
+          <key value="name"/>
+          <ordered-by value="user"/>
+          <description>
+            <text>Client address list</text>
+          </description>
+          <uses name="client-address-object"/>
+        </list>
+      </list>
+      <list name="community">
+        <key value="name"/>
+        <ordered-by value="user"/>
+        <description>
+          <text>Configure a community string</text>
+        </description>
+        <leaf name="name">
+          <description>
+            <text>Community name</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+        <uses name="apply-advanced"/>
+        <leaf name="view">
+          <description>
+            <text>View name</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+        <leaf name="authorization">
+          <description>
+            <text>Authorization type</text>
+          </description>
+          <type name="enumeration">
+            <enum name="read-only">
+              <description>
+                <text>Allow read-only access</text>
+              </description>
+            </enum>
+            <enum name="read-write">
+              <description>
+                <text>Allow read and write access</text>
+              </description>
+            </enum>
+          </type>
+        </leaf>
+        <choice name="clients_choice">
+          <case name="case_1">
+            <leaf name="client-list-name">
+              <description>
+                <text>The name of client list or prefix list</text>
+              </description>
+              <type name="string"/>
+            </leaf>
+          </case>
+          <case name="case_2">
+            <list name="clients">
+              <key value="name"/>
+              <ordered-by value="user"/>
+              <description>
+                <text>List of source address prefix ranges to accept</text>
+              </description>
+              <leaf name="name">
+                <description>
+                  <text>Address or prefix</text>
+                </description>
+                <type name="jt:ipprefix"/>
+              </leaf>
+              <leaf name="restrict">
+                <description>
+                  <text>Deny access</text>
+                </description>
+                <type name="empty"/>
+              </leaf>
+            </list>
+          </case>
+        </choice>
+        <list name="routing-instances">
+          <key value="name"/>
+          <ordered-by value="user"/>
+          <description>
+            <text>Use logical-system/routing-instance for v1/v2c clients</text>
+          </description>
+          <status value="deprecated"/>
+          <leaf name="name">
+            <description>
+              <text>Routing instance of v1/v2c clients</text>
+            </description>
+            <type name="string"/>
+          </leaf>
+          <uses name="apply-advanced"/>
+          <choice name="clients_choice">
+            <case name="case_1">
+              <leaf name="client-list-name">
+                <description>
+                  <text>The name of client list or prefix list</text>
+                </description>
+                <type name="string"/>
+              </leaf>
+            </case>
+            <case name="case_2">
+              <list name="clients">
+                <key value="name"/>
+                <ordered-by value="user"/>
+                <description>
+                  <text>List of source address prefix ranges to accept</text>
+                </description>
+                <leaf name="name">
+                  <description>
+                    <text>Address or prefix</text>
+                  </description>
+                  <type name="jt:ipprefix"/>
+                </leaf>
+                <leaf name="restrict">
+                  <description>
+                    <text>Deny access</text>
+                  </description>
+                  <type name="empty"/>
+                </leaf>
+              </list>
+            </case>
+          </choice>
+        </list>
+        <list name="routing-instance">
+          <key value="name"/>
+          <ordered-by value="user"/>
+          <description>
+            <text>Use routing-instance name for v1/v2c clients</text>
+          </description>
+          <leaf name="name">
+            <description>
+              <text>Routing instance of v1/v2c clients</text>
+            </description>
+            <type name="string"/>
+          </leaf>
+          <uses name="apply-advanced"/>
+          <choice name="clients_choice">
+            <case name="case_1">
+              <leaf name="client-list-name">
+                <description>
+                  <text>The name of client list or prefix list</text>
+                </description>
+                <type name="string"/>
+              </leaf>
+            </case>
+            <case name="case_2">
+              <list name="clients">
+                <key value="name"/>
+                <ordered-by value="user"/>
+                <description>
+                  <text>List of source address prefix ranges to accept</text>
+                </description>
+                <leaf name="name">
+                  <description>
+                    <text>Address or prefix</text>
+                  </description>
+                  <type name="jt:ipprefix"/>
+                </leaf>
+                <leaf name="restrict">
+                  <description>
+                    <text>Deny access</text>
+                  </description>
+                  <type name="empty"/>
+                </leaf>
+              </list>
+            </case>
+          </choice>
+        </list>
+        <list name="logical-system">
+          <key value="name"/>
+          <ordered-by value="user"/>
+          <description>
+            <text>Use logical-system name for v1/v2c clients</text>
+          </description>
+          <leaf name="name">
+            <description>
+              <text>Use logical-system name for v1/v2c clients</text>
+            </description>
+            <type name="string"/>
+          </leaf>
+          <uses name="apply-advanced"/>
+          <list name="routing-instance">
+            <key value="name"/>
+            <ordered-by value="user"/>
+            <description>
+              <text>Use routing-instance name for v1/v2c clients</text>
+            </description>
+            <leaf name="name">
+              <description>
+                <text>Routing instance of v1/v2c clients</text>
+              </description>
+              <type name="string"/>
+            </leaf>
+            <uses name="apply-advanced"/>
+            <choice name="clients_choice">
+              <case name="case_1">
+                <leaf name="client-list-name">
+                  <description>
+                    <text>The name of client list or prefix list</text>
+                  </description>
+                  <type name="string"/>
+                </leaf>
+              </case>
+              <case name="case_2">
+                <list name="clients">
+                  <key value="name"/>
+                  <ordered-by value="user"/>
+                  <description>
+                    <text>List of source address prefix ranges to accept</text>
+                  </description>
+                  <leaf name="name">
+                    <description>
+                      <text>Address or prefix</text>
+                    </description>
+                    <type name="jt:ipprefix"/>
+                  </leaf>
+                  <leaf name="restrict">
+                    <description>
+                      <text>Deny access</text>
+                    </description>
+                    <type name="empty"/>
+                  </leaf>
+                </list>
+              </case>
+            </choice>
+          </list>
+        </list>
+      </list>
+      <container name="trap-options">
+        <presence value="enable trap-options"/>
+        <description>
+          <text>SNMP trap options</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <container name="source-address">
+          <description>
+            <text>IPv4/IPv6 source address for trap PDUs</text>
+          </description>
+          <uses name="apply-advanced"/>
+          <choice name="address-choice">
+            <case name="case_1">
+              <leaf name="lo0">
+                <description>
+                  <text>Use lowest address on loopback interface</text>
+                </description>
+                <type name="empty"/>
+              </leaf>
+            </case>
+            <case name="case_2">
+              <leaf name="address">
+                <description>
+                  <text>Use specified address</text>
+                </description>
+                <type name="jt:ipaddr"/>
+              </leaf>
+            </case>
+          </choice>
+        </container>
+        <leaf name="enterprise-oid">
+          <description>
+            <text>Add snmpTrapEnterprise oid in varbind of all traps</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+        <leaf name="context-oid">
+          <description>
+            <text>Add context oid in varbind of all traps at the end</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+        <list name="routing-instances">
+          <key value="name"/>
+          <ordered-by value="user"/>
+          <description>
+            <text>Use routing-instance name for source-address</text>
+          </description>
+          <status value="deprecated"/>
+          <leaf name="name">
+            <description>
+              <text>Routing instance of trap destination</text>
+            </description>
+            <type name="string"/>
+          </leaf>
+          <uses name="apply-advanced"/>
+          <container name="source-address">
+            <description>
+              <text>IPv4/IPv6 source address for trap PDUs</text>
+            </description>
+            <uses name="apply-advanced"/>
+            <choice name="address-choice">
+              <case name="case_1">
+                <leaf name="lo0">
+                  <description>
+                    <text>Use lowest address on loopback interface</text>
+                  </description>
+                  <type name="empty"/>
+                </leaf>
+              </case>
+              <case name="case_2">
+                <leaf name="address">
+                  <description>
+                    <text>Use specified address</text>
+                  </description>
+                  <type name="jt:ipaddr"/>
+                </leaf>
+              </case>
+            </choice>
+          </container>
+        </list>
+        <list name="routing-instance">
+          <key value="name"/>
+          <ordered-by value="user"/>
+          <description>
+            <text>Use routing-instance name for source-address</text>
+          </description>
+          <leaf name="name">
+            <description>
+              <text>Routing instance of trap destination</text>
+            </description>
+            <type name="string"/>
+          </leaf>
+          <uses name="apply-advanced"/>
+          <container name="source-address">
+            <description>
+              <text>IPv4/IPv6 source address for trap PDUs</text>
+            </description>
+            <uses name="apply-advanced"/>
+            <choice name="address-choice">
+              <case name="case_1">
+                <leaf name="lo0">
+                  <description>
+                    <text>Use lowest address on loopback interface</text>
+                  </description>
+                  <type name="empty"/>
+                </leaf>
+              </case>
+              <case name="case_2">
+                <leaf name="address">
+                  <description>
+                    <text>Use specified address</text>
+                  </description>
+                  <type name="jt:ipaddr"/>
+                </leaf>
+              </case>
+            </choice>
+          </container>
+        </list>
+        <list name="logical-system">
+          <key value="name"/>
+          <ordered-by value="user"/>
+          <description>
+            <text>Use logical-system name for source-address</text>
+          </description>
+          <leaf name="name">
+            <description>
+              <text>Use logical-system name for source-address</text>
+            </description>
+            <type name="string"/>
+          </leaf>
+          <uses name="apply-advanced"/>
+          <list name="routing-instance">
+            <key value="name"/>
+            <ordered-by value="user"/>
+            <description>
+              <text>Use routing-instance name for source-address</text>
+            </description>
+            <leaf name="name">
+              <description>
+                <text>Routing instance of trap destination</text>
+              </description>
+              <type name="string"/>
+            </leaf>
+            <uses name="apply-advanced"/>
+            <container name="source-address">
+              <description>
+                <text>IPv4/IPv6 source address for trap PDUs</text>
+              </description>
+              <uses name="apply-advanced"/>
+              <choice name="address-choice">
+                <case name="case_1">
+                  <leaf name="lo0">
+                    <description>
+                      <text>Use lowest address on loopback interface</text>
+                    </description>
+                    <type name="empty"/>
+                  </leaf>
+                </case>
+                <case name="case_2">
+                  <leaf name="address">
+                    <description>
+                      <text>Use specified address</text>
+                    </description>
+                    <type name="jt:ipaddr"/>
+                  </leaf>
+                </case>
+              </choice>
+            </container>
+          </list>
+        </list>
+        <leaf name="agent-address">
+          <description>
+            <text>Agent address for v1 trap PDUs</text>
+          </description>
+          <type name="enumeration">
+            <enum name="outgoing-interface">
+              <description>
+                <text>Use address on outgoing interface</text>
+              </description>
+            </enum>
+          </type>
+        </leaf>
+      </container>
+      <list name="trap-group">
+        <key value="name"/>
+        <ordered-by value="user"/>
+        <description>
+          <text>Configure traps and notifications</text>
+        </description>
+        <leaf name="name">
+          <description>
+            <text>Trap group name</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+        <uses name="apply-advanced"/>
+        <leaf name="version">
+          <description>
+            <text>SNMP version</text>
+          </description>
+          <type name="enumeration">
+            <enum name="all">
+              <description>
+                <text>Send SNMPv1 and SNMPv2 traps</text>
+              </description>
+            </enum>
+            <enum name="v1">
+              <description>
+                <text>Send SNMPv1 traps</text>
+              </description>
+            </enum>
+            <enum name="v2">
+              <description>
+                <text>Send SNMPv2 traps</text>
+              </description>
+            </enum>
+          </type>
+        </leaf>
+        <leaf name="destination-port">
+          <description>
+            <text>SNMP trap receiver port number</text>
+          </description>
+          <type name="union">
+            <type name="int32"/>
+            <type name="string">
+              <pattern value="&lt;.*&gt;|$.*"/>
+            </type>
+          </type>
+        </leaf>
+        <container name="categories">
+          <description>
+            <text>Trap categories</text>
+          </description>
+          <uses name="apply-advanced"/>
+          <leaf name="authentication">
+            <description>
+              <text>Authentication failures</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="chassis">
+            <description>
+              <text>Chassis or environment notifications</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="link">
+            <description>
+              <text>Link up-down transitions</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="remote-operations">
+            <description>
+              <text>Remote operations</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="routing">
+            <description>
+              <text>Routing protocol notifications</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="startup">
+            <description>
+              <text>System warm and cold starts</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="ggsn">
+            <description>
+              <text>GGSN notifications</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="rmon-alarm">
+            <description>
+              <text>RMON rising and falling alarms</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="vrrp-events">
+            <description>
+              <text>VRRP notifications</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="configuration">
+            <description>
+              <text>Configuration notifications</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="services">
+            <description>
+              <text>Services notifications</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="chassis-cluster">
+            <description>
+              <text>Clustering notifications</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="chassis-high-availability">
+            <description>
+              <text>High Availability notifications</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="chassis-ha-reswatch">
+            <description>
+              <text>High availability resource watch notifications</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="dot3oam-events">
+            <description>
+              <text>802.3ah notifications</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <container name="sonet-alarms">
+            <presence value="enable sonet-alarms"/>
+            <description>
+              <text>SONET alarm trap subcategories</text>
+            </description>
+            <uses name="apply-advanced"/>
+            <leaf name="loss-of-light">
+              <description>
+                <text>Loss of light alarm notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="pll-lock">
+              <description>
+                <text>PLL lock alarm notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="loss-of-frame">
+              <description>
+                <text>Loss of frame alarm notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="loss-of-signal">
+              <description>
+                <text>Loss of signal alarm notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="severely-errored-frame">
+              <description>
+                <text>Severely errored frame alarm notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="line-ais">
+              <description>
+                <text>Line AIS alarm notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="path-ais">
+              <description>
+                <text>Path AIS alarm notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="loss-of-pointer">
+              <description>
+                <text>Loss of pointer alarm notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="ber-defect">
+              <description>
+                <text>Sonet bit error rate alarm defect notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="ber-fault">
+              <description>
+                <text>Sonet bit error rate alarm fault notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="line-remote-defect-indication">
+              <description>
+                <text>Line Remote Defect Indication alarm notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="path-remote-defect-indication">
+              <description>
+                <text>Path Remote Defect Indication alarm notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="remote-error-indication">
+              <description>
+                <text>Remote Error Indication alarm notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="unequipped">
+              <description>
+                <text>Unequipped alarm notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="path-mismatch">
+              <description>
+                <text>Path mismatch alarm notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="loss-of-cell">
+              <description>
+                <text>Loss of Cell delineation alarm notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="vt-ais">
+              <description>
+                <text>VT AIS alarm notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="vt-loss-of-pointer">
+              <description>
+                <text>VT Loss Of Pointer alarm notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="vt-remote-defect-indication">
+              <description>
+                <text>VT Remote Defect Indication alarm notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="vt-unequipped">
+              <description>
+                <text>VT Unequipped alarm notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="vt-label-mismatch">
+              <description>
+                <text>VT label mismatch error notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="vt-loss-of-cell">
+              <description>
+                <text>VT Loss of Cell delineation notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+          </container>
+          <container name="otn-alarms">
+            <presence value="enable otn-alarms"/>
+            <description>
+              <text>OTN alarm trap subcategories</text>
+            </description>
+            <uses name="apply-advanced"/>
+            <leaf name="oc-los">
+              <description>
+                <text>Loss of signal alarm notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="oc-lof">
+              <description>
+                <text>Loss of frame alarm notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="oc-lom">
+              <description>
+                <text>Loss of multiframe alarm notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="wavelength-lock">
+              <description>
+                <text>Wavelength lock alarm notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="otu-ais">
+              <description>
+                <text>OTU Alarm indication signal alarm notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="otu-bdi">
+              <description>
+                <text>OTU Backward defect indication alarm notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="otu-ttim">
+              <description>
+                <text>OTU Trace identification mismatch alarm notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="otu-iae">
+              <description>
+                <text>OTU Incoming alignment error alarm notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="otu-sd">
+              <description>
+                <text>OTU Signal degrade alarm notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="otu-sf">
+              <description>
+                <text>OTU Signal fail alarm notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="otu-fec-exe">
+              <description>
+                <text>OTU Fec excessive errors alarm notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="otu-fec-deg">
+              <description>
+                <text>OTU Fec degraded errors alarm notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="otu-bbe-threshold">
+              <description>
+                <text>OTU Background block error threshold alarm notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="otu-es-threshold">
+              <description>
+                <text>OTU Errored Second threshold alarm notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="otu-ses-threshold">
+              <description>
+                <text>OTU Severely Errored Second threshold alarm notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="otu-uas-threshold">
+              <description>
+                <text>OTU Unavailable Second threshold alarm notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="odu-ais">
+              <description>
+                <text>ODU Alarm indication signal alarm notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="odu-oci">
+              <description>
+                <text>ODU Open connection indicator alarm notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="odu-lck">
+              <description>
+                <text>ODU Locked alarm notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="odu-bdi">
+              <description>
+                <text>ODU Backward defect indication alarm notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="odu-ttim">
+              <description>
+                <text>ODU Trace identification mismatch alarm notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="odu-sd">
+              <description>
+                <text>ODU Signal degrade alarm notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="odu-sf">
+              <description>
+                <text>ODU Signal fail alarm notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="odu-rx-aps-change">
+              <description>
+                <text>ODU Receive APS change notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="odu-bbe-threshold">
+              <description>
+                <text>ODU Background block error threshold alarm notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="odu-es-threshold">
+              <description>
+                <text>ODU Errored Second threshold alarm notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="odu-ses-threshold">
+              <description>
+                <text>ODU Severely Errored Second threshold alarm notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="odu-uas-threshold">
+              <description>
+                <text>ODU Unavailable Second threshold alarm notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="opu-ptm">
+              <description>
+                <text>ODU Payload Type Mismatch alarm notification</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+          </container>
+        </container>
+        <list name="targets">
+          <key value="name"/>
+          <ordered-by value="user"/>
+          <description>
+            <text>Targets for trap messages</text>
+          </description>
+          <leaf name="name">
+            <description>
+              <text>IP address</text>
+            </description>
+            <type name="jt:hostname"/>
+          </leaf>
+        </list>
+        <leaf name="routing-instance">
+          <description>
+            <text>Routing instance for trap destination</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+        <leaf name="logical-system">
+          <description>
+            <text>Logical-system name for trap destination</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+      </list>
+      <container name="routing-instance-access">
+        <presence value="enable routing-instance-access"/>
+        <description>
+          <text>SNMP routing-instance options</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <list name="access-list">
+          <key value="name"/>
+          <description>
+            <text>Allow/Deny SNMP access to routing-instances</text>
+          </description>
+          <leaf name="name">
+            <description>
+              <text>Routing-instance in format &lt;name&gt;, &lt;prefix&gt;* or *</text>
+            </description>
+            <type name="string"/>
+          </leaf>
+          <leaf name="restrict">
+            <description>
+              <text>Deny access</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+        </list>
+      </container>
+      <leaf name="logical-system-trap-filter">
+        <description>
+          <text>Allow only logical-system specific traps</text>
+        </description>
+        <type name="empty"/>
+      </leaf>
+      <container name="traceoptions">
+        <description>
+          <text>Trace options for SNMP</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <container name="memory-trace">
+          <presence value="enable memory-trace"/>
+          <description>
+            <text>Memory tracing information</text>
+          </description>
+          <uses name="apply-advanced"/>
+          <leaf name="size">
+            <description>
+              <text>Memory size reserved for tracing </text>
+            </description>
+            <default value="5120"/>
+            <units name="kilobytes"/>
+            <type name="union">
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+              <type name="uint32">
+                <range value="1250 .. 12500"/>
+              </type>
+            </type>
+          </leaf>
+        </container>
+        <leaf name="no-remote-trace">
+          <description>
+            <text>Disable remote tracing</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+        <container name="file">
+          <description>
+            <text>Trace file information</text>
+          </description>
+          <leaf name="size">
+            <description>
+              <text>Maximum trace file size</text>
+            </description>
+            <type name="string"/>
+          </leaf>
+          <leaf name="files">
+            <description>
+              <text>Maximum number of trace files</text>
+            </description>
+            <default value="10"/>
+            <type name="union">
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+              <type name="uint32">
+                <range value="2 .. 1000"/>
+              </type>
+            </type>
+          </leaf>
+          <choice name="world-readable-choice">
+            <leaf name="world-readable">
+              <description>
+                <text>Allow any user to read the log file</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="no-world-readable">
+              <description>
+                <text>Don't allow any user to read the log file</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+          </choice>
+          <leaf name="match">
+            <description>
+              <text>Regular expression for lines to be logged</text>
+            </description>
+            <type name="jt:regular-expression"/>
+          </leaf>
+        </container>
+        <list name="flag">
+          <key value="name"/>
+          <ordered-by value="user"/>
+          <description>
+            <text>Tracing parameters</text>
+          </description>
+          <leaf name="name">
+            <type name="enumeration">
+              <enum name="timer">
+                <description>
+                  <text>Trace internal timer events</text>
+                </description>
+              </enum>
+              <enum name="protocol-timeouts">
+                <description>
+                  <text>Trace SNMP request timeouts</text>
+                </description>
+              </enum>
+              <enum name="pdu">
+                <description>
+                  <text>Dump SNMP request/response packets</text>
+                </description>
+              </enum>
+              <enum name="varbind-error">
+                <description>
+                  <text>Trace varbind errors</text>
+                </description>
+              </enum>
+              <enum name="routing-socket">
+                <description>
+                  <text>Trace routing socket calls</text>
+                </description>
+              </enum>
+              <enum name="interface-stats">
+                <description>
+                  <text>Trace interface statistics (logical and physical)</text>
+                </description>
+              </enum>
+              <enum name="subagent">
+                <description>
+                  <text>Trace master-agent interations with sub-agents</text>
+                </description>
+              </enum>
+              <enum name="general">
+                <description>
+                  <text>Trace general events</text>
+                </description>
+              </enum>
+              <enum name="nonvolatile-sets">
+                <description>
+                  <text>Nonvolatile SNMP set request handling</text>
+                </description>
+              </enum>
+              <enum name="all">
+                <description>
+                  <text>Trace everything</text>
+                </description>
+              </enum>
+            </type>
+          </leaf>
+        </list>
+      </container>
+      <container name="rmon">
+        <presence value="enable rmon"/>
+        <description>
+          <text>Remote Monitoring configuration</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <list name="alarm">
+          <key value="name"/>
+          <ordered-by value="user"/>
+          <description>
+            <text>RMON alarm entries</text>
+          </description>
+          <leaf name="name">
+            <description>
+              <text>RMON alarm identifier</text>
+            </description>
+            <type name="union">
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+              <type name="uint32">
+                <range value="1 .. 65535"/>
+              </type>
+            </type>
+          </leaf>
+          <uses name="apply-advanced"/>
+          <leaf name="description">
+            <description>
+              <text>General description of alarm (stored in alarmOwner)</text>
+            </description>
+            <type name="string"/>
+          </leaf>
+          <leaf name="interval">
+            <description>
+              <text>Interval between samples</text>
+            </description>
+            <default value="60"/>
+            <units name="seconds"/>
+            <type name="union">
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+              <type name="uint32">
+                <range value="1 .. 2147483647"/>
+              </type>
+            </type>
+          </leaf>
+          <leaf name="falling-threshold-interval">
+            <description>
+              <text>Interval between samples during falling-threshold test</text>
+            </description>
+            <default value="2147483647"/>
+            <units name="seconds"/>
+            <type name="union">
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+              <type name="uint32">
+                <range value="1 .. 2147483647"/>
+              </type>
+            </type>
+          </leaf>
+          <leaf name="variable">
+            <description>
+              <text>OID of MIB variable to be monitored</text>
+            </description>
+            <type name="string"/>
+          </leaf>
+          <leaf name="sample-type">
+            <description>
+              <text>Method of sampling the selected variable</text>
+            </description>
+            <type name="enumeration">
+              <enum name="absolute-value">
+                <description>
+                  <text>Absolute sample value is used</text>
+                </description>
+              </enum>
+              <enum name="delta-value">
+                <description>
+                  <text>Difference between sampled values is used</text>
+                </description>
+              </enum>
+            </type>
+          </leaf>
+          <leaf name="request-type">
+            <description>
+              <text>Type of SNMP request to issue for alarm</text>
+            </description>
+            <default value="get-request"/>
+            <type name="enumeration">
+              <enum name="get-request">
+                <description>
+                  <text>Get request</text>
+                </description>
+              </enum>
+              <enum name="get-next-request">
+                <description>
+                  <text>Get-next request</text>
+                </description>
+              </enum>
+              <enum name="walk-request">
+                <description>
+                  <text>Walk request</text>
+                </description>
+              </enum>
+            </type>
+          </leaf>
+          <leaf name="startup-alarm">
+            <description>
+              <text>The alarm that may be sent upon entry startup</text>
+            </description>
+            <default value="rising-or-falling-alarm"/>
+            <type name="enumeration">
+              <enum name="rising-alarm">
+                <description>
+                  <text>Rising alarm may be sent at startup</text>
+                </description>
+              </enum>
+              <enum name="falling-alarm">
+                <description>
+                  <text>Falling alarm may be sent at startup</text>
+                </description>
+              </enum>
+              <enum name="rising-or-falling-alarm">
+                <description>
+                  <text>Rising or falling alarm may be sent at startup</text>
+                </description>
+              </enum>
+            </type>
+          </leaf>
+          <leaf name="rising-threshold">
+            <description>
+              <text>The rising threshold</text>
+            </description>
+            <type name="union">
+              <type name="int32"/>
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+            </type>
+          </leaf>
+          <leaf name="falling-threshold">
+            <description>
+              <text>The falling threshold</text>
+            </description>
+            <default value="2147483647"/>
+            <type name="union">
+              <type name="int32"/>
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+            </type>
+          </leaf>
+          <leaf name="rising-event-index">
+            <description>
+              <text>Event triggered after rising threshold is crossed</text>
+            </description>
+            <default value="0"/>
+            <type name="union">
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+              <type name="int32">
+                <range value="0 .. 65535"/>
+              </type>
+            </type>
+          </leaf>
+          <leaf name="falling-event-index">
+            <description>
+              <text>Event triggered after falling threshold is crossed</text>
+            </description>
+            <default value="0"/>
+            <type name="union">
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+              <type name="int32">
+                <range value="0 .. 65535"/>
+              </type>
+            </type>
+          </leaf>
+          <leaf name="syslog-subtag">
+            <description>
+              <text>Tag to be added to syslog messages</text>
+            </description>
+            <type name="string"/>
+          </leaf>
+        </list>
+        <list name="event">
+          <key value="name"/>
+          <ordered-by value="user"/>
+          <description>
+            <text>RMON event entries</text>
+          </description>
+          <leaf name="name">
+            <description>
+              <text>RMON event identifier</text>
+            </description>
+            <type name="union">
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+              <type name="uint32">
+                <range value="1 .. 65535"/>
+              </type>
+            </type>
+          </leaf>
+          <uses name="apply-advanced"/>
+          <leaf name="description">
+            <description>
+              <text>General description of event</text>
+            </description>
+            <type name="string"/>
+          </leaf>
+          <leaf name="type">
+            <description>
+              <text>The type of notification for this event</text>
+            </description>
+            <default value="log-and-trap"/>
+            <type name="enumeration">
+              <enum name="none">
+                <description>
+                  <text>No notifications</text>
+                </description>
+              </enum>
+              <enum name="log">
+                <description>
+                  <text>Add entry to logTable</text>
+                </description>
+              </enum>
+              <enum name="snmptrap">
+                <description>
+                  <text>Send SNMP trap</text>
+                </description>
+              </enum>
+              <enum name="log-and-trap">
+                <description>
+                  <text>Send SNMP trap and make log entry</text>
+                </description>
+              </enum>
+            </type>
+          </leaf>
+          <leaf name="community">
+            <description>
+              <text>The community (trap group) for outgoing traps</text>
+            </description>
+            <type name="string"/>
+          </leaf>
+        </list>
+      </container>
+      <container name="health-monitor">
+        <presence value="enable health-monitor"/>
+        <description>
+          <text>Health monitoring configuration</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <container name="routing-engine">
+          <presence value="enable routing-engine"/>
+          <description>
+            <text>Routing engine health monitoring configuration</text>
+          </description>
+          <uses name="apply-advanced"/>
+          <container name="cpu">
+            <description>
+              <text>CPU monitoring parameters configuration</text>
+            </description>
+            <uses name="apply-advanced"/>
+            <leaf name="interval">
+              <description>
+                <text>Interval between samples</text>
+              </description>
+              <units name="seconds"/>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="1 .. 604800"/>
+                </type>
+              </type>
+            </leaf>
+            <leaf name="moderate-threshold">
+              <description>
+                <text>Acceptable limit for resource utilization</text>
+              </description>
+              <units name="percent"/>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="30 .. 99"/>
+                </type>
+              </type>
+            </leaf>
+            <leaf name="high-threshold">
+              <description>
+                <text>Warning limit for resource utilization</text>
+              </description>
+              <units name="percent"/>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="30 .. 99"/>
+                </type>
+              </type>
+            </leaf>
+            <leaf name="critical-threshold">
+              <description>
+                <text>Critical limit for resource utilization</text>
+              </description>
+              <units name="percent"/>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="30 .. 99"/>
+                </type>
+              </type>
+            </leaf>
+            <leaf name="action">
+              <description>
+                <text>Action level (monitor, prevent or recover)</text>
+              </description>
+              <type name="enumeration">
+                <enum name="monitor">
+                  <description>
+                    <text>Monitoring action only</text>
+                  </description>
+                </enum>
+                <enum name="prevent">
+                  <description>
+                    <text>Monitoring and preventive action</text>
+                  </description>
+                </enum>
+                <enum name="recover">
+                  <description>
+                    <text>Monitoring, preventive and recovery action</text>
+                  </description>
+                </enum>
+              </type>
+            </leaf>
+          </container>
+          <container name="memory">
+            <description>
+              <text>Memory monitoring parameters configuration</text>
+            </description>
+            <uses name="apply-advanced"/>
+            <leaf name="interval">
+              <description>
+                <text>Interval between samples</text>
+              </description>
+              <units name="seconds"/>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="1 .. 604800"/>
+                </type>
+              </type>
+            </leaf>
+            <leaf name="moderate-threshold">
+              <description>
+                <text>Acceptable limit for resource utilization</text>
+              </description>
+              <units name="percent"/>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="30 .. 99"/>
+                </type>
+              </type>
+            </leaf>
+            <leaf name="high-threshold">
+              <description>
+                <text>Warning limit for resource utilization</text>
+              </description>
+              <units name="percent"/>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="30 .. 99"/>
+                </type>
+              </type>
+            </leaf>
+            <leaf name="critical-threshold">
+              <description>
+                <text>Critical limit for resource utilization</text>
+              </description>
+              <units name="percent"/>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="30 .. 99"/>
+                </type>
+              </type>
+            </leaf>
+            <leaf name="action">
+              <description>
+                <text>Action level (monitor, prevent or recover)</text>
+              </description>
+              <type name="enumeration">
+                <enum name="monitor">
+                  <description>
+                    <text>Monitoring action only</text>
+                  </description>
+                </enum>
+                <enum name="prevent">
+                  <description>
+                    <text>Monitoring and preventive action</text>
+                  </description>
+                </enum>
+                <enum name="recover">
+                  <description>
+                    <text>Monitoring, preventive and recovery action</text>
+                  </description>
+                </enum>
+              </type>
+            </leaf>
+          </container>
+          <container name="storage">
+            <description>
+              <text>Storage monitoring parameters configuration</text>
+            </description>
+            <uses name="apply-advanced"/>
+            <leaf name="interval">
+              <description>
+                <text>Interval between samples</text>
+              </description>
+              <units name="seconds"/>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="1 .. 604800"/>
+                </type>
+              </type>
+            </leaf>
+            <leaf name="moderate-threshold">
+              <description>
+                <text>Acceptable limit for resource utilization</text>
+              </description>
+              <units name="percent"/>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="30 .. 99"/>
+                </type>
+              </type>
+            </leaf>
+            <leaf name="high-threshold">
+              <description>
+                <text>Warning limit for resource utilization</text>
+              </description>
+              <units name="percent"/>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="30 .. 99"/>
+                </type>
+              </type>
+            </leaf>
+            <leaf name="critical-threshold">
+              <description>
+                <text>Critical limit for resource utilization</text>
+              </description>
+              <units name="percent"/>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="30 .. 99"/>
+                </type>
+              </type>
+            </leaf>
+            <leaf name="action">
+              <description>
+                <text>Action level (monitor, prevent or recover)</text>
+              </description>
+              <type name="enumeration">
+                <enum name="monitor">
+                  <description>
+                    <text>Monitoring action only</text>
+                  </description>
+                </enum>
+                <enum name="prevent">
+                  <description>
+                    <text>Monitoring and preventive action</text>
+                  </description>
+                </enum>
+                <enum name="recover">
+                  <description>
+                    <text>Monitoring, preventive and recovery action</text>
+                  </description>
+                </enum>
+              </type>
+            </leaf>
+          </container>
+          <container name="temperature">
+            <description>
+              <text>Temperature monitoring parameters configuration</text>
+            </description>
+            <uses name="apply-advanced"/>
+            <leaf name="interval">
+              <description>
+                <text>Interval between samples</text>
+              </description>
+              <units name="seconds"/>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="1 .. 604800"/>
+                </type>
+              </type>
+            </leaf>
+            <leaf name="moderate-threshold">
+              <description>
+                <text>Acceptable limit for resource utilization</text>
+              </description>
+              <units name="percent"/>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="30 .. 99"/>
+                </type>
+              </type>
+            </leaf>
+            <leaf name="high-threshold">
+              <description>
+                <text>Warning limit for resource utilization</text>
+              </description>
+              <units name="percent"/>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="30 .. 99"/>
+                </type>
+              </type>
+            </leaf>
+            <leaf name="critical-threshold">
+              <description>
+                <text>Critical limit for resource utilization</text>
+              </description>
+              <units name="percent"/>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="30 .. 99"/>
+                </type>
+              </type>
+            </leaf>
+          </container>
+          <container name="process-count">
+            <description>
+              <text>Process count monitoring parameters configuration</text>
+            </description>
+            <uses name="apply-advanced"/>
+            <leaf name="interval">
+              <description>
+                <text>Interval between samples</text>
+              </description>
+              <units name="seconds"/>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="1 .. 604800"/>
+                </type>
+              </type>
+            </leaf>
+            <leaf name="moderate-threshold">
+              <description>
+                <text>Acceptable limit for resource utilization</text>
+              </description>
+              <units name="percent"/>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="30 .. 99"/>
+                </type>
+              </type>
+            </leaf>
+            <leaf name="high-threshold">
+              <description>
+                <text>Warning limit for resource utilization</text>
+              </description>
+              <units name="percent"/>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="30 .. 99"/>
+                </type>
+              </type>
+            </leaf>
+            <leaf name="critical-threshold">
+              <description>
+                <text>Critical limit for resource utilization</text>
+              </description>
+              <units name="percent"/>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="30 .. 99"/>
+                </type>
+              </type>
+            </leaf>
+            <leaf name="action">
+              <description>
+                <text>Action level (monitor, prevent or recover)</text>
+              </description>
+              <type name="enumeration">
+                <enum name="monitor">
+                  <description>
+                    <text>Monitoring action only</text>
+                  </description>
+                </enum>
+                <enum name="prevent">
+                  <description>
+                    <text>Monitoring and preventive action</text>
+                  </description>
+                </enum>
+                <enum name="recover">
+                  <description>
+                    <text>Monitoring, preventive and recovery action</text>
+                  </description>
+                </enum>
+              </type>
+            </leaf>
+          </container>
+          <container name="open-files-count">
+            <description>
+              <text>Open files count monitoring parameters configuration</text>
+            </description>
+            <uses name="apply-advanced"/>
+            <leaf name="interval">
+              <description>
+                <text>Interval between samples</text>
+              </description>
+              <units name="seconds"/>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="1 .. 604800"/>
+                </type>
+              </type>
+            </leaf>
+            <leaf name="moderate-threshold">
+              <description>
+                <text>Acceptable limit for resource utilization</text>
+              </description>
+              <units name="percent"/>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="30 .. 99"/>
+                </type>
+              </type>
+            </leaf>
+            <leaf name="high-threshold">
+              <description>
+                <text>Warning limit for resource utilization</text>
+              </description>
+              <units name="percent"/>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="30 .. 99"/>
+                </type>
+              </type>
+            </leaf>
+            <leaf name="critical-threshold">
+              <description>
+                <text>Critical limit for resource utilization</text>
+              </description>
+              <units name="percent"/>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="30 .. 99"/>
+                </type>
+              </type>
+            </leaf>
+            <leaf name="action">
+              <description>
+                <text>Action level (monitor, prevent or recover)</text>
+              </description>
+              <type name="enumeration">
+                <enum name="monitor">
+                  <description>
+                    <text>Monitoring action only</text>
+                  </description>
+                </enum>
+                <enum name="prevent">
+                  <description>
+                    <text>Monitoring and preventive action</text>
+                  </description>
+                </enum>
+                <enum name="recover">
+                  <description>
+                    <text>Monitoring, preventive and recovery action</text>
+                  </description>
+                </enum>
+              </type>
+            </leaf>
+          </container>
+          <leaf name="interval">
+            <description>
+              <text>Interval between samples</text>
+            </description>
+            <units name="seconds"/>
+            <type name="union">
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+              <type name="uint32">
+                <range value="1 .. 604800"/>
+              </type>
+            </type>
+          </leaf>
+          <leaf name="moderate-threshold">
+            <description>
+              <text>Acceptable limit for resource utilization</text>
+            </description>
+            <units name="percent"/>
+            <type name="union">
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+              <type name="uint32">
+                <range value="30 .. 99"/>
+              </type>
+            </type>
+          </leaf>
+          <leaf name="high-threshold">
+            <description>
+              <text>Warning limit for resource utilization</text>
+            </description>
+            <units name="percent"/>
+            <type name="union">
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+              <type name="uint32">
+                <range value="30 .. 99"/>
+              </type>
+            </type>
+          </leaf>
+          <leaf name="critical-threshold">
+            <description>
+              <text>Critical limit for resource utilization</text>
+            </description>
+            <units name="percent"/>
+            <type name="union">
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+              <type name="uint32">
+                <range value="30 .. 99"/>
+              </type>
+            </type>
+          </leaf>
+          <leaf name="action">
+            <description>
+              <text>Action level (monitor, prevent or recover)</text>
+            </description>
+            <type name="enumeration">
+              <enum name="monitor">
+                <description>
+                  <text>Monitoring action only</text>
+                </description>
+              </enum>
+              <enum name="prevent">
+                <description>
+                  <text>Monitoring and preventive action</text>
+                </description>
+              </enum>
+              <enum name="recover">
+                <description>
+                  <text>Monitoring, preventive and recovery action</text>
+                </description>
+              </enum>
+            </type>
+          </leaf>
+          <container name="traceoptions">
+            <description>
+              <text>Trace options for system health management process</text>
+            </description>
+            <uses name="apply-advanced"/>
+            <container name="file">
+              <description>
+                <text>Trace file information</text>
+              </description>
+              <leaf name="filename">
+                <description>
+                  <text>Name of file in which to write trace information</text>
+                </description>
+                <type name="string">
+                  <length value="1 .. 1024"/>
+                </type>
+              </leaf>
+              <leaf name="size">
+                <description>
+                  <text>Maximum trace file size</text>
+                </description>
+                <type name="string"/>
+              </leaf>
+              <leaf name="files">
+                <description>
+                  <text>Maximum number of trace files</text>
+                </description>
+                <type name="union">
+                  <type name="string">
+                    <pattern value="&lt;.*&gt;|$.*"/>
+                  </type>
+                  <type name="uint32">
+                    <range value="10240 .. 1073741824"/>
+                  </type>
+                </type>
+              </leaf>
+              <choice name="world-readable-choice">
+                <leaf name="world-readable">
+                  <description>
+                    <text>Allow any user to read the log file</text>
+                  </description>
+                  <type name="empty"/>
+                </leaf>
+                <leaf name="no-world-readable">
+                  <description>
+                    <text>Don't allow any user to read the log file</text>
+                  </description>
+                  <type name="empty"/>
+                </leaf>
+              </choice>
+            </container>
+            <list name="flag">
+              <key value="name"/>
+              <ordered-by value="user"/>
+              <description>
+                <text>Events or messages to include in the trace output</text>
+              </description>
+              <leaf name="name">
+                <type name="enumeration">
+                  <enum name="configuration">
+                    <description>
+                      <text>Configuration events</text>
+                    </description>
+                  </enum>
+                  <enum name="memory">
+                    <description>
+                      <text>Memory allocation or deallocation messages</text>
+                    </description>
+                  </enum>
+                  <enum name="diagnostic">
+                    <description>
+                      <text>Diagnostic test case specific information</text>
+                    </description>
+                  </enum>
+                  <enum name="all">
+                    <description>
+                      <text>All events and messages</text>
+                    </description>
+                  </enum>
+                </type>
+              </leaf>
+            </list>
+          </container>
+        </container>
+        <leaf name="interval">
+          <description>
+            <text>Interval between samples</text>
+          </description>
+          <units name="seconds"/>
+          <type name="union">
+            <type name="string">
+              <pattern value="&lt;.*&gt;|$.*"/>
+            </type>
+            <type name="uint32">
+              <range value="1 .. 2147483647"/>
+            </type>
+          </type>
+        </leaf>
+        <leaf name="rising-threshold">
+          <description>
+            <text>Rising threshold applied to all monitored objects</text>
+          </description>
+          <units name="percent"/>
+          <type name="union">
+            <type name="string">
+              <pattern value="&lt;.*&gt;|$.*"/>
+            </type>
+            <type name="uint32">
+              <range value="1 .. 100"/>
+            </type>
+          </type>
+        </leaf>
+        <leaf name="falling-threshold">
+          <description>
+            <text>Falling threshold applied to all monitored objects</text>
+          </description>
+          <units name="percent"/>
+          <type name="union">
+            <type name="string">
+              <pattern value="&lt;.*&gt;|$.*"/>
+            </type>
+            <type name="uint32">
+              <range value="0 .. 100"/>
+            </type>
+          </type>
+        </leaf>
+        <container name="idp">
+          <presence value="enable idp"/>
+          <description>
+            <text>IDP health monitor configuration</text>
+          </description>
+          <uses name="apply-advanced"/>
+          <leaf name="interval">
+            <description>
+              <text>Interval between samples</text>
+            </description>
+            <units name="seconds"/>
+            <type name="union">
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+              <type name="uint32">
+                <range value="1 .. 2147483647"/>
+              </type>
+            </type>
+          </leaf>
+          <leaf name="rising-threshold">
+            <description>
+              <text>Rising threshold applied to all monitored objects</text>
+            </description>
+            <units name="percent"/>
+            <type name="union">
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+              <type name="uint32">
+                <range value="0 .. 100"/>
+              </type>
+            </type>
+          </leaf>
+          <leaf name="falling-threshold">
+            <description>
+              <text>Falling threshold applied to all monitored objects</text>
+            </description>
+            <units name="percent"/>
+            <type name="union">
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+              <type name="uint32">
+                <range value="0 .. 100"/>
+              </type>
+            </type>
+          </leaf>
+        </container>
+      </container>
+      <container name="arp">
+        <presence value="enable arp"/>
+        <description>
+          <text>JVision ARP settings</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <leaf name="host-name-resolution">
+          <description>
+            <text>Enable host name resolution</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </container>
+      <container name="customization">
+        <description>
+          <text>Customize SNMP behaviour based on knob</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <leaf name="ether-stats-ifd-only">
+          <description>
+            <text>To stop exposing IFLs as part of etherStatsTable</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </container>
+    </container>
+  </grouping>
+  <grouping name="apply-advanced">
+    <description>
+      <text>Apply advanced configuration logic</text>
+    </description>
+    <leaf-list name="apply-groups">
+      <ordered-by value="user"/>
+      <description>
+        <text>Groups from which to inherit configuration data</text>
+      </description>
+      <type name="string"/>
+    </leaf-list>
+    <leaf-list name="apply-groups-except">
+      <ordered-by value="user"/>
+      <description>
+        <text>Don't inherit configuration data from these groups</text>
+      </description>
+      <type name="string"/>
+    </leaf-list>
+    <list name="apply-macro">
+      <key value="name"/>
+      <ordered-by value="user"/>
+      <description>
+        <text>Macro and parameters for commit script expansion</text>
+      </description>
+      <uses name="apply-macro-type"/>
+    </list>
+  </grouping>
+  <grouping name="apply-macro-type">
+    <description>
+      <text>Macro data for commit-script expansion</text>
+    </description>
+    <leaf name="name">
+      <description>
+        <text>Name of the macro to be expanded</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <list name="data">
+      <key value="name"/>
+      <uses name="macro-data-type"/>
+    </list>
+  </grouping>
+  <grouping name="client-address-object">
+    <description>
+      <text>Client address</text>
+    </description>
+    <leaf name="name">
+      <description>
+        <text>Address or prefix</text>
+      </description>
+      <type name="jt:ipprefix"/>
+    </leaf>
+    <uses name="apply-advanced"/>
+    <leaf name="restrict">
+      <description>
+        <text>Deny access</text>
+      </description>
+      <type name="empty"/>
+    </leaf>
+  </grouping>
+  <grouping name="comm-object">
+    <description>
+      <text>Specify snmp-community name</text>
+    </description>
+    <uses name="apply-advanced"/>
+    <leaf name="snmp-community">
+      <description>
+        <text>Specify community name</text>
+      </description>
+      <type name="string">
+        <length value="1 .. 32"/>
+      </type>
+    </leaf>
+    <leaf name="no-default-comm-to-v3-config">
+      <description>
+        <text>No default snmp-community and v3 configuration</text>
+      </description>
+      <type name="empty"/>
+    </leaf>
+  </grouping>
+  <grouping name="macro-data-type">
+    <leaf name="name">
+      <description>
+        <text>Keyword part of the keyword-value pair</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <leaf name="value">
+      <description>
+        <text>Value part of the keyword-value pair</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+  </grouping>
+  <grouping name="sec-object">
+    <description>
+      <text>Specify security-name</text>
+    </description>
+    <uses name="apply-advanced"/>
+    <leaf name="security-name">
+      <description>
+        <text>Specify v3 security-name</text>
+      </description>
+      <type name="string">
+        <length value="1 .. 32"/>
+      </type>
+    </leaf>
+    <leaf name="context">
+      <description>
+        <text>Specify context name associated to this security-name</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+  </grouping>
+  <grouping name="security-model-access">
+    <description>
+      <text>Security access configuration</text>
+    </description>
+    <leaf name="name">
+      <description>
+        <text>SNMPv3 VACM security model</text>
+      </description>
+      <type name="enumeration">
+        <enum name="any">
+          <description>
+            <text>Any security model</text>
+          </description>
+        </enum>
+        <enum name="usm">
+          <description>
+            <text>User-based security model</text>
+          </description>
+        </enum>
+        <enum name="v1">
+          <description>
+            <text>SNMPv1 model</text>
+          </description>
+        </enum>
+        <enum name="v2c">
+          <description>
+            <text>SNMPv2c model</text>
+          </description>
+        </enum>
+      </type>
+    </leaf>
+    <uses name="apply-advanced"/>
+    <list name="security-level">
+      <key value="name"/>
+      <ordered-by value="user"/>
+      <description>
+        <text>Security level access configuration</text>
+      </description>
+      <leaf name="name">
+        <description>
+          <text>SNMPv3 VACM security level</text>
+        </description>
+        <type name="enumeration">
+          <enum name="none">
+            <description>
+              <text>None (noAuthNoPriv)</text>
+            </description>
+          </enum>
+          <enum name="authentication">
+            <description>
+              <text>Authentication (authNoPriv)</text>
+            </description>
+          </enum>
+          <enum name="privacy">
+            <description>
+              <text>Privacy and authentication (authPriv)</text>
+            </description>
+          </enum>
+        </type>
+      </leaf>
+      <uses name="apply-advanced"/>
+      <leaf name="context-match">
+        <description>
+          <text>Type of match to perform on context-prefix</text>
+        </description>
+        <default value="exact"/>
+        <type name="enumeration">
+          <enum name="exact">
+            <description>
+              <text>Exact match of prefix and context name</text>
+            </description>
+          </enum>
+          <enum name="prefix">
+            <description>
+              <text>Only match the context prefix</text>
+            </description>
+          </enum>
+        </type>
+      </leaf>
+      <leaf name="read-view">
+        <description>
+          <text>View used for read access</text>
+        </description>
+        <type name="string"/>
+      </leaf>
+      <leaf name="write-view">
+        <description>
+          <text>View used for write access</text>
+        </description>
+        <type name="string"/>
+      </leaf>
+      <leaf name="notify-view">
+        <description>
+          <text>View used to notifications</text>
+        </description>
+        <type name="string"/>
+      </leaf>
+    </list>
+  </grouping>
+  <grouping name="v3-user-config">
+    <description>
+      <text>SNMPv3 user configuration</text>
+    </description>
+    <leaf name="name">
+      <description>
+        <text>User name</text>
+      </description>
+      <type name="string">
+        <length value="1 .. 32"/>
+      </type>
+    </leaf>
+    <uses name="apply-advanced"/>
+    <choice name="authentication">
+      <case name="case_1">
+        <container name="authentication-md5">
+          <description>
+            <text>Configure MD5 authentication</text>
+          </description>
+          <uses name="auth-object"/>
+        </container>
+      </case>
+      <case name="case_2">
+        <container name="authentication-sha">
+          <description>
+            <text>Configure SHA authentication</text>
+          </description>
+          <uses name="auth-object"/>
+        </container>
+      </case>
+      <case name="case_3">
+        <container name="authentication-sha224">
+          <description>
+            <text>Configure SHA224 authentication</text>
+          </description>
+          <uses name="auth-object"/>
+        </container>
+      </case>
+      <case name="case_4">
+        <container name="authentication-sha256">
+          <description>
+            <text>Configure SHA256 authentication</text>
+          </description>
+          <uses name="auth-object"/>
+        </container>
+      </case>
+      <case name="case_5">
+        <container name="authentication-sha384">
+          <description>
+            <text>Configure SHA384 authentication</text>
+          </description>
+          <uses name="auth-object"/>
+        </container>
+      </case>
+      <case name="case_6">
+        <container name="authentication-sha512">
+          <description>
+            <text>Configure SHA512 authentication</text>
+          </description>
+          <uses name="auth-object"/>
+        </container>
+      </case>
+      <case name="case_7">
+        <leaf name="authentication-none">
+          <description>
+            <text>Set no authentication for the user</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+    </choice>
+    <choice name="privacy">
+      <case name="case_1">
+        <container name="privacy-des">
+          <description>
+            <text>Configure DES privacy</text>
+          </description>
+          <uses name="priv-object"/>
+        </container>
+      </case>
+      <case name="case_2">
+        <container name="privacy-3des">
+          <description>
+            <text>Configure Triple DES privacy</text>
+          </description>
+          <uses name="priv-object"/>
+        </container>
+      </case>
+      <case name="case_3">
+        <container name="privacy-aes128">
+          <description>
+            <text>Configure AES128 privacy</text>
+          </description>
+          <uses name="priv-object"/>
+        </container>
+      </case>
+      <case name="case_4">
+        <leaf name="privacy-none">
+          <description>
+            <text>Set no privacy for the user</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+    </choice>
+  </grouping>
+  <grouping name="auth-object">
+    <description>
+      <text>Authentication parameters</text>
+    </description>
+    <uses name="apply-advanced"/>
+    <leaf name="authentication-password">
+      <description>
+        <text>User's authentication password</text>
+      </description>
+      <type name="string">
+        <length value="8 .. 1024"/>
+      </type>
+    </leaf>
+    <leaf name="authentication-key">
+      <description>
+        <text>Encrypted key used for user authentication</text>
+      </description>
+      <type name="jt:unreadable"/>
+    </leaf>
+  </grouping>
+  <grouping name="priv-object">
+    <description>
+      <text>Privacy parameters</text>
+    </description>
+    <uses name="apply-advanced"/>
+    <leaf name="privacy-password">
+      <description>
+        <text>User's privacy password</text>
+      </description>
+      <type name="string">
+        <length value="8 .. 1024"/>
+      </type>
+    </leaf>
+    <leaf name="privacy-key">
+      <description>
+        <text>Encrypted key used for user privacy</text>
+      </description>
+      <type name="jt:unreadable"/>
+    </leaf>
+  </grouping>
+</module>

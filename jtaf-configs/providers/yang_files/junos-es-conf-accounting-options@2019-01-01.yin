@@ -1,0 +1,1184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module name="junos-es-conf-accounting-options"
+        xmlns="urn:ietf:params:xml:ns:yang:yin:1"
+        xmlns:jc-accounting-options="http://yang.juniper.net/junos-es/conf/accounting-options"
+        xmlns:jt="http://yang.juniper.net/junos/common/types"
+        xmlns:jc="http://yang.juniper.net/junos-es/conf/root">
+  <namespace uri="http://yang.juniper.net/junos-es/conf/accounting-options"/>
+  <prefix value="jc-accounting-options"/>
+  <import module="junos-common-types">
+    <prefix value="jt"/>
+    <revision-date date="2019-01-01"/>
+  </import>
+  <import module="junos-es-conf-root">
+    <prefix value="jc"/>
+    <revision-date date="2019-01-01"/>
+  </import>
+  <organization>
+    <text>Juniper Networks, Inc.</text>
+  </organization>
+  <contact>
+    <text>yang-support@juniper.net</text>
+  </contact>
+  <description>
+    <text>Junos accounting-options configuration module</text>
+  </description>
+  <revision date="2019-01-01">
+    <description>
+      <text>Junos: 21.3R1.9</text>
+    </description>
+  </revision>
+  <augment target-node="/jc:configuration">
+    <uses name="accounting-options-group"/>
+  </augment>
+  <augment target-node="/jc:configuration/jc:groups">
+    <uses name="accounting-options-group"/>
+  </augment>
+  <grouping name="accounting-options-group">
+    <container name="accounting-options">
+      <description>
+        <text>Accounting data configuration</text>
+      </description>
+      <uses name="juniper_accounting_options"/>
+    </container>
+  </grouping>
+  <grouping name="juniper_accounting_options">
+    <description>
+      <text>Accounting data configuration</text>
+    </description>
+    <uses name="apply-advanced"/>
+    <container name="periodic-refresh">
+      <description>
+        <text>Toggle periodic statistics collection</text>
+      </description>
+      <choice name="enable-disable">
+        <case name="case_1">
+          <leaf name="disable">
+            <description>
+              <text>Disable statistics refresh</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+        </case>
+      </choice>
+    </container>
+    <list name="file">
+      <key value="name"/>
+      <ordered-by value="user"/>
+      <description>
+        <text>Accounting data file configuration</text>
+      </description>
+      <leaf name="name">
+        <description>
+          <text>Name of file in which to write accounting data</text>
+        </description>
+        <type name="string"/>
+      </leaf>
+      <uses name="apply-advanced"/>
+      <leaf name="nonpersistent">
+        <description>
+          <text>File does not persist across reboot</text>
+        </description>
+        <type name="empty"/>
+      </leaf>
+      <leaf name="size">
+        <description>
+          <text>Maximum accounting data file size</text>
+        </description>
+        <type name="string"/>
+      </leaf>
+      <leaf name="files">
+        <description>
+          <text>Maximum number of files for this profile</text>
+        </description>
+        <default value="10"/>
+        <type name="union">
+          <type name="string">
+            <pattern value="&lt;.*&gt;|$.*"/>
+          </type>
+          <type name="uint32">
+            <range value="3 .. 1000"/>
+          </type>
+        </type>
+      </leaf>
+      <leaf name="transfer-interval">
+        <description>
+          <text>Frequency at which to transfer files to archive sites</text>
+        </description>
+        <default value="30"/>
+        <units name="minutes"/>
+        <type name="union">
+          <type name="string">
+            <pattern value="&lt;.*&gt;|$.*"/>
+          </type>
+          <type name="uint32">
+            <range value="5 .. 2880"/>
+          </type>
+        </type>
+      </leaf>
+      <leaf name="start-time">
+        <description>
+          <text>Start time for file transmission (yyyy-mm-dd.hh:mm) in local time format</text>
+        </description>
+        <type name="jt:time"/>
+      </leaf>
+      <leaf name="compress">
+        <description>
+          <text>Transfer file in compressed format</text>
+        </description>
+        <type name="empty"/>
+      </leaf>
+      <container name="backup-on-failure">
+        <description>
+          <text>Backup on transfer failure</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <choice name="backuponfailure">
+          <case name="case_1">
+            <leaf name="master-only">
+              <description>
+                <text>Backup on master only</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+          </case>
+          <case name="case_2">
+            <leaf name="master-and-slave">
+              <description>
+                <text>Backup on both master and slave</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+          </case>
+        </choice>
+      </container>
+      <leaf name="push-backup-to-master">
+        <description>
+          <text>Push backup files to master RE</text>
+        </description>
+        <type name="empty"/>
+      </leaf>
+      <list name="archive-sites">
+        <key value="name"/>
+        <ordered-by value="user"/>
+        <description>
+          <text>List of archive destinations</text>
+        </description>
+        <leaf name="name">
+          <description>
+            <text>Primary and failover URLs to receive archive files</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+        <leaf name="password">
+          <description>
+            <text>Password for login into the archive site</text>
+          </description>
+          <type name="jt:unreadable"/>
+        </leaf>
+      </list>
+    </list>
+    <list name="interface-profile">
+      <key value="name"/>
+      <ordered-by value="user"/>
+      <description>
+        <text>Interface profile for accounting data</text>
+      </description>
+      <leaf name="name">
+        <description>
+          <text>Name of profile</text>
+        </description>
+        <type name="string"/>
+      </leaf>
+      <uses name="apply-advanced"/>
+      <leaf name="file">
+        <description>
+          <text>Name of file for accounting data</text>
+        </description>
+        <type name="string"/>
+      </leaf>
+      <leaf name="interval">
+        <description>
+          <text>Polling interval</text>
+        </description>
+        <default value="30"/>
+        <units name="minutes"/>
+        <type name="union">
+          <type name="string">
+            <pattern value="&lt;.*&gt;|$.*"/>
+          </type>
+          <type name="uint32">
+            <range value="1 .. 2880"/>
+          </type>
+        </type>
+      </leaf>
+      <leaf name="start-time">
+        <description>
+          <text>Profile start time (yyyy-mm-dd.hh:mm) in local time format</text>
+        </description>
+        <type name="jt:time"/>
+      </leaf>
+      <container name="fields">
+        <description>
+          <text>Statistics to log to file</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <leaf name="input-bytes">
+          <description>
+            <text>Input bytes</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+        <leaf name="output-bytes">
+          <description>
+            <text>Output bytes</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+        <leaf name="input-packets">
+          <description>
+            <text>Input packets</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+        <leaf name="output-packets">
+          <description>
+            <text>Output packets</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+        <leaf name="input-errors">
+          <description>
+            <text>Generic input error packets</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+        <leaf name="output-errors">
+          <description>
+            <text>Generic output error packets</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+        <leaf name="input-multicast">
+          <description>
+            <text>Input packets arriving by multicast</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+        <leaf name="output-multicast">
+          <description>
+            <text>Output packets sent by multicast</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+        <leaf name="input-unicast">
+          <description>
+            <text>Input unicast packets</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+        <leaf name="output-unicast">
+          <description>
+            <text>Output unicast packets</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+        <leaf name="unsupported-protocol">
+          <description>
+            <text>Packets for unsupported protocol</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+        <leaf name="rpf-check-bytes">
+          <description>
+            <text>Bytes failing IPv4 reverse-path-forwarding check</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+        <leaf name="rpf-check-packets">
+          <description>
+            <text>Packets failing IPv4 reverse-path-forwarding check</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+        <leaf name="rpf-check6-bytes">
+          <description>
+            <text>Bytes failing IPv6 reverse-path-forwarding check</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+        <leaf name="rpf-check6-packets">
+          <description>
+            <text>Packets failing IPv6 reverse-path-forwarding check</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+        <leaf name="rpf-check-total-bytes">
+          <description>
+            <text>Total Bytes failing reverse-path-forwarding check</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+        <leaf name="rpf-check-total-packets">
+          <description>
+            <text>Total Packets failing reverse-path-forwarding check</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </container>
+    </list>
+    <list name="filter-profile">
+      <key value="name"/>
+      <ordered-by value="user"/>
+      <description>
+        <text>Filter profile for accounting data</text>
+      </description>
+      <leaf name="name">
+        <description>
+          <text>Name of profile</text>
+        </description>
+        <type name="string"/>
+      </leaf>
+      <uses name="apply-advanced"/>
+      <leaf name="file">
+        <description>
+          <text>Name of file for accounting data</text>
+        </description>
+        <type name="string"/>
+      </leaf>
+      <leaf name="interval">
+        <description>
+          <text>Polling interval</text>
+        </description>
+        <default value="30"/>
+        <units name="minutes"/>
+        <type name="union">
+          <type name="string">
+            <pattern value="&lt;.*&gt;|$.*"/>
+          </type>
+          <type name="uint32">
+            <range value="1 .. 1048576"/>
+          </type>
+        </type>
+      </leaf>
+      <list name="counters">
+        <key value="name"/>
+        <ordered-by value="user"/>
+        <description>
+          <text>Name of counter</text>
+        </description>
+        <uses name="counter-object"/>
+      </list>
+      <leaf name="start-time">
+        <description>
+          <text>Profile start time (yyyy-mm-dd.hh:mm) in local time format</text>
+        </description>
+        <type name="jt:time"/>
+      </leaf>
+    </list>
+    <list name="class-usage-profile">
+      <key value="name"/>
+      <ordered-by value="user"/>
+      <description>
+        <text>Class usage profile for accounting data</text>
+      </description>
+      <leaf name="name">
+        <description>
+          <text>Name of profile</text>
+        </description>
+        <type name="string"/>
+      </leaf>
+      <uses name="apply-advanced"/>
+      <leaf name="file">
+        <description>
+          <text>Name of file for accounting data</text>
+        </description>
+        <type name="string"/>
+      </leaf>
+      <leaf name="interval">
+        <description>
+          <text>Polling interval</text>
+        </description>
+        <default value="30"/>
+        <units name="minutes"/>
+        <type name="union">
+          <type name="string">
+            <pattern value="&lt;.*&gt;|$.*"/>
+          </type>
+          <type name="uint32">
+            <range value="1 .. 1048576"/>
+          </type>
+        </type>
+      </leaf>
+      <leaf name="start-time">
+        <description>
+          <text>Profile start time (yyyy-mm-dd.hh:mm) in local time format</text>
+        </description>
+        <type name="jt:time"/>
+      </leaf>
+      <choice name="class-name">
+        <case name="case_1">
+          <list name="destination-classes">
+            <key value="name"/>
+            <ordered-by value="user"/>
+            <description>
+              <text>Name of destination class</text>
+            </description>
+            <uses name="dest-class-name-object"/>
+          </list>
+        </case>
+        <case name="case_2">
+          <list name="source-classes">
+            <key value="name"/>
+            <ordered-by value="user"/>
+            <description>
+              <text>Name of source class</text>
+            </description>
+            <uses name="source-class-name-object"/>
+          </list>
+        </case>
+      </choice>
+    </list>
+    <list name="routing-engine-profile">
+      <key value="name"/>
+      <ordered-by value="user"/>
+      <description>
+        <text>Routing Engine profile for accounting data</text>
+      </description>
+      <leaf name="name">
+        <description>
+          <text>Name of profile</text>
+        </description>
+        <type name="string"/>
+      </leaf>
+      <uses name="apply-advanced"/>
+      <leaf name="file">
+        <description>
+          <text>Name of file for accounting data</text>
+        </description>
+        <type name="string"/>
+      </leaf>
+      <leaf name="interval">
+        <description>
+          <text>Polling interval</text>
+        </description>
+        <default value="30"/>
+        <units name="minutes"/>
+        <type name="union">
+          <type name="string">
+            <pattern value="&lt;.*&gt;|$.*"/>
+          </type>
+          <type name="uint32">
+            <range value="1 .. 2880"/>
+          </type>
+        </type>
+      </leaf>
+      <leaf name="start-time">
+        <description>
+          <text>Profile start time (yyyy-mm-dd.hh:mm) in local time format</text>
+        </description>
+        <type name="jt:time"/>
+      </leaf>
+      <container name="fields">
+        <description>
+          <text>Information to log to file</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <leaf name="host-name">
+          <description>
+            <text>Hostname for this router</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+        <leaf name="date">
+          <description>
+            <text>Date</text>
+          </description>
+          <units name="YYYYMMDD"/>
+          <type name="empty"/>
+        </leaf>
+        <leaf name="time-of-day">
+          <description>
+            <text>Time of day</text>
+          </description>
+          <units name="HHMMSS"/>
+          <type name="empty"/>
+        </leaf>
+        <leaf name="uptime">
+          <description>
+            <text>Time since last reboot</text>
+          </description>
+          <units name="seconds"/>
+          <type name="empty"/>
+        </leaf>
+        <leaf name="cpu-load-1">
+          <description>
+            <text>Average system load over last 1 minute</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+        <leaf name="cpu-load-5">
+          <description>
+            <text>Average system load over last 5 minutes</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+        <leaf name="cpu-load-15">
+          <description>
+            <text>Average system load over last 15 minutes</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+        <leaf name="memory-usage">
+          <description>
+            <text>Instantaneous active memory usage</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+        <leaf name="total-cpu-usage">
+          <description>
+            <text>Total CPU usage percentage</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+        <leaf name="cpu-usage-5sec">
+          <description>
+            <text>System CPU usage for last 5 seconds</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+        <leaf name="cpu-usage-1min">
+          <description>
+            <text>System CPU usage for the last minute</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+        <leaf name="cpu-usage-5min">
+          <description>
+            <text>System CPU usage for the 5 minutes</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+        <leaf name="free-mem">
+          <description>
+            <text>Total free memory available</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+        <leaf name="total-mem">
+          <description>
+            <text>Total memory available</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </container>
+    </list>
+    <list name="mib-profile">
+      <key value="name"/>
+      <ordered-by value="user"/>
+      <description>
+        <text>MIB profile for accounting data</text>
+      </description>
+      <leaf name="name">
+        <description>
+          <text>Name of profile</text>
+        </description>
+        <type name="string"/>
+      </leaf>
+      <uses name="apply-advanced"/>
+      <leaf name="file">
+        <description>
+          <text>Name of file for accounting data</text>
+        </description>
+        <type name="string"/>
+      </leaf>
+      <leaf name="interval">
+        <description>
+          <text>Polling interval</text>
+        </description>
+        <default value="30"/>
+        <units name="minutes"/>
+        <type name="union">
+          <type name="string">
+            <pattern value="&lt;.*&gt;|$.*"/>
+          </type>
+          <type name="uint32">
+            <range value="1 .. 2880"/>
+          </type>
+        </type>
+      </leaf>
+      <leaf name="start-time">
+        <description>
+          <text>Profile start time (yyyy-mm-dd.hh:mm) in local time format</text>
+        </description>
+        <type name="jt:time"/>
+      </leaf>
+      <leaf name="operation">
+        <description>
+          <text>SNMP operation</text>
+        </description>
+        <default value="walk"/>
+        <type name="enumeration">
+          <enum name="get">
+            <description>
+              <text>Get SNMP object value</text>
+            </description>
+          </enum>
+          <enum name="get-next">
+            <description>
+              <text>Get next SNMP object value</text>
+            </description>
+          </enum>
+          <enum name="walk">
+            <description>
+              <text>Walk SNMP object values</text>
+            </description>
+          </enum>
+        </type>
+      </leaf>
+      <list name="object-names">
+        <key value="name"/>
+        <ordered-by value="user"/>
+        <description>
+          <text>Names of MIB objects</text>
+        </description>
+        <uses name="mib-variable-name-object"/>
+      </list>
+    </list>
+    <list name="flat-file-profile">
+      <key value="name"/>
+      <ordered-by value="user"/>
+      <description>
+        <text>Flat file profile for accounting data</text>
+      </description>
+      <leaf name="name">
+        <description>
+          <text>Name of profile</text>
+        </description>
+        <type name="string"/>
+      </leaf>
+      <uses name="apply-advanced"/>
+      <leaf name="file">
+        <description>
+          <text>Name of file for accounting data</text>
+        </description>
+        <type name="string"/>
+      </leaf>
+      <leaf name="interval">
+        <description>
+          <text>Polling interval</text>
+        </description>
+        <default value="15"/>
+        <units name="minutes"/>
+        <type name="union">
+          <type name="string">
+            <pattern value="&lt;.*&gt;|$.*"/>
+          </type>
+          <type name="uint32">
+            <range value="1 .. 2880"/>
+          </type>
+        </type>
+      </leaf>
+      <leaf name="schema-version">
+        <description>
+          <text>Name of the schema</text>
+        </description>
+        <type name="string"/>
+      </leaf>
+      <leaf name="start-time">
+        <description>
+          <text>Profile start time (yyyy-mm-dd.hh:mm) in local time format</text>
+        </description>
+        <type name="jt:time"/>
+      </leaf>
+      <leaf name="use-fc-ingress-stats">
+        <description>
+          <text>Use Ingress stats for reporting forwarding class counters</text>
+        </description>
+        <type name="empty"/>
+      </leaf>
+      <container name="fields">
+        <description>
+          <text>Statistics to log to file</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <leaf name="all-fields">
+          <description>
+            <text>All parameters</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+        <leaf name="service-accounting">
+          <description>
+            <text>Service accounting for filters - obsolete config</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+        <container name="general-param">
+          <presence value="enable general-param"/>
+          <description>
+            <text>General interface parameters</text>
+          </description>
+          <uses name="apply-advanced"/>
+          <leaf name="all-fields">
+            <description>
+              <text>All general interface parameters</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="timestamp">
+            <description>
+              <text>Timestamp</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="accounting-type">
+            <description>
+              <text>Accounting status type</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="descr">
+            <description>
+              <text>Description</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="routing-instances">
+            <description>
+              <text>Routing Instances where interface belongs</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="nas-port-id">
+            <description>
+              <text>NAS port id</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="line-id">
+            <description>
+              <text>Line id</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="vlan-id">
+            <description>
+              <text>Vlan-id</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="logical-interface">
+            <description>
+              <text>Logical-Interface</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="physical-interface">
+            <description>
+              <text>Physical Interface name</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="user-name">
+            <description>
+              <text>User name of the subscriber</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+        </container>
+        <container name="overall-packet">
+          <presence value="enable overall-packet"/>
+          <description>
+            <text>Overall packet statistics</text>
+          </description>
+          <uses name="apply-advanced"/>
+          <leaf name="all-fields">
+            <description>
+              <text>All overall packet statistics</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="input-bytes">
+            <description>
+              <text>Input bytes</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="input-packets">
+            <description>
+              <text>Input packets</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="input-v6-bytes">
+            <description>
+              <text>Input IPV6 bytes</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="input-v6-packets">
+            <description>
+              <text>Input IPV6 packets</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="output-bytes">
+            <description>
+              <text>Output bytes</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="output-packets">
+            <description>
+              <text>Output packets</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="output-v6-bytes">
+            <description>
+              <text>Output IPV6 bytes</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="output-v6-packets">
+            <description>
+              <text>Output IPV6 packets</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="input-errors">
+            <description>
+              <text>Total input errors</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="output-errors">
+            <description>
+              <text>Total output errors</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="input-discards">
+            <description>
+              <text>Total input discards</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="input-v4-bytes">
+            <description>
+              <text>Input IPV4 bytes</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="input-v4-packets">
+            <description>
+              <text>Input IPV4 packets</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="output-v4-bytes">
+            <description>
+              <text>Output IPV4 bytes</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="output-v4-packets">
+            <description>
+              <text>Output IPV4 packets</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="input-bytes-per-sec">
+            <description>
+              <text>Input bytes per second</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="input-packets-per-sec">
+            <description>
+              <text>Input packets per second</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+        </container>
+        <container name="l2-stats">
+          <presence value="enable l2-stats"/>
+          <description>
+            <text>Layer2 statistics</text>
+          </description>
+          <uses name="apply-advanced"/>
+          <leaf name="all-fields">
+            <description>
+              <text>All Layer2 statistics</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="input-mcast-bytes">
+            <description>
+              <text>L2 multicast bytes from input side</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="input-mcast-packets">
+            <description>
+              <text>L2 multicast packets from input side</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+        </container>
+        <container name="ingress-stats">
+          <presence value="enable ingress-stats"/>
+          <description>
+            <text>Ingress queue statistics</text>
+          </description>
+          <uses name="apply-advanced"/>
+          <leaf name="all-fields">
+            <description>
+              <text>All ingress queue statistics</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="queue-id">
+            <description>
+              <text>Queue ID</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="input-packets">
+            <description>
+              <text>Total input packets on the queue</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="input-bytes">
+            <description>
+              <text>Total input bytes on the queue</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="output-packets">
+            <description>
+              <text>Total output packet on the queue</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="output-bytes">
+            <description>
+              <text>Total output bytes on the queue</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="drop-packets">
+            <description>
+              <text>Ingress queue dropped packets</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+        </container>
+        <container name="egress-stats">
+          <presence value="enable egress-stats"/>
+          <description>
+            <text>Egress queue statistics</text>
+          </description>
+          <uses name="apply-advanced"/>
+          <leaf name="all-fields">
+            <description>
+              <text>All egress queue statistics</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="queue-id">
+            <description>
+              <text>Queue ID</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="input-packets">
+            <description>
+              <text>Total input packets on the queue</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="input-bytes">
+            <description>
+              <text>Total input bytes on the queue</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="output-packets">
+            <description>
+              <text>Total output packet on the queue</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="output-bytes">
+            <description>
+              <text>Total output bytes on the queue</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="tail-drop-packets">
+            <description>
+              <text>Egress queue tail dropped packets</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="red-drop-packets">
+            <description>
+              <text>Egress queue red dropped packets</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="red-drop-bytes">
+            <description>
+              <text>Egress queue red drop bytes</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="total-drop-packets">
+            <description>
+              <text>Egress queue total drop packets</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+        </container>
+      </container>
+      <container name="format">
+        <description>
+          <text>Flat file accounting format</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <choice name="flatfileformat">
+          <case name="case_1">
+            <leaf name="ipdr">
+              <description>
+                <text>IPDR format</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+          </case>
+          <case name="case_2">
+            <leaf name="csv">
+              <description>
+                <text>CSV format</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+          </case>
+        </choice>
+      </container>
+    </list>
+    <container name="cleanup-interval">
+      <presence value="enable cleanup-interval"/>
+      <description>
+        <text>Backup files cleanup interval</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <leaf name="interval">
+        <description>
+          <text>Cleanup interval in days</text>
+        </description>
+        <default value="1"/>
+        <units name="day"/>
+        <type name="union">
+          <type name="string">
+            <pattern value="&lt;.*&gt;|$.*"/>
+          </type>
+          <type name="uint32">
+            <range value="1 .. 31"/>
+          </type>
+        </type>
+      </leaf>
+    </container>
+  </grouping>
+  <grouping name="apply-advanced">
+    <description>
+      <text>Apply advanced configuration logic</text>
+    </description>
+    <leaf-list name="apply-groups">
+      <ordered-by value="user"/>
+      <description>
+        <text>Groups from which to inherit configuration data</text>
+      </description>
+      <type name="string"/>
+    </leaf-list>
+    <leaf-list name="apply-groups-except">
+      <ordered-by value="user"/>
+      <description>
+        <text>Don't inherit configuration data from these groups</text>
+      </description>
+      <type name="string"/>
+    </leaf-list>
+    <list name="apply-macro">
+      <key value="name"/>
+      <ordered-by value="user"/>
+      <description>
+        <text>Macro and parameters for commit script expansion</text>
+      </description>
+      <uses name="apply-macro-type"/>
+    </list>
+  </grouping>
+  <grouping name="apply-macro-type">
+    <description>
+      <text>Macro data for commit-script expansion</text>
+    </description>
+    <leaf name="name">
+      <description>
+        <text>Name of the macro to be expanded</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <list name="data">
+      <key value="name"/>
+      <uses name="macro-data-type"/>
+    </list>
+  </grouping>
+  <grouping name="counter-object">
+    <leaf name="name">
+      <description>
+        <text>Name of counter</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+  </grouping>
+  <grouping name="dest-class-name-object">
+    <leaf name="name">
+      <description>
+        <text>Class name</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+  </grouping>
+  <grouping name="macro-data-type">
+    <leaf name="name">
+      <description>
+        <text>Keyword part of the keyword-value pair</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <leaf name="value">
+      <description>
+        <text>Value part of the keyword-value pair</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+  </grouping>
+  <grouping name="mib-variable-name-object">
+    <leaf name="name">
+      <description>
+        <text>MIB variable name</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+  </grouping>
+  <grouping name="source-class-name-object">
+    <leaf name="name">
+      <description>
+        <text>Class name</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+  </grouping>
+</module>

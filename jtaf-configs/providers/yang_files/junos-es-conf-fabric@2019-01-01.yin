@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module name="junos-es-conf-fabric"
+        xmlns="urn:ietf:params:xml:ns:yang:yin:1"
+        xmlns:jc-fabric="http://yang.juniper.net/junos-es/conf/fabric"
+        xmlns:jt="http://yang.juniper.net/junos/common/types"
+        xmlns:jc="http://yang.juniper.net/junos-es/conf/root">
+  <namespace uri="http://yang.juniper.net/junos-es/conf/fabric"/>
+  <prefix value="jc-fabric"/>
+  <import module="junos-common-types">
+    <prefix value="jt"/>
+    <revision-date date="2019-01-01"/>
+  </import>
+  <import module="junos-es-conf-root">
+    <prefix value="jc"/>
+    <revision-date date="2019-01-01"/>
+  </import>
+  <organization>
+    <text>Juniper Networks, Inc.</text>
+  </organization>
+  <contact>
+    <text>yang-support@juniper.net</text>
+  </contact>
+  <description>
+    <text>Junos fabric configuration module</text>
+  </description>
+  <revision date="2019-01-01">
+    <description>
+      <text>Junos: 21.3R1.9</text>
+    </description>
+  </revision>
+  <augment target-node="/jc:configuration">
+    <uses name="fabric-group"/>
+  </augment>
+  <augment target-node="/jc:configuration/jc:groups">
+    <uses name="fabric-group"/>
+  </augment>
+  <grouping name="fabric-group"/>
+</module>

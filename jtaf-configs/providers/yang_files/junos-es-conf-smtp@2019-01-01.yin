@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module name="junos-es-conf-smtp"
+        xmlns="urn:ietf:params:xml:ns:yang:yin:1"
+        xmlns:jc-smtp="http://yang.juniper.net/junos-es/conf/smtp"
+        xmlns:jt="http://yang.juniper.net/junos/common/types"
+        xmlns:jc="http://yang.juniper.net/junos-es/conf/root">
+  <namespace uri="http://yang.juniper.net/junos-es/conf/smtp"/>
+  <prefix value="jc-smtp"/>
+  <import module="junos-common-types">
+    <prefix value="jt"/>
+    <revision-date date="2019-01-01"/>
+  </import>
+  <import module="junos-es-conf-root">
+    <prefix value="jc"/>
+    <revision-date date="2019-01-01"/>
+  </import>
+  <organization>
+    <text>Juniper Networks, Inc.</text>
+  </organization>
+  <contact>
+    <text>yang-support@juniper.net</text>
+  </contact>
+  <description>
+    <text>Junos smtp configuration module</text>
+  </description>
+  <revision date="2019-01-01">
+    <description>
+      <text>Junos: 21.3R1.9</text>
+    </description>
+  </revision>
+  <augment target-node="/jc:configuration">
+    <uses name="smtp-group"/>
+  </augment>
+  <augment target-node="/jc:configuration/jc:groups">
+    <uses name="smtp-group"/>
+  </augment>
+  <grouping name="smtp-group">
+    <container name="smtp">
+      <description>
+        <text>Simple Mail Transfer Protocol service configuration</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <container name="primary-server">
+        <description>
+          <text>SMTP primary server configuration</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <leaf name="address">
+          <description>
+            <text>SMTP server's IPv4 address</text>
+          </description>
+          <type name="jt:ipv4addr"/>
+        </leaf>
+        <choice name="authentication">
+          <case name="case_1">
+            <list name="login">
+              <key value="name"/>
+              <ordered-by value="user"/>
+              <description>
+                <text>Configure a mail sender account to the server</text>
+              </description>
+              <uses name="login-object"/>
+            </list>
+          </case>
+        </choice>
+      </container>
+      <container name="secondary-server">
+        <description>
+          <text>SMTP secondary server configuration</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <leaf name="address">
+          <description>
+            <text>SMTP server's IPv4 address</text>
+          </description>
+          <type name="jt:ipv4addr"/>
+        </leaf>
+        <choice name="authentication">
+          <case name="case_1">
+            <list name="login">
+              <key value="name"/>
+              <ordered-by value="user"/>
+              <description>
+                <text>Configure a mail sender account to the server</text>
+              </description>
+              <uses name="login-object"/>
+            </list>
+          </case>
+        </choice>
+      </container>
+      <container name="traceoptions">
+        <description>
+          <text>Trace options for SMTP client service</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <list name="flag">
+          <key value="name"/>
+          <ordered-by value="user"/>
+          <description>
+            <text>Tracing parameters</text>
+          </description>
+          <leaf name="name">
+            <type name="enumeration">
+              <enum name="IPC">
+                <description>
+                  <text>Trace inter-processs communication</text>
+                </description>
+              </enum>
+              <enum name="protocol-exchange">
+                <description>
+                  <text>Trace SMTP protocol exchanges</text>
+                </description>
+              </enum>
+              <enum name="configuration">
+                <description>
+                  <text>Trace configuration event</text>
+                </description>
+              </enum>
+              <enum name="send-request">
+                <description>
+                  <text>Trace send mail request event</text>
+                </description>
+              </enum>
+              <enum name="all">
+                <description>
+                  <text>Trace everything</text>
+                </description>
+              </enum>
+            </type>
+          </leaf>
+        </list>
+      </container>
+    </container>
+  </grouping>
+  <grouping name="apply-advanced">
+    <description>
+      <text>Apply advanced configuration logic</text>
+    </description>
+    <leaf-list name="apply-groups">
+      <ordered-by value="user"/>
+      <description>
+        <text>Groups from which to inherit configuration data</text>
+      </description>
+      <type name="string"/>
+    </leaf-list>
+    <leaf-list name="apply-groups-except">
+      <ordered-by value="user"/>
+      <description>
+        <text>Don't inherit configuration data from these groups</text>
+      </description>
+      <type name="string"/>
+    </leaf-list>
+    <list name="apply-macro">
+      <key value="name"/>
+      <ordered-by value="user"/>
+      <description>
+        <text>Macro and parameters for commit script expansion</text>
+      </description>
+      <uses name="apply-macro-type"/>
+    </list>
+  </grouping>
+  <grouping name="apply-macro-type">
+    <description>
+      <text>Macro data for commit-script expansion</text>
+    </description>
+    <leaf name="name">
+      <description>
+        <text>Name of the macro to be expanded</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <list name="data">
+      <key value="name"/>
+      <uses name="macro-data-type"/>
+    </list>
+  </grouping>
+  <grouping name="login-object">
+    <description>
+      <text>Mail login parameters</text>
+    </description>
+    <leaf name="name">
+      <description>
+        <text>Default sender email address in user@foo.com format</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <uses name="apply-advanced"/>
+    <leaf name="password">
+      <description>
+        <text>Default sender password for user authentication</text>
+      </description>
+      <type name="jt:unreadable"/>
+    </leaf>
+  </grouping>
+  <grouping name="macro-data-type">
+    <leaf name="name">
+      <description>
+        <text>Keyword part of the keyword-value pair</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <leaf name="value">
+      <description>
+        <text>Value part of the keyword-value pair</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+  </grouping>
+</module>

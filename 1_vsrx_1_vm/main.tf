@@ -35,8 +35,16 @@ variable "net3" {
 # Provider definition
 #####################
 
+terraform {
+    required_providers {
+        azurerm = {
+            source = "hashicorp/azurerm"
+            version = "=2.33.0"
+        }
+    }
+}
+
 provider "azurerm" {
-    version = "=2.33.0"
     features {}
 }
 

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module name="junos-es-conf-session-limit-group"
+        xmlns="urn:ietf:params:xml:ns:yang:yin:1"
+        xmlns:jc-session-limit-group="http://yang.juniper.net/junos-es/conf/session-limit-group"
+        xmlns:jt="http://yang.juniper.net/junos/common/types"
+        xmlns:jc="http://yang.juniper.net/junos-es/conf/root">
+  <namespace uri="http://yang.juniper.net/junos-es/conf/session-limit-group"/>
+  <prefix value="jc-session-limit-group"/>
+  <import module="junos-common-types">
+    <prefix value="jt"/>
+    <revision-date date="2019-01-01"/>
+  </import>
+  <import module="junos-es-conf-root">
+    <prefix value="jc"/>
+    <revision-date date="2019-01-01"/>
+  </import>
+  <organization>
+    <text>Juniper Networks, Inc.</text>
+  </organization>
+  <contact>
+    <text>yang-support@juniper.net</text>
+  </contact>
+  <description>
+    <text>Junos session-limit-group configuration module</text>
+  </description>
+  <revision date="2019-01-01">
+    <description>
+      <text>Junos: 21.3R1.9</text>
+    </description>
+  </revision>
+  <augment target-node="/jc:configuration">
+    <uses name="session-limit-group-group"/>
+  </augment>
+  <augment target-node="/jc:configuration/jc:groups">
+    <uses name="session-limit-group-group"/>
+  </augment>
+  <grouping name="session-limit-group-group">
+    <list name="session-limit-group">
+      <key value="name"/>
+      <ordered-by value="user"/>
+      <description>
+        <text>Session-limit-group configuration</text>
+      </description>
+      <status value="deprecated"/>
+      <leaf name="name">
+        <description>
+          <text>Name of the group</text>
+        </description>
+        <type name="string">
+          <length value="1 .. 63"/>
+        </type>
+      </leaf>
+      <leaf name="maximum-sessions">
+        <description>
+          <text>Maximum number of sessions per tunnel-group</text>
+        </description>
+        <type name="union">
+          <type name="uint32"/>
+          <type name="string">
+            <pattern value="&lt;.*&gt;|$.*"/>
+          </type>
+        </type>
+      </leaf>
+    </list>
+  </grouping>
+</module>

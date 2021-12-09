@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module name="junos-es-conf-isdn"
+        xmlns="urn:ietf:params:xml:ns:yang:yin:1"
+        xmlns:jc-isdn="http://yang.juniper.net/junos-es/conf/isdn"
+        xmlns:jt="http://yang.juniper.net/junos/common/types"
+        xmlns:jc="http://yang.juniper.net/junos-es/conf/root">
+  <namespace uri="http://yang.juniper.net/junos-es/conf/isdn"/>
+  <prefix value="jc-isdn"/>
+  <import module="junos-common-types">
+    <prefix value="jt"/>
+    <revision-date date="2019-01-01"/>
+  </import>
+  <import module="junos-es-conf-root">
+    <prefix value="jc"/>
+    <revision-date date="2019-01-01"/>
+  </import>
+  <organization>
+    <text>Juniper Networks, Inc.</text>
+  </organization>
+  <contact>
+    <text>yang-support@juniper.net</text>
+  </contact>
+  <description>
+    <text>Junos isdn configuration module</text>
+  </description>
+  <revision date="2019-01-01">
+    <description>
+      <text>Junos: 21.3R1.9</text>
+    </description>
+  </revision>
+  <augment target-node="/jc:configuration">
+    <uses name="isdn-group"/>
+  </augment>
+  <augment target-node="/jc:configuration/jc:groups">
+    <uses name="isdn-group"/>
+  </augment>
+  <grouping name="isdn-group">
+    <container name="isdn">
+      <description>
+        <text>ISDN process configuration</text>
+      </description>
+      <status value="deprecated"/>
+      <uses name="apply-advanced"/>
+      <container name="traceoptions">
+        <description>
+          <text>Trace options for ISDN signaling process</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <leaf name="no-remote-trace">
+          <description>
+            <text>Disable remote tracing</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+        <container name="file">
+          <description>
+            <text>Trace file information</text>
+          </description>
+          <leaf name="filename">
+            <description>
+              <text>Name of file in which to write trace information</text>
+            </description>
+            <type name="string">
+              <length value="1 .. 1024"/>
+            </type>
+          </leaf>
+          <leaf name="size">
+            <description>
+              <text>Maximum trace file size</text>
+            </description>
+            <type name="string"/>
+          </leaf>
+          <leaf name="files">
+            <description>
+              <text>Maximum number of trace files</text>
+            </description>
+            <default value="3"/>
+            <type name="union">
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+              <type name="uint32">
+                <range value="2 .. 1000"/>
+              </type>
+            </type>
+          </leaf>
+          <choice name="world-readable-choice">
+            <leaf name="world-readable">
+              <description>
+                <text>Allow any user to read the log file</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="no-world-readable">
+              <description>
+                <text>Don't allow any user to read the log file</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+          </choice>
+          <leaf name="match">
+            <description>
+              <text>Regular expression for lines to be logged</text>
+            </description>
+            <type name="jt:regular-expression"/>
+          </leaf>
+        </container>
+        <list name="flag">
+          <key value="name"/>
+          <ordered-by value="user"/>
+          <description>
+            <text>One or more event types to include in trace</text>
+          </description>
+          <leaf name="name">
+            <type name="enumeration">
+              <enum name="daemon">
+                <description>
+                  <text>ISDN process events</text>
+                </description>
+              </enum>
+              <enum name="stack">
+                <description>
+                  <text>ISDN stack events</text>
+                </description>
+              </enum>
+              <enum name="all">
+                <description>
+                  <text>All events</text>
+                </description>
+              </enum>
+            </type>
+          </leaf>
+        </list>
+      </container>
+    </container>
+  </grouping>
+  <grouping name="apply-advanced">
+    <description>
+      <text>Apply advanced configuration logic</text>
+    </description>
+    <leaf-list name="apply-groups">
+      <ordered-by value="user"/>
+      <description>
+        <text>Groups from which to inherit configuration data</text>
+      </description>
+      <type name="string"/>
+    </leaf-list>
+    <leaf-list name="apply-groups-except">
+      <ordered-by value="user"/>
+      <description>
+        <text>Don't inherit configuration data from these groups</text>
+      </description>
+      <type name="string"/>
+    </leaf-list>
+    <list name="apply-macro">
+      <key value="name"/>
+      <ordered-by value="user"/>
+      <description>
+        <text>Macro and parameters for commit script expansion</text>
+      </description>
+      <uses name="apply-macro-type"/>
+    </list>
+  </grouping>
+  <grouping name="apply-macro-type">
+    <description>
+      <text>Macro data for commit-script expansion</text>
+    </description>
+    <leaf name="name">
+      <description>
+        <text>Name of the macro to be expanded</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <list name="data">
+      <key value="name"/>
+      <uses name="macro-data-type"/>
+    </list>
+  </grouping>
+  <grouping name="macro-data-type">
+    <leaf name="name">
+      <description>
+        <text>Keyword part of the keyword-value pair</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <leaf name="value">
+      <description>
+        <text>Value part of the keyword-value pair</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+  </grouping>
+</module>

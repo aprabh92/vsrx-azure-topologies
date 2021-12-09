@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module name="junos-es-conf-schedulers"
+        xmlns="urn:ietf:params:xml:ns:yang:yin:1"
+        xmlns:jc-schedulers="http://yang.juniper.net/junos-es/conf/schedulers"
+        xmlns:jt="http://yang.juniper.net/junos/common/types"
+        xmlns:jc="http://yang.juniper.net/junos-es/conf/root">
+  <namespace uri="http://yang.juniper.net/junos-es/conf/schedulers"/>
+  <prefix value="jc-schedulers"/>
+  <import module="junos-common-types">
+    <prefix value="jt"/>
+    <revision-date date="2019-01-01"/>
+  </import>
+  <import module="junos-es-conf-root">
+    <prefix value="jc"/>
+    <revision-date date="2019-01-01"/>
+  </import>
+  <organization>
+    <text>Juniper Networks, Inc.</text>
+  </organization>
+  <contact>
+    <text>yang-support@juniper.net</text>
+  </contact>
+  <description>
+    <text>Junos schedulers configuration module</text>
+  </description>
+  <revision date="2019-01-01">
+    <description>
+      <text>Junos: 21.3R1.9</text>
+    </description>
+  </revision>
+  <augment target-node="/jc:configuration">
+    <uses name="schedulers-group"/>
+  </augment>
+  <augment target-node="/jc:configuration/jc:groups">
+    <uses name="schedulers-group"/>
+  </augment>
+  <grouping name="schedulers-group">
+    <container name="schedulers">
+      <description>
+        <text>Security scheduler</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <list name="scheduler">
+        <key value="name"/>
+        <ordered-by value="user"/>
+        <description>
+          <text>Scheduler configuration</text>
+        </description>
+        <uses name="scheduler_object_type"/>
+      </list>
+    </container>
+  </grouping>
+  <grouping name="apply-advanced">
+    <description>
+      <text>Apply advanced configuration logic</text>
+    </description>
+    <leaf-list name="apply-groups">
+      <ordered-by value="user"/>
+      <description>
+        <text>Groups from which to inherit configuration data</text>
+      </description>
+      <type name="string"/>
+    </leaf-list>
+    <leaf-list name="apply-groups-except">
+      <ordered-by value="user"/>
+      <description>
+        <text>Don't inherit configuration data from these groups</text>
+      </description>
+      <type name="string"/>
+    </leaf-list>
+    <list name="apply-macro">
+      <key value="name"/>
+      <ordered-by value="user"/>
+      <description>
+        <text>Macro and parameters for commit script expansion</text>
+      </description>
+      <uses name="apply-macro-type"/>
+    </list>
+  </grouping>
+  <grouping name="apply-macro-type">
+    <description>
+      <text>Macro data for commit-script expansion</text>
+    </description>
+    <leaf name="name">
+      <description>
+        <text>Name of the macro to be expanded</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <list name="data">
+      <key value="name"/>
+      <uses name="macro-data-type"/>
+    </list>
+  </grouping>
+  <grouping name="macro-data-type">
+    <leaf name="name">
+      <description>
+        <text>Keyword part of the keyword-value pair</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <leaf name="value">
+      <description>
+        <text>Value part of the keyword-value pair</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+  </grouping>
+  <grouping name="scheduler_object_type">
+    <leaf name="name">
+      <description>
+        <text>Name of security scheduler</text>
+      </description>
+      <type name="string">
+        <length value="1 .. 63"/>
+      </type>
+    </leaf>
+    <uses name="apply-advanced"/>
+    <leaf name="description">
+      <description>
+        <text>Text description of scheduler</text>
+      </description>
+      <type name="string">
+        <length value="1 .. 900"/>
+      </type>
+    </leaf>
+    <list name="start-date">
+      <key value="start-date stop-date"/>
+      <ordered-by value="user"/>
+      <description>
+        <text>Start date and time ([YYYY-]MM-DD.hh:mm)</text>
+      </description>
+      <max-elements value="2"/>
+      <leaf name="start-date">
+        <description>
+          <text>Start date and time ([YYYY-]MM-DD.hh:mm)</text>
+        </description>
+        <type name="string"/>
+      </leaf>
+      <leaf name="stop-date">
+        <description>
+          <text>Stop date and time ([YYYY-]MM-DD.hh:mm)</text>
+        </description>
+        <type name="string"/>
+      </leaf>
+      <uses name="apply-advanced"/>
+    </list>
+    <container name="daily">
+      <description>
+        <text>Everyday; can be overwritten by specific weekday</text>
+      </description>
+      <uses name="daily-object"/>
+    </container>
+    <container name="sunday">
+      <description>
+        <text>Every Sunday</text>
+      </description>
+      <uses name="daily-object"/>
+    </container>
+    <container name="monday">
+      <description>
+        <text>Every Monday</text>
+      </description>
+      <uses name="daily-object"/>
+    </container>
+    <container name="tuesday">
+      <description>
+        <text>Every Tuesday</text>
+      </description>
+      <uses name="daily-object"/>
+    </container>
+    <container name="wednesday">
+      <description>
+        <text>Every Wednesday</text>
+      </description>
+      <uses name="daily-object"/>
+    </container>
+    <container name="thursday">
+      <description>
+        <text>Every Thursday</text>
+      </description>
+      <uses name="daily-object"/>
+    </container>
+    <container name="friday">
+      <description>
+        <text>Every Friday</text>
+      </description>
+      <uses name="daily-object"/>
+    </container>
+    <container name="saturday">
+      <description>
+        <text>Every Saturday</text>
+      </description>
+      <uses name="daily-object"/>
+    </container>
+  </grouping>
+  <grouping name="daily-object">
+    <description>
+      <text>Daily schedule</text>
+    </description>
+    <uses name="apply-advanced"/>
+    <choice name="daily_type">
+      <case name="case_1">
+        <list name="start-time">
+          <key value="start-time-value stop-time"/>
+          <description>
+            <text>Time range for day</text>
+          </description>
+          <max-elements value="2"/>
+          <leaf name="start-time-value">
+            <description>
+              <text>Start time for day (hh:mm)</text>
+            </description>
+            <type name="string"/>
+          </leaf>
+          <leaf name="stop-time">
+            <description>
+              <text>Stop time for day (hh:mm)</text>
+            </description>
+            <type name="string"/>
+          </leaf>
+          <uses name="apply-advanced"/>
+        </list>
+      </case>
+      <case name="case_2">
+        <leaf name="exclude">
+          <description>
+            <text>Exclude day from week</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_3">
+        <leaf name="all-day">
+          <description>
+            <text>Include complete day</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+    </choice>
+  </grouping>
+</module>

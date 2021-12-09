@@ -1,0 +1,533 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module name="junos-es-conf-diameter"
+        xmlns="urn:ietf:params:xml:ns:yang:yin:1"
+        xmlns:jc-diameter="http://yang.juniper.net/junos-es/conf/diameter"
+        xmlns:jt="http://yang.juniper.net/junos/common/types"
+        xmlns:jc="http://yang.juniper.net/junos-es/conf/root">
+  <namespace uri="http://yang.juniper.net/junos-es/conf/diameter"/>
+  <prefix value="jc-diameter"/>
+  <import module="junos-common-types">
+    <prefix value="jt"/>
+    <revision-date date="2019-01-01"/>
+  </import>
+  <import module="junos-es-conf-root">
+    <prefix value="jc"/>
+    <revision-date date="2019-01-01"/>
+  </import>
+  <organization>
+    <text>Juniper Networks, Inc.</text>
+  </organization>
+  <contact>
+    <text>yang-support@juniper.net</text>
+  </contact>
+  <description>
+    <text>Junos diameter configuration module</text>
+  </description>
+  <revision date="2019-01-01">
+    <description>
+      <text>Junos: 21.3R1.9</text>
+    </description>
+  </revision>
+  <augment target-node="/jc:configuration">
+    <uses name="diameter-group"/>
+  </augment>
+  <augment target-node="/jc:configuration/jc:groups">
+    <uses name="diameter-group"/>
+  </augment>
+  <grouping name="diameter-group">
+    <container name="diameter">
+      <presence value="enable diameter"/>
+      <description>
+        <text>Diameter protocol layer</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <container name="origin">
+        <presence value="enable origin"/>
+        <description>
+          <text>Origin attributes of this diameter instance</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <leaf name="realm">
+          <description>
+            <text>Origin realm of this diameter instance</text>
+          </description>
+          <type name="string">
+            <length value="1 .. 255"/>
+          </type>
+        </leaf>
+        <leaf name="host">
+          <description>
+            <text>Origin host of this diameter instance</text>
+          </description>
+          <type name="string">
+            <length value="1 .. 255"/>
+          </type>
+        </leaf>
+      </container>
+      <list name="network-element">
+        <key value="name"/>
+        <ordered-by value="user"/>
+        <description>
+          <text>Network element of this diameter instance</text>
+        </description>
+        <leaf name="name">
+          <description>
+            <text>Name for this network element</text>
+          </description>
+          <type name="string">
+            <length value="1 .. 255"/>
+          </type>
+        </leaf>
+        <uses name="apply-advanced"/>
+        <container name="dne-origin">
+          <presence value="enable dne-origin"/>
+          <description>
+            <text>Optional origin filter of this networkd element</text>
+          </description>
+          <uses name="apply-advanced"/>
+          <leaf name="realm">
+            <description>
+              <text>Origin realm of this network element</text>
+            </description>
+            <type name="string">
+              <length value="1 .. 255"/>
+            </type>
+          </leaf>
+          <leaf name="host">
+            <description>
+              <text>Optional origin host of this network element</text>
+            </description>
+            <type name="string">
+              <length value="1 .. 255"/>
+            </type>
+          </leaf>
+        </container>
+        <leaf-list name="function">
+          <ordered-by value="user"/>
+          <description>
+            <text>Diameter function associated with by this network element</text>
+          </description>
+          <type name="enumeration">
+            <enum name="jsrc">
+              <description>
+                <text>Function to use SRC application</text>
+              </description>
+            </enum>
+            <enum name="gx-plus">
+              <description>
+                <text>Function to use GX-PLUS application</text>
+              </description>
+            </enum>
+            <enum name="sd-3gpp">
+              <description>
+                <text>Function to use SD-3GPP application</text>
+              </description>
+            </enum>
+            <enum name="nasreq">
+              <description>
+                <text>Function to use NASREQ application</text>
+              </description>
+            </enum>
+            <enum name="pcrf">
+              <description>
+                <text>Function to use PCRF(GX) application</text>
+              </description>
+            </enum>
+            <enum name="ocs">
+              <description>
+                <text>Function to use OCS(GY) application</text>
+              </description>
+            </enum>
+            <enum name="s6a">
+              <description>
+                <text>Function to use S6A application</text>
+              </description>
+            </enum>
+          </type>
+          <max-elements value="8"/>
+        </leaf-list>
+        <list name="peer">
+          <key value="name"/>
+          <ordered-by value="user"/>
+          <description>
+            <text>Peer associated with this network element</text>
+          </description>
+          <leaf name="name">
+            <description>
+              <text>Name of a peer associated with this network element</text>
+            </description>
+            <type name="string">
+              <length value="1 .. 255"/>
+            </type>
+          </leaf>
+          <uses name="apply-advanced"/>
+          <leaf name="priority">
+            <description>
+              <text>Peer priority with this network element</text>
+            </description>
+            <type name="union">
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+              <type name="uint32">
+                <range value="1 .. 65535"/>
+              </type>
+            </type>
+          </leaf>
+        </list>
+        <container name="forwarding">
+          <description>
+            <text>Forwarding configuration for this network-element</text>
+          </description>
+          <uses name="apply-advanced"/>
+          <list name="route">
+            <key value="name"/>
+            <ordered-by value="user"/>
+            <description>
+              <text>Routes associated with this network-element</text>
+            </description>
+            <max-elements value="256"/>
+            <leaf name="name">
+              <description>
+                <text>Name of a route associated with this network element</text>
+              </description>
+              <type name="string">
+                <length value="1 .. 255"/>
+              </type>
+            </leaf>
+            <uses name="apply-advanced"/>
+            <container name="function">
+              <description>
+                <text>Diameter function and partition associated with route</text>
+              </description>
+              <leaf name="function-name">
+                <type name="enumeration">
+                  <enum name="jsrc">
+                    <description>
+                      <text>Function to use SRC application</text>
+                    </description>
+                  </enum>
+                  <enum name="gx-plus">
+                    <description>
+                      <text>Function to use GX-PLUS application</text>
+                    </description>
+                  </enum>
+                  <enum name="sd-3gpp">
+                    <description>
+                      <text>Function to use SD-3GPP application</text>
+                    </description>
+                  </enum>
+                  <enum name="nasreq">
+                    <description>
+                      <text>Function to use NASREQ application</text>
+                    </description>
+                  </enum>
+                  <enum name="pcrf">
+                    <description>
+                      <text>Function to use PCRF(GX) application</text>
+                    </description>
+                  </enum>
+                  <enum name="ocs">
+                    <description>
+                      <text>Function to use OCS(GY) application</text>
+                    </description>
+                  </enum>
+                  <enum name="s6a">
+                    <description>
+                      <text>Function to use S6A application</text>
+                    </description>
+                  </enum>
+                </type>
+              </leaf>
+              <leaf name="partition">
+                <description>
+                  <text>Diameter function partition name</text>
+                </description>
+                <type name="string">
+                  <length value="1 .. 255"/>
+                </type>
+              </leaf>
+            </container>
+            <container name="destination">
+              <description>
+                <text>Destination for this route</text>
+              </description>
+              <leaf name="realm">
+                <description>
+                  <text>Diameter destination realm</text>
+                </description>
+                <type name="string">
+                  <length value="1 .. 255"/>
+                </type>
+              </leaf>
+              <leaf name="host">
+                <description>
+                  <text>Diameter destination host</text>
+                </description>
+                <type name="string">
+                  <length value="1 .. 255"/>
+                </type>
+              </leaf>
+            </container>
+            <leaf name="metric">
+              <description>
+                <text>Metric for this route</text>
+              </description>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="0 .. 255"/>
+                </type>
+              </type>
+            </leaf>
+          </list>
+        </container>
+      </list>
+      <list name="transport">
+        <key value="name"/>
+        <ordered-by value="user"/>
+        <description>
+          <text>Diameter transport configuration</text>
+        </description>
+        <max-elements value="31"/>
+        <leaf name="name">
+          <description>
+            <text>Name for this transport definition</text>
+          </description>
+          <type name="string">
+            <length value="1 .. 255"/>
+          </type>
+        </leaf>
+        <uses name="apply-advanced"/>
+        <leaf name="address">
+          <description>
+            <text>Source IP address for a peer</text>
+          </description>
+          <type name="jt:ipaddr"/>
+        </leaf>
+        <choice name="instance">
+          <case name="case_1">
+            <container name="logical-system">
+              <description>
+                <text>Logical system to be used by transport</text>
+              </description>
+              <leaf name="logical-system-name">
+                <description>
+                  <text>Name of logical system</text>
+                </description>
+                <type name="string"/>
+              </leaf>
+              <leaf name="routing-instance">
+                <description>
+                  <text>Routing instance to be used by transport</text>
+                </description>
+                <type name="union">
+                  <type name="string">
+                    <pattern value="default"/>
+                  </type>
+                  <type name="string"/>
+                </type>
+              </leaf>
+            </container>
+          </case>
+          <case name="case_2">
+            <leaf name="routing-instance">
+              <description>
+                <text>Routing instance of server to which to forward</text>
+              </description>
+              <type name="union">
+                <type name="string">
+                  <pattern value="default"/>
+                </type>
+                <type name="string"/>
+              </type>
+            </leaf>
+          </case>
+        </choice>
+      </list>
+      <list name="peer">
+        <key value="name"/>
+        <ordered-by value="user"/>
+        <description>
+          <text>Diameter peer configuration</text>
+        </description>
+        <max-elements value="31"/>
+        <leaf name="name">
+          <description>
+            <text>Name for this Diameter peer</text>
+          </description>
+          <type name="string">
+            <length value="1 .. 255"/>
+          </type>
+        </leaf>
+        <uses name="apply-advanced"/>
+        <leaf name="address">
+          <description>
+            <text>IP Address of Diameter peer</text>
+          </description>
+          <type name="jt:ipaddr"/>
+        </leaf>
+        <leaf name="send-origin-state-id">
+          <description>
+            <text>Include origin-state-id in peer messages</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+        <choice name="instance">
+          <case name="case_1">
+            <container name="logical-system">
+              <description>
+                <text>Logical system to be used by transport</text>
+              </description>
+              <leaf name="logical-system-name">
+                <description>
+                  <text>Name of logical system</text>
+                </description>
+                <type name="string"/>
+              </leaf>
+              <leaf name="routing-instance">
+                <description>
+                  <text>Routing instance to be used by transport</text>
+                </description>
+                <type name="union">
+                  <type name="string">
+                    <pattern value="default"/>
+                  </type>
+                  <type name="string"/>
+                </type>
+              </leaf>
+            </container>
+          </case>
+          <case name="case_2">
+            <leaf name="routing-instance">
+              <description>
+                <text>Routing instance of server to which to forward</text>
+              </description>
+              <type name="union">
+                <type name="string">
+                  <pattern value="default"/>
+                </type>
+                <type name="string"/>
+              </type>
+            </leaf>
+          </case>
+        </choice>
+        <container name="connect-actively">
+          <presence value="enable connect-actively"/>
+          <uses name="apply-advanced"/>
+          <leaf name="transport">
+            <description>
+              <text>Name of transport</text>
+            </description>
+            <type name="string">
+              <length value="1 .. 255"/>
+            </type>
+          </leaf>
+          <leaf name="port">
+            <description>
+              <text>Peer port</text>
+            </description>
+            <default value="3868"/>
+            <type name="union">
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+              <type name="uint16">
+                <range value="1 .. 65535"/>
+              </type>
+            </type>
+          </leaf>
+        </container>
+        <container name="peer-origin">
+          <presence value="enable peer-origin"/>
+          <description>
+            <text>Optional origin attributes of this diameter peer</text>
+          </description>
+          <uses name="apply-advanced"/>
+          <leaf name="realm">
+            <description>
+              <text>Origin realm of this diameter peer</text>
+            </description>
+            <type name="string">
+              <length value="1 .. 255"/>
+            </type>
+          </leaf>
+          <leaf name="host">
+            <description>
+              <text>Origin host of this diameter peer</text>
+            </description>
+            <type name="string">
+              <length value="1 .. 255"/>
+            </type>
+          </leaf>
+        </container>
+      </list>
+      <leaf name="product-name">
+        <description>
+          <text>Product name to advertise in capability-exchange</text>
+        </description>
+        <type name="string">
+          <length value="1 .. 255"/>
+        </type>
+      </leaf>
+    </container>
+  </grouping>
+  <grouping name="apply-advanced">
+    <description>
+      <text>Apply advanced configuration logic</text>
+    </description>
+    <leaf-list name="apply-groups">
+      <ordered-by value="user"/>
+      <description>
+        <text>Groups from which to inherit configuration data</text>
+      </description>
+      <type name="string"/>
+    </leaf-list>
+    <leaf-list name="apply-groups-except">
+      <ordered-by value="user"/>
+      <description>
+        <text>Don't inherit configuration data from these groups</text>
+      </description>
+      <type name="string"/>
+    </leaf-list>
+    <list name="apply-macro">
+      <key value="name"/>
+      <ordered-by value="user"/>
+      <description>
+        <text>Macro and parameters for commit script expansion</text>
+      </description>
+      <uses name="apply-macro-type"/>
+    </list>
+  </grouping>
+  <grouping name="apply-macro-type">
+    <description>
+      <text>Macro data for commit-script expansion</text>
+    </description>
+    <leaf name="name">
+      <description>
+        <text>Name of the macro to be expanded</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <list name="data">
+      <key value="name"/>
+      <uses name="macro-data-type"/>
+    </list>
+  </grouping>
+  <grouping name="macro-data-type">
+    <leaf name="name">
+      <description>
+        <text>Keyword part of the keyword-value pair</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <leaf name="value">
+      <description>
+        <text>Value part of the keyword-value pair</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+  </grouping>
+</module>

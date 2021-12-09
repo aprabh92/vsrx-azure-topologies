@@ -1,0 +1,916 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module name="junos-es-conf-applications"
+        xmlns="urn:ietf:params:xml:ns:yang:yin:1"
+        xmlns:jc-applications="http://yang.juniper.net/junos-es/conf/applications"
+        xmlns:jt="http://yang.juniper.net/junos/common/types"
+        xmlns:jc="http://yang.juniper.net/junos-es/conf/root">
+  <namespace uri="http://yang.juniper.net/junos-es/conf/applications"/>
+  <prefix value="jc-applications"/>
+  <import module="junos-common-types">
+    <prefix value="jt"/>
+    <revision-date date="2019-01-01"/>
+  </import>
+  <import module="junos-es-conf-root">
+    <prefix value="jc"/>
+    <revision-date date="2019-01-01"/>
+  </import>
+  <organization>
+    <text>Juniper Networks, Inc.</text>
+  </organization>
+  <contact>
+    <text>yang-support@juniper.net</text>
+  </contact>
+  <description>
+    <text>Junos applications configuration module</text>
+  </description>
+  <revision date="2019-01-01">
+    <description>
+      <text>Junos: 21.3R1.9</text>
+    </description>
+  </revision>
+  <augment target-node="/jc:configuration">
+    <uses name="applications-group"/>
+  </augment>
+  <augment target-node="/jc:configuration/jc:groups">
+    <uses name="applications-group"/>
+  </augment>
+  <grouping name="applications-group">
+    <container name="applications">
+      <description>
+        <text>Define applications by protocol characteristics</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <list name="application">
+        <key value="name"/>
+        <ordered-by value="user"/>
+        <description>
+          <text>Define an application</text>
+        </description>
+        <uses name="application_object"/>
+      </list>
+      <list name="application-set">
+        <key value="name"/>
+        <ordered-by value="user"/>
+        <description>
+          <text>Define an application set</text>
+        </description>
+        <uses name="application_set_object"/>
+      </list>
+    </container>
+  </grouping>
+  <grouping name="application_object">
+    <leaf name="name">
+      <description>
+        <text>Application name</text>
+      </description>
+      <type name="string">
+        <length value="1 .. 63"/>
+      </type>
+    </leaf>
+    <uses name="apply-advanced"/>
+    <leaf name="description">
+      <description>
+        <text>Text description of application</text>
+      </description>
+      <type name="string">
+        <length value="1 .. 900"/>
+      </type>
+    </leaf>
+    <list name="term">
+      <key value="name"/>
+      <ordered-by value="user"/>
+      <description>
+        <text>Define individual application protocols</text>
+      </description>
+      <max-elements value="8"/>
+      <uses name="term_object"/>
+    </list>
+    <leaf name="application-protocol">
+      <description>
+        <text>Application protocol type</text>
+      </description>
+      <type name="enumeration">
+        <enum name="bootp">
+          <description>
+            <text>Bootstrap protocol</text>
+          </description>
+        </enum>
+        <enum name="dce-rpc">
+          <description>
+            <text>DCE RPC</text>
+          </description>
+        </enum>
+        <enum name="dce-rpc-portmap">
+          <description>
+            <text>DCE RPC portmap</text>
+          </description>
+        </enum>
+        <enum name="dns">
+          <description>
+            <text>Domain Name Service</text>
+          </description>
+        </enum>
+        <enum name="exec">
+          <description>
+            <text>Remote Execution Protocol</text>
+          </description>
+        </enum>
+        <enum name="ftp">
+          <description>
+            <text>File Transfer Protocol</text>
+          </description>
+        </enum>
+        <enum name="ftp-data">
+          <description>
+            <text>File Transfer Protocol Data Session</text>
+          </description>
+        </enum>
+        <enum name="gprs-gtp-c">
+          <description>
+            <text>GPRS Tunneling Control Plane</text>
+          </description>
+        </enum>
+        <enum name="gprs-gtp-u">
+          <description>
+            <text>GPRS Tunneling User Plane</text>
+          </description>
+        </enum>
+        <enum name="gprs-gtp-v0">
+          <description>
+            <text>GPRS Tunneling Version 0</text>
+          </description>
+        </enum>
+        <enum name="gprs-sctp">
+          <description>
+            <text>GPRS Stream Control Protocol</text>
+          </description>
+        </enum>
+        <enum name="h323">
+          <description>
+            <text>H.323</text>
+          </description>
+        </enum>
+        <enum name="icmp">
+          <description>
+            <text>ICMP</text>
+          </description>
+        </enum>
+        <enum name="icmpv6">
+          <description>
+            <text>ICMPv6</text>
+          </description>
+        </enum>
+        <enum name="ignore">
+          <description>
+            <text>Ignore application type</text>
+          </description>
+        </enum>
+        <enum name="iiop">
+          <description>
+            <text>Internet Inter-ORB Protocol</text>
+          </description>
+        </enum>
+        <enum name="ike-esp-nat">
+          <description>
+            <text>IKE/ESP with NAT</text>
+          </description>
+        </enum>
+        <enum name="ip">
+          <description>
+            <text>IP</text>
+          </description>
+        </enum>
+        <enum name="login">
+          <description>
+            <text>Login</text>
+          </description>
+        </enum>
+        <enum name="mgcp-ca">
+          <description>
+            <text>MGCP-CA</text>
+          </description>
+        </enum>
+        <enum name="mgcp-ua">
+          <description>
+            <text>MGCP-UA</text>
+          </description>
+        </enum>
+        <enum name="ms-rpc">
+          <description>
+            <text>Microsoft RPC</text>
+          </description>
+        </enum>
+        <enum name="netbios">
+          <description>
+            <text>NetBIOS</text>
+          </description>
+        </enum>
+        <enum name="netshow">
+          <description>
+            <text>NetShow</text>
+          </description>
+        </enum>
+        <enum name="none">
+          <description>
+            <text>None</text>
+          </description>
+        </enum>
+        <enum name="pptp">
+          <description>
+            <text>Point-to-Point Tunneling Protocol</text>
+          </description>
+        </enum>
+        <enum name="q931">
+          <description>
+            <text>Q.931</text>
+          </description>
+        </enum>
+        <enum name="ras">
+          <description>
+            <text>RAS</text>
+          </description>
+        </enum>
+        <enum name="realaudio">
+          <description>
+            <text>RealAudio</text>
+          </description>
+        </enum>
+        <enum name="rpc">
+          <description>
+            <text>RPC</text>
+          </description>
+        </enum>
+        <enum name="rpc-portmap">
+          <description>
+            <text>RPC portmap</text>
+          </description>
+        </enum>
+        <enum name="rsh">
+          <description>
+            <text>Remote Shell</text>
+          </description>
+        </enum>
+        <enum name="rtsp">
+          <description>
+            <text>Real Time Streaming Protocol</text>
+          </description>
+        </enum>
+        <enum name="sccp">
+          <description>
+            <text>Skinny Client Control Protocol</text>
+          </description>
+        </enum>
+        <enum name="sip">
+          <description>
+            <text>Session Initiation Protocol</text>
+          </description>
+        </enum>
+        <enum name="shell">
+          <description>
+            <text>Shell</text>
+          </description>
+        </enum>
+        <enum name="snmp">
+          <description>
+            <text>SNMP</text>
+          </description>
+        </enum>
+        <enum name="sqlnet">
+          <description>
+            <text>SQLNet</text>
+          </description>
+        </enum>
+        <enum name="sqlnet-v2">
+          <description>
+            <text>Oracle SQL*Net Version 2</text>
+          </description>
+        </enum>
+        <enum name="sun-rpc">
+          <description>
+            <text>Sun Microsystems RPC</text>
+          </description>
+        </enum>
+        <enum name="talk">
+          <description>
+            <text>Talk Program</text>
+          </description>
+        </enum>
+        <enum name="tftp">
+          <description>
+            <text>Trivial File Transfer Protocol</text>
+          </description>
+        </enum>
+        <enum name="traceroute">
+          <description>
+            <text>Traceroute</text>
+          </description>
+        </enum>
+        <enum name="http">
+          <description>
+            <text>Hypertext Transfer Protocol</text>
+          </description>
+        </enum>
+        <enum name="winframe">
+          <description>
+            <text>WinFrame</text>
+          </description>
+        </enum>
+        <enum name="https">
+          <description>
+            <text>Hypertext Transfer Protocol</text>
+          </description>
+        </enum>
+        <enum name="imap">
+          <description>
+            <text>Internet Mail Access Protocol</text>
+          </description>
+        </enum>
+        <enum name="smtp">
+          <description>
+            <text>Simple Mail Transfer Protocol</text>
+          </description>
+        </enum>
+        <enum name="ssh">
+          <description>
+            <text>Secure Shell Protocol</text>
+          </description>
+        </enum>
+        <enum name="telnet">
+          <description>
+            <text>Telnet Protocol</text>
+          </description>
+        </enum>
+        <enum name="twamp">
+          <description>
+            <text>Two Way Active Meaurement Protocol</text>
+          </description>
+        </enum>
+        <enum name="pop3">
+          <description>
+            <text>Post Office Protocol 3 Protocol</text>
+          </description>
+        </enum>
+        <enum name="smtps">
+          <description>
+            <text>Simple Mail Transfer Protocol Over TLS</text>
+          </description>
+        </enum>
+        <enum name="imaps">
+          <description>
+            <text>Internet Mail Access Protocol Over TLS</text>
+          </description>
+        </enum>
+        <enum name="pop3s">
+          <description>
+            <text>Post Office Protocol 3 Protocol Over TLS</text>
+          </description>
+        </enum>
+      </type>
+    </leaf>
+    <leaf name="protocol">
+      <description>
+        <text>Match IP protocol type</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <leaf name="source-port">
+      <description>
+        <text>Match TCP/UDP source port</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <leaf name="destination-port">
+      <description>
+        <text>Match TCP/UDP destination port</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <leaf name="ether-type">
+      <description>
+        <text>Match ether type</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <leaf name="icmp-type">
+      <description>
+        <text>Match ICMP message type</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <leaf name="icmp6-type">
+      <description>
+        <text>Match ICMP6 message type</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <leaf name="icmp-code">
+      <description>
+        <text>Match ICMP message code</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <leaf name="icmp6-code">
+      <description>
+        <text>Match ICMP6 message code</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <leaf name="rpc-program-number">
+      <description>
+        <text>Match range of RPC program numbers</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <leaf name="uuid">
+      <description>
+        <text>Match universal unique identifier for DCE RPC objects</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <leaf name="inactivity-timeout">
+      <description>
+        <text>Application-specific inactivity timeout</text>
+      </description>
+      <units name="seconds"/>
+      <type name="string"/>
+    </leaf>
+    <choice name="dns-choice">
+      <case name="case_1">
+        <leaf name="do-not-translate-AAAA-query-to-A-query">
+          <description>
+            <text>Knob to control the translation of AAAA query to A query</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_2">
+        <leaf name="do-not-translate-A-query-to-AAAA-query">
+          <description>
+            <text>Knob to control the translation of A query to AAAA query</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+    </choice>
+  </grouping>
+  <grouping name="application_set_object">
+    <leaf name="name">
+      <description>
+        <text>Application set name</text>
+      </description>
+      <type name="string">
+        <length value="1 .. 63"/>
+      </type>
+    </leaf>
+    <uses name="apply-advanced"/>
+    <leaf name="description">
+      <description>
+        <text>Text description of application set</text>
+      </description>
+      <type name="string">
+        <length value="1 .. 900"/>
+      </type>
+    </leaf>
+    <list name="application">
+      <key value="name"/>
+      <ordered-by value="user"/>
+      <description>
+        <text>Application to be included in the set</text>
+      </description>
+      <leaf name="name">
+        <description>
+          <text>Application name</text>
+        </description>
+        <type name="string">
+          <length value="1 .. 63"/>
+        </type>
+      </leaf>
+      <uses name="apply-advanced"/>
+    </list>
+    <list name="application-set">
+      <key value="name"/>
+      <ordered-by value="user"/>
+      <description>
+        <text>Define an application-set</text>
+      </description>
+      <leaf name="name">
+        <description>
+          <text>Define an application-set name</text>
+        </description>
+        <type name="string">
+          <length value="1 .. 63"/>
+        </type>
+      </leaf>
+      <uses name="apply-advanced"/>
+    </list>
+  </grouping>
+  <grouping name="apply-advanced">
+    <description>
+      <text>Apply advanced configuration logic</text>
+    </description>
+    <leaf-list name="apply-groups">
+      <ordered-by value="user"/>
+      <description>
+        <text>Groups from which to inherit configuration data</text>
+      </description>
+      <type name="string"/>
+    </leaf-list>
+    <leaf-list name="apply-groups-except">
+      <ordered-by value="user"/>
+      <description>
+        <text>Don't inherit configuration data from these groups</text>
+      </description>
+      <type name="string"/>
+    </leaf-list>
+    <list name="apply-macro">
+      <key value="name"/>
+      <ordered-by value="user"/>
+      <description>
+        <text>Macro and parameters for commit script expansion</text>
+      </description>
+      <uses name="apply-macro-type"/>
+    </list>
+  </grouping>
+  <grouping name="apply-macro-type">
+    <description>
+      <text>Macro data for commit-script expansion</text>
+    </description>
+    <leaf name="name">
+      <description>
+        <text>Name of the macro to be expanded</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <list name="data">
+      <key value="name"/>
+      <uses name="macro-data-type"/>
+    </list>
+  </grouping>
+  <grouping name="macro-data-type">
+    <leaf name="name">
+      <description>
+        <text>Keyword part of the keyword-value pair</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <leaf name="value">
+      <description>
+        <text>Value part of the keyword-value pair</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+  </grouping>
+  <grouping name="term_object">
+    <leaf name="name">
+      <description>
+        <text>Term name</text>
+      </description>
+      <type name="string">
+        <length value="1 .. 63"/>
+      </type>
+    </leaf>
+    <leaf name="alg">
+      <description>
+        <text>Application Layer Gateway</text>
+      </description>
+      <type name="enumeration">
+        <enum name="bootp">
+          <description>
+            <text>Bootstrap protocol</text>
+          </description>
+        </enum>
+        <enum name="dce-rpc">
+          <description>
+            <text>DCE RPC</text>
+          </description>
+        </enum>
+        <enum name="dce-rpc-portmap">
+          <description>
+            <text>DCE RPC portmap</text>
+          </description>
+        </enum>
+        <enum name="dns">
+          <description>
+            <text>Domain Name Service</text>
+          </description>
+        </enum>
+        <enum name="exec">
+          <description>
+            <text>Remote Execution Protocol</text>
+          </description>
+        </enum>
+        <enum name="ftp">
+          <description>
+            <text>File Transfer Protocol</text>
+          </description>
+        </enum>
+        <enum name="ftp-data">
+          <description>
+            <text>File Transfer Protocol Data Session</text>
+          </description>
+        </enum>
+        <enum name="gprs-gtp-c">
+          <description>
+            <text>GPRS Tunneling Control Plane</text>
+          </description>
+        </enum>
+        <enum name="gprs-gtp-u">
+          <description>
+            <text>GPRS Tunneling User Plane</text>
+          </description>
+        </enum>
+        <enum name="gprs-gtp-v0">
+          <description>
+            <text>GPRS Tunneling Version 0</text>
+          </description>
+        </enum>
+        <enum name="gprs-sctp">
+          <description>
+            <text>GPRS Stream Control Protocol</text>
+          </description>
+        </enum>
+        <enum name="h323">
+          <description>
+            <text>H.323</text>
+          </description>
+        </enum>
+        <enum name="icmp">
+          <description>
+            <text>ICMP</text>
+          </description>
+        </enum>
+        <enum name="icmpv6">
+          <description>
+            <text>ICMPv6</text>
+          </description>
+        </enum>
+        <enum name="ignore">
+          <description>
+            <text>Ignore application type</text>
+          </description>
+        </enum>
+        <enum name="iiop">
+          <description>
+            <text>Internet Inter-ORB Protocol</text>
+          </description>
+        </enum>
+        <enum name="ike-esp-nat">
+          <description>
+            <text>IKE/ESP with NAT</text>
+          </description>
+        </enum>
+        <enum name="ip">
+          <description>
+            <text>IP</text>
+          </description>
+        </enum>
+        <enum name="login">
+          <description>
+            <text>Login</text>
+          </description>
+        </enum>
+        <enum name="mgcp-ca">
+          <description>
+            <text>MGCP-CA</text>
+          </description>
+        </enum>
+        <enum name="mgcp-ua">
+          <description>
+            <text>MGCP-UA</text>
+          </description>
+        </enum>
+        <enum name="ms-rpc">
+          <description>
+            <text>Microsoft RPC</text>
+          </description>
+        </enum>
+        <enum name="netbios">
+          <description>
+            <text>NetBIOS</text>
+          </description>
+        </enum>
+        <enum name="netshow">
+          <description>
+            <text>NetShow</text>
+          </description>
+        </enum>
+        <enum name="none">
+          <description>
+            <text>None</text>
+          </description>
+        </enum>
+        <enum name="pptp">
+          <description>
+            <text>Point-to-Point Tunneling Protocol</text>
+          </description>
+        </enum>
+        <enum name="q931">
+          <description>
+            <text>Q.931</text>
+          </description>
+        </enum>
+        <enum name="ras">
+          <description>
+            <text>RAS</text>
+          </description>
+        </enum>
+        <enum name="realaudio">
+          <description>
+            <text>RealAudio</text>
+          </description>
+        </enum>
+        <enum name="rpc">
+          <description>
+            <text>RPC</text>
+          </description>
+        </enum>
+        <enum name="rpc-portmap">
+          <description>
+            <text>RPC portmap</text>
+          </description>
+        </enum>
+        <enum name="rsh">
+          <description>
+            <text>Remote Shell</text>
+          </description>
+        </enum>
+        <enum name="rtsp">
+          <description>
+            <text>Real Time Streaming Protocol</text>
+          </description>
+        </enum>
+        <enum name="sccp">
+          <description>
+            <text>Skinny Client Control Protocol</text>
+          </description>
+        </enum>
+        <enum name="sip">
+          <description>
+            <text>Session Initiation Protocol</text>
+          </description>
+        </enum>
+        <enum name="shell">
+          <description>
+            <text>Shell</text>
+          </description>
+        </enum>
+        <enum name="snmp">
+          <description>
+            <text>SNMP</text>
+          </description>
+        </enum>
+        <enum name="sqlnet">
+          <description>
+            <text>SQLNet</text>
+          </description>
+        </enum>
+        <enum name="sqlnet-v2">
+          <description>
+            <text>Oracle SQL*Net Version 2</text>
+          </description>
+        </enum>
+        <enum name="sun-rpc">
+          <description>
+            <text>Sun Microsystems RPC</text>
+          </description>
+        </enum>
+        <enum name="talk">
+          <description>
+            <text>Talk Program</text>
+          </description>
+        </enum>
+        <enum name="tftp">
+          <description>
+            <text>Trivial File Transfer Protocol</text>
+          </description>
+        </enum>
+        <enum name="traceroute">
+          <description>
+            <text>Traceroute</text>
+          </description>
+        </enum>
+        <enum name="http">
+          <description>
+            <text>Hypertext Transfer Protocol</text>
+          </description>
+        </enum>
+        <enum name="winframe">
+          <description>
+            <text>WinFrame</text>
+          </description>
+        </enum>
+        <enum name="https">
+          <description>
+            <text>Hypertext Transfer Protocol</text>
+          </description>
+        </enum>
+        <enum name="imap">
+          <description>
+            <text>Internet Mail Access Protocol</text>
+          </description>
+        </enum>
+        <enum name="smtp">
+          <description>
+            <text>Simple Mail Transfer Protocol</text>
+          </description>
+        </enum>
+        <enum name="ssh">
+          <description>
+            <text>Secure Shell Protocol</text>
+          </description>
+        </enum>
+        <enum name="telnet">
+          <description>
+            <text>Telnet Protocol</text>
+          </description>
+        </enum>
+        <enum name="twamp">
+          <description>
+            <text>Two Way Active Meaurement Protocol</text>
+          </description>
+        </enum>
+        <enum name="pop3">
+          <description>
+            <text>Post Office Protocol 3 Protocol</text>
+          </description>
+        </enum>
+        <enum name="smtps">
+          <description>
+            <text>Simple Mail Transfer Protocol Over TLS</text>
+          </description>
+        </enum>
+        <enum name="imaps">
+          <description>
+            <text>Internet Mail Access Protocol Over TLS</text>
+          </description>
+        </enum>
+        <enum name="pop3s">
+          <description>
+            <text>Post Office Protocol 3 Protocol Over TLS</text>
+          </description>
+        </enum>
+      </type>
+    </leaf>
+    <leaf name="protocol">
+      <description>
+        <text>Match IP protocol type</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <leaf name="source-port">
+      <description>
+        <text>Match TCP/UDP source port</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <leaf name="destination-port">
+      <description>
+        <text>Match TCP/UDP destination port</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <leaf name="icmp-type">
+      <description>
+        <text>Match ICMP message type</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <leaf name="icmp-code">
+      <description>
+        <text>Match ICMP message code</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <leaf name="icmp6-type">
+      <description>
+        <text>Match ICMP6 message type</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <leaf name="icmp6-code">
+      <description>
+        <text>Match ICMP6 message code</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <leaf name="rpc-program-number">
+      <description>
+        <text>Match range of RPC program numbers</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <leaf name="uuid">
+      <description>
+        <text>Match universal unique identifier for DCE RPC objects</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <leaf name="inactivity-timeout">
+      <description>
+        <text>Application-specific inactivity timeout</text>
+      </description>
+      <units name="seconds"/>
+      <type name="string"/>
+    </leaf>
+  </grouping>
+</module>

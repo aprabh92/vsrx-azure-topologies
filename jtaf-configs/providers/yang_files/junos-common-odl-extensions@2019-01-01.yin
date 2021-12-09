@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module name="junos-common-odl-extensions"
+        xmlns="urn:ietf:params:xml:ns:yang:yin:1"
+        xmlns:junos-odl="http://yang.juniper.net/junos/common/odl-extensions">
+  <namespace uri="http://yang.juniper.net/junos/common/odl-extensions"/>
+  <prefix value="junos-odl"/>
+  <organization>
+    <text>Juniper Networks, Inc.</text>
+  </organization>
+  <contact>
+    <text>yang-support@juniper.net</text>
+  </contact>
+  <description>
+    <text>This module contains definitions for Junos YANG ODL extensions</text>
+  </description>
+  <revision date="2019-01-01">
+    <description>
+      <text>Junos: 21.3R1.9</text>
+    </description>
+  </revision>
+  <extension name="header">
+    <argument name="header"/>
+    <description>
+      <text>ODL format header</text>
+    </description>
+  </extension>
+  <extension name="header-group">
+    <argument name="header-group"/>
+    <description>
+      <text>ODL format header group</text>
+    </description>
+  </extension>
+  <extension name="picture">
+    <argument name="picture"/>
+    <description>
+      <text>ODL format picture</text>
+    </description>
+  </extension>
+  <extension name="line">
+    <description>
+      <text>ODL line statement</text>
+    </description>
+  </extension>
+  <extension name="field">
+    <argument name="field"/>
+    <description>
+      <text>ODL field statement</text>
+    </description>
+  </extension>
+  <extension name="style">
+    <argument name="style"/>
+    <description>
+      <text>ODL format style</text>
+    </description>
+  </extension>
+  <extension name="template">
+    <argument name="template"/>
+    <description>
+      <text>ODL format template</text>
+    </description>
+  </extension>
+  <extension name="indent">
+    <argument name="indent"/>
+    <description>
+      <text>Indent the display to right</text>
+    </description>
+  </extension>
+  <extension name="default-text">
+    <argument name="default-text"/>
+    <description>
+      <text>ODL default text for missing field</text>
+    </description>
+  </extension>
+  <extension name="formal-name">
+    <argument name="formal-name"/>
+    <description>
+      <text>ODL formal name for rendering</text>
+    </description>
+  </extension>
+  <extension name="capitalize">
+    <description>
+      <text>ODL flag to capitalize the text output</text>
+    </description>
+  </extension>
+  <extension name="colon">
+    <description>
+      <text>ODL flag for colon</text>
+    </description>
+  </extension>
+  <extension name="explicit">
+    <description>
+      <text>ODL flag for explicit</text>
+    </description>
+  </extension>
+  <extension name="fieldwrap">
+    <description>
+      <text>ODL flag for fieldwrap</text>
+    </description>
+  </extension>
+  <extension name="float">
+    <description>
+      <text>ODL flag for float</text>
+    </description>
+  </extension>
+  <extension name="leading">
+    <description>
+      <text>ODL flag for leading</text>
+    </description>
+  </extension>
+  <extension name="space">
+    <description>
+      <text>ODL flag for space</text>
+    </description>
+  </extension>
+  <extension name="truncate">
+    <description>
+      <text>ODL flag for truncate</text>
+    </description>
+  </extension>
+  <extension name="wordwrap">
+    <description>
+      <text>ODL flag for wordwrap</text>
+    </description>
+  </extension>
+  <extension name="comma">
+    <description>
+      <text>ODL flag for comma</text>
+    </description>
+  </extension>
+  <extension name="cli-format">
+    <description>
+      <text>Flag for container used for cli rendering</text>
+    </description>
+  </extension>
+  <extension name="no-line-break">
+    <description>
+      <text>ODL flag for no linebreak</text>
+    </description>
+  </extension>
+  <extension name="blank-line">
+    <description>
+      <text>ODL flag for no blank line</text>
+    </description>
+  </extension>
+</module>

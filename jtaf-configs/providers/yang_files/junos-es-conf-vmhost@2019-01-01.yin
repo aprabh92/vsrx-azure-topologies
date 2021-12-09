@@ -1,0 +1,685 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module name="junos-es-conf-vmhost"
+        xmlns="urn:ietf:params:xml:ns:yang:yin:1"
+        xmlns:jc-vmhost="http://yang.juniper.net/junos-es/conf/vmhost"
+        xmlns:jt="http://yang.juniper.net/junos/common/types"
+        xmlns:jc="http://yang.juniper.net/junos-es/conf/root">
+  <namespace uri="http://yang.juniper.net/junos-es/conf/vmhost"/>
+  <prefix value="jc-vmhost"/>
+  <import module="junos-common-types">
+    <prefix value="jt"/>
+    <revision-date date="2019-01-01"/>
+  </import>
+  <import module="junos-es-conf-root">
+    <prefix value="jc"/>
+    <revision-date date="2019-01-01"/>
+  </import>
+  <organization>
+    <text>Juniper Networks, Inc.</text>
+  </organization>
+  <contact>
+    <text>yang-support@juniper.net</text>
+  </contact>
+  <description>
+    <text>Junos vmhost configuration module</text>
+  </description>
+  <revision date="2019-01-01">
+    <description>
+      <text>Junos: 21.3R1.9</text>
+    </description>
+  </revision>
+  <augment target-node="/jc:configuration">
+    <uses name="vmhost-group"/>
+  </augment>
+  <augment target-node="/jc:configuration/jc:groups">
+    <uses name="vmhost-group"/>
+  </augment>
+  <grouping name="vmhost-group">
+    <container name="vmhost">
+      <description>
+        <text>VM Host configurations</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <leaf name="no-auto-recovery">
+        <description>
+          <text>Disable Guest auto recovery by the host</text>
+        </description>
+        <type name="empty"/>
+      </leaf>
+      <container name="management-if">
+        <presence value="enable management-if"/>
+        <description>
+          <text>Configuration for the host's side management interface</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <leaf name="link-mode">
+          <description>
+            <text>Link operational mode</text>
+          </description>
+          <default value="automatic"/>
+          <type name="enumeration">
+            <enum name="automatic">
+              <description>
+                <text>Automatically negotiate duplex</text>
+              </description>
+            </enum>
+            <enum name="half-duplex">
+              <description>
+                <text>Half-duplex operation</text>
+              </description>
+            </enum>
+            <enum name="full-duplex">
+              <description>
+                <text>Full-duplex operation</text>
+              </description>
+            </enum>
+          </type>
+        </leaf>
+        <leaf name="speed">
+          <description>
+            <text>Link speed</text>
+          </description>
+          <default value="automatic"/>
+          <type name="enumeration">
+            <enum name="automatic">
+              <description>
+                <text>Automatically negotiate speed</text>
+              </description>
+            </enum>
+            <enum name="10m">
+              <description>
+                <text>10Mbps operation</text>
+              </description>
+            </enum>
+            <enum name="100m">
+              <description>
+                <text>100Mbps operation</text>
+              </description>
+            </enum>
+            <enum name="1g">
+              <description>
+                <text>1Gbps operation</text>
+              </description>
+            </enum>
+          </type>
+        </leaf>
+        <leaf name="disable">
+          <description>
+            <text>Administratively disable the management port</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </container>
+      <container name="resize">
+        <description>
+          <text>Resize the resource allocation of guest VM</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <container name="vjunos">
+          <description>
+            <text>Vjunos/adminjunos VM</text>
+          </description>
+          <uses name="apply-advanced"/>
+          <leaf name="compact">
+            <description>
+              <text>Reduce the resource allocation of vjunos VM</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+        </container>
+      </container>
+      <list name="interfaces">
+        <key value="name"/>
+        <ordered-by value="user"/>
+        <description>
+          <text>Interface configuration</text>
+        </description>
+        <leaf name="name">
+          <type name="enumeration">
+            <enum name="management-if0">
+              <description>
+                <text>Configuration for the host's side management interface0</text>
+              </description>
+            </enum>
+            <enum name="management-if1">
+              <description>
+                <text>Configuration for the host's side management interface1</text>
+              </description>
+            </enum>
+          </type>
+        </leaf>
+        <uses name="apply-advanced"/>
+        <container name="family">
+          <description>
+            <text>Protocol family</text>
+          </description>
+          <container name="inet">
+            <presence value="enable inet"/>
+            <description>
+              <text>IPv4 parameters</text>
+            </description>
+            <uses name="apply-advanced"/>
+            <list name="address">
+              <key value="name"/>
+              <ordered-by value="user"/>
+              <description>
+                <text>Interface address/destination prefix</text>
+              </description>
+              <leaf name="name">
+                <description>
+                  <text>Interface address/destination prefix</text>
+                </description>
+                <type name="jt:ipv4prefix"/>
+              </leaf>
+              <uses name="apply-advanced"/>
+              <leaf name="master-only">
+                <description>
+                  <text>Master management IP address for host</text>
+                </description>
+                <type name="empty"/>
+              </leaf>
+            </list>
+            <leaf name="gateway">
+              <description>
+                <text>Gateway IP address</text>
+              </description>
+              <type name="jt:ipv4addr"/>
+            </leaf>
+          </container>
+          <container name="inet6">
+            <presence value="enable inet6"/>
+            <description>
+              <text>IPv6 parameters</text>
+            </description>
+            <uses name="apply-advanced"/>
+            <list name="address">
+              <key value="name"/>
+              <ordered-by value="user"/>
+              <description>
+                <text>Interface address/destination prefix</text>
+              </description>
+              <leaf name="name">
+                <description>
+                  <text>Interface address/destination prefix</text>
+                </description>
+                <type name="jt:ipv6prefix"/>
+              </leaf>
+              <uses name="apply-advanced"/>
+              <leaf name="master-only">
+                <description>
+                  <text>Master management IP address for host</text>
+                </description>
+                <type name="empty"/>
+              </leaf>
+            </list>
+            <leaf name="gateway">
+              <description>
+                <text>Gateway IP address</text>
+              </description>
+              <type name="jt:ipv6addr"/>
+            </leaf>
+          </container>
+        </container>
+      </list>
+      <container name="syslog">
+        <presence value="enable syslog"/>
+        <description>
+          <text>VMhost logging facility</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <list name="file">
+          <key value="name"/>
+          <description>
+            <text>File in which to log data</text>
+          </description>
+          <leaf name="name">
+            <description>
+              <text>Name of file in which to log data</text>
+            </description>
+            <type name="string">
+              <length value="1 .. 1024"/>
+            </type>
+          </leaf>
+          <uses name="apply-advanced"/>
+          <list name="vmhost-syslog-object">
+            <key value="facility level"/>
+            <leaf name="facility">
+              <description>
+                <text>Facility type</text>
+              </description>
+              <type name="enumeration">
+                <enum name="any">
+                  <description>
+                    <text>All facilities</text>
+                  </description>
+                </enum>
+                <enum name="authorization">
+                  <description>
+                    <text>Authorization system</text>
+                  </description>
+                </enum>
+                <enum name="privileged">
+                  <description>
+                    <text>Privileged authorization events</text>
+                  </description>
+                </enum>
+                <enum name="cron">
+                  <description>
+                    <text>Cron daemon</text>
+                  </description>
+                </enum>
+                <enum name="daemon">
+                  <description>
+                    <text>Various system processes</text>
+                  </description>
+                </enum>
+                <enum name="kernel">
+                  <description>
+                    <text>Kernel</text>
+                  </description>
+                </enum>
+                <enum name="lpr">
+                  <description>
+                    <text>Line printer spooling system</text>
+                  </description>
+                </enum>
+                <enum name="mail">
+                  <description>
+                    <text>Mail system</text>
+                  </description>
+                </enum>
+                <enum name="mark"/>
+                <enum name="news">
+                  <description>
+                    <text>Network news system</text>
+                  </description>
+                </enum>
+                <enum name="syslog"/>
+                <enum name="user">
+                  <description>
+                    <text>User processes</text>
+                  </description>
+                </enum>
+                <enum name="uucp">
+                  <description>
+                    <text>UUCP system</text>
+                  </description>
+                </enum>
+                <enum name="local0">
+                  <description>
+                    <text>Local logging option number 0</text>
+                  </description>
+                </enum>
+                <enum name="local1">
+                  <description>
+                    <text>Local logging option number 1</text>
+                  </description>
+                </enum>
+                <enum name="local2">
+                  <description>
+                    <text>Local logging option number 2</text>
+                  </description>
+                </enum>
+                <enum name="local3">
+                  <description>
+                    <text>Local logging option number 3</text>
+                  </description>
+                </enum>
+                <enum name="local4">
+                  <description>
+                    <text>Local logging option number 4</text>
+                  </description>
+                </enum>
+                <enum name="local5">
+                  <description>
+                    <text>Local logging option number 5</text>
+                  </description>
+                </enum>
+                <enum name="local6">
+                  <description>
+                    <text>Local logging option number 6</text>
+                  </description>
+                </enum>
+                <enum name="local7">
+                  <description>
+                    <text>Local logging option number 7</text>
+                  </description>
+                </enum>
+              </type>
+            </leaf>
+            <leaf name="level">
+              <description>
+                <text>Level name</text>
+              </description>
+              <type name="enumeration">
+                <enum name="any">
+                  <description>
+                    <text>All levels</text>
+                  </description>
+                </enum>
+                <enum name="emergency">
+                  <description>
+                    <text>Panic conditions</text>
+                  </description>
+                </enum>
+                <enum name="alert">
+                  <description>
+                    <text>Conditions that should be corrected immediately</text>
+                  </description>
+                </enum>
+                <enum name="critical">
+                  <description>
+                    <text>Critical conditions</text>
+                  </description>
+                </enum>
+                <enum name="error">
+                  <description>
+                    <text>Error conditions</text>
+                  </description>
+                </enum>
+                <enum name="warning">
+                  <description>
+                    <text>Warning messages</text>
+                  </description>
+                </enum>
+                <enum name="notice">
+                  <description>
+                    <text>Conditions that should be handled specially</text>
+                  </description>
+                </enum>
+                <enum name="info">
+                  <description>
+                    <text>Informational messages</text>
+                  </description>
+                </enum>
+                <enum name="none">
+                  <description>
+                    <text>No messages</text>
+                  </description>
+                </enum>
+              </type>
+            </leaf>
+          </list>
+        </list>
+        <list name="host">
+          <key value="name"/>
+          <ordered-by value="user"/>
+          <description>
+            <text>Host to be notified</text>
+          </description>
+          <leaf name="name">
+            <description>
+              <text>Host to be notified</text>
+            </description>
+            <type name="string"/>
+          </leaf>
+          <uses name="apply-advanced"/>
+          <list name="vmhost-syslog-object">
+            <key value="facility level"/>
+            <leaf name="facility">
+              <description>
+                <text>Facility type</text>
+              </description>
+              <type name="enumeration">
+                <enum name="any">
+                  <description>
+                    <text>All facilities</text>
+                  </description>
+                </enum>
+                <enum name="authorization">
+                  <description>
+                    <text>Authorization system</text>
+                  </description>
+                </enum>
+                <enum name="privileged">
+                  <description>
+                    <text>Privileged authorization events</text>
+                  </description>
+                </enum>
+                <enum name="cron">
+                  <description>
+                    <text>Cron daemon</text>
+                  </description>
+                </enum>
+                <enum name="daemon">
+                  <description>
+                    <text>Various system processes</text>
+                  </description>
+                </enum>
+                <enum name="kernel">
+                  <description>
+                    <text>Kernel</text>
+                  </description>
+                </enum>
+                <enum name="lpr">
+                  <description>
+                    <text>Line printer spooling system</text>
+                  </description>
+                </enum>
+                <enum name="mail">
+                  <description>
+                    <text>Mail system</text>
+                  </description>
+                </enum>
+                <enum name="mark"/>
+                <enum name="news">
+                  <description>
+                    <text>Network news system</text>
+                  </description>
+                </enum>
+                <enum name="syslog"/>
+                <enum name="user">
+                  <description>
+                    <text>User processes</text>
+                  </description>
+                </enum>
+                <enum name="uucp">
+                  <description>
+                    <text>UUCP system</text>
+                  </description>
+                </enum>
+                <enum name="local0">
+                  <description>
+                    <text>Local logging option number 0</text>
+                  </description>
+                </enum>
+                <enum name="local1">
+                  <description>
+                    <text>Local logging option number 1</text>
+                  </description>
+                </enum>
+                <enum name="local2">
+                  <description>
+                    <text>Local logging option number 2</text>
+                  </description>
+                </enum>
+                <enum name="local3">
+                  <description>
+                    <text>Local logging option number 3</text>
+                  </description>
+                </enum>
+                <enum name="local4">
+                  <description>
+                    <text>Local logging option number 4</text>
+                  </description>
+                </enum>
+                <enum name="local5">
+                  <description>
+                    <text>Local logging option number 5</text>
+                  </description>
+                </enum>
+                <enum name="local6">
+                  <description>
+                    <text>Local logging option number 6</text>
+                  </description>
+                </enum>
+                <enum name="local7">
+                  <description>
+                    <text>Local logging option number 7</text>
+                  </description>
+                </enum>
+              </type>
+            </leaf>
+            <leaf name="level">
+              <description>
+                <text>Level name</text>
+              </description>
+              <type name="enumeration">
+                <enum name="any">
+                  <description>
+                    <text>All levels</text>
+                  </description>
+                </enum>
+                <enum name="emergency">
+                  <description>
+                    <text>Panic conditions</text>
+                  </description>
+                </enum>
+                <enum name="alert">
+                  <description>
+                    <text>Conditions that should be corrected immediately</text>
+                  </description>
+                </enum>
+                <enum name="critical">
+                  <description>
+                    <text>Critical conditions</text>
+                  </description>
+                </enum>
+                <enum name="error">
+                  <description>
+                    <text>Error conditions</text>
+                  </description>
+                </enum>
+                <enum name="warning">
+                  <description>
+                    <text>Warning messages</text>
+                  </description>
+                </enum>
+                <enum name="notice">
+                  <description>
+                    <text>Conditions that should be handled specially</text>
+                  </description>
+                </enum>
+                <enum name="info">
+                  <description>
+                    <text>Informational messages</text>
+                  </description>
+                </enum>
+                <enum name="none">
+                  <description>
+                    <text>No messages</text>
+                  </description>
+                </enum>
+              </type>
+            </leaf>
+          </list>
+          <leaf name="transport">
+            <description>
+              <text>Transport type</text>
+            </description>
+            <default value="udp"/>
+            <type name="enumeration">
+              <enum name="tcp">
+                <description>
+                  <text>TCP as transport of syslog</text>
+                </description>
+              </enum>
+              <enum name="udp">
+                <description>
+                  <text>UDP as transport of syslog</text>
+                </description>
+              </enum>
+            </type>
+          </leaf>
+        </list>
+      </container>
+      <container name="services">
+        <presence value="enable services"/>
+        <description>
+          <text>System services</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <container name="ssh">
+          <presence value="enable ssh"/>
+          <description>
+            <text>Allow ssh access</text>
+          </description>
+          <uses name="apply-advanced"/>
+          <leaf name="root-login">
+            <description>
+              <text>Configure vmhost root access via ssh</text>
+            </description>
+            <type name="enumeration">
+              <enum name="allow">
+                <description>
+                  <text>Allow root access via ssh</text>
+                </description>
+              </enum>
+              <enum name="deny">
+                <description>
+                  <text>Do not allow root access via ssh</text>
+                </description>
+              </enum>
+            </type>
+          </leaf>
+        </container>
+      </container>
+    </container>
+  </grouping>
+  <grouping name="apply-advanced">
+    <description>
+      <text>Apply advanced configuration logic</text>
+    </description>
+    <leaf-list name="apply-groups">
+      <ordered-by value="user"/>
+      <description>
+        <text>Groups from which to inherit configuration data</text>
+      </description>
+      <type name="string"/>
+    </leaf-list>
+    <leaf-list name="apply-groups-except">
+      <ordered-by value="user"/>
+      <description>
+        <text>Don't inherit configuration data from these groups</text>
+      </description>
+      <type name="string"/>
+    </leaf-list>
+    <list name="apply-macro">
+      <key value="name"/>
+      <ordered-by value="user"/>
+      <description>
+        <text>Macro and parameters for commit script expansion</text>
+      </description>
+      <uses name="apply-macro-type"/>
+    </list>
+  </grouping>
+  <grouping name="apply-macro-type">
+    <description>
+      <text>Macro data for commit-script expansion</text>
+    </description>
+    <leaf name="name">
+      <description>
+        <text>Name of the macro to be expanded</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <list name="data">
+      <key value="name"/>
+      <uses name="macro-data-type"/>
+    </list>
+  </grouping>
+  <grouping name="macro-data-type">
+    <leaf name="name">
+      <description>
+        <text>Keyword part of the keyword-value pair</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <leaf name="value">
+      <description>
+        <text>Value part of the keyword-value pair</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+  </grouping>
+</module>

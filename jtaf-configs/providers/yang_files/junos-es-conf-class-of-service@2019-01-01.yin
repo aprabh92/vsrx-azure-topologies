@@ -1,0 +1,4728 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module name="junos-es-conf-class-of-service"
+        xmlns="urn:ietf:params:xml:ns:yang:yin:1"
+        xmlns:jc-class-of-service="http://yang.juniper.net/junos-es/conf/class-of-service"
+        xmlns:jt="http://yang.juniper.net/junos/common/types"
+        xmlns:jc="http://yang.juniper.net/junos-es/conf/root">
+  <namespace uri="http://yang.juniper.net/junos-es/conf/class-of-service"/>
+  <prefix value="jc-class-of-service"/>
+  <import module="junos-common-types">
+    <prefix value="jt"/>
+    <revision-date date="2019-01-01"/>
+  </import>
+  <import module="junos-es-conf-root">
+    <prefix value="jc"/>
+    <revision-date date="2019-01-01"/>
+  </import>
+  <organization>
+    <text>Juniper Networks, Inc.</text>
+  </organization>
+  <contact>
+    <text>yang-support@juniper.net</text>
+  </contact>
+  <description>
+    <text>Junos class-of-service configuration module</text>
+  </description>
+  <revision date="2019-01-01">
+    <description>
+      <text>Junos: 21.3R1.9</text>
+    </description>
+  </revision>
+  <augment target-node="/jc:configuration">
+    <uses name="class-of-service-group"/>
+  </augment>
+  <augment target-node="/jc:configuration/jc:groups">
+    <uses name="class-of-service-group"/>
+  </augment>
+  <grouping name="class-of-service-group">
+    <container name="class-of-service">
+      <description>
+        <text>Class-of-service configuration</text>
+      </description>
+      <uses name="juniper-class-of-service-options"/>
+    </container>
+  </grouping>
+  <grouping name="juniper-class-of-service-options">
+    <uses name="apply-advanced"/>
+    <container name="classifiers">
+      <description>
+        <text>Classify incoming packets based on code point value</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <list name="dscp">
+        <key value="name"/>
+        <ordered-by value="user"/>
+        <description>
+          <text>Differentiated Services code point classifier</text>
+        </description>
+        <leaf name="name">
+          <description>
+            <text>Classifier name</text>
+          </description>
+          <type name="string">
+            <length value="1 .. 64"/>
+          </type>
+        </leaf>
+        <uses name="apply-advanced"/>
+        <leaf name="import">
+          <description>
+            <text>Include this classifier in this definition</text>
+          </description>
+          <type name="union">
+            <type name="string">
+              <pattern value="default"/>
+            </type>
+            <type name="string">
+              <length value="1 .. 64"/>
+            </type>
+          </type>
+        </leaf>
+        <list name="forwarding-class">
+          <key value="name"/>
+          <description>
+            <text>Define a classification of code point aliases</text>
+          </description>
+          <leaf name="name">
+            <description>
+              <text>Forwarding class name</text>
+            </description>
+            <type name="string">
+              <length value="1 .. 64"/>
+            </type>
+          </leaf>
+          <uses name="apply-advanced"/>
+          <list name="loss-priority">
+            <key value="name"/>
+            <description>
+              <text>Classify code points to a loss priority</text>
+            </description>
+            <leaf name="name">
+              <type name="enumeration">
+                <enum name="low">
+                  <description>
+                    <text>Code points to classify to loss priority low</text>
+                  </description>
+                </enum>
+                <enum name="high">
+                  <description>
+                    <text>Code points to classify to loss priority high</text>
+                  </description>
+                </enum>
+                <enum name="medium-low">
+                  <description>
+                    <text>Code points to classify to loss priority medium-low</text>
+                  </description>
+                </enum>
+                <enum name="medium-high">
+                  <description>
+                    <text>Code points to classify to loss priority medium-high</text>
+                  </description>
+                </enum>
+              </type>
+            </leaf>
+            <leaf-list name="code-points">
+              <ordered-by value="user"/>
+              <description>
+                <text>List of code point aliases and/or bit strings</text>
+              </description>
+              <type name="string"/>
+            </leaf-list>
+          </list>
+        </list>
+      </list>
+      <list name="dscp-ipv6">
+        <key value="name"/>
+        <ordered-by value="user"/>
+        <description>
+          <text>Differentiated Services code point classifier IPv6</text>
+        </description>
+        <leaf name="name">
+          <description>
+            <text>Classifier name</text>
+          </description>
+          <type name="string">
+            <length value="1 .. 64"/>
+          </type>
+        </leaf>
+        <uses name="apply-advanced"/>
+        <leaf name="import">
+          <description>
+            <text>Include this classifier in this definition</text>
+          </description>
+          <type name="union">
+            <type name="string">
+              <pattern value="default"/>
+            </type>
+            <type name="string">
+              <length value="1 .. 64"/>
+            </type>
+          </type>
+        </leaf>
+        <list name="forwarding-class">
+          <key value="name"/>
+          <description>
+            <text>Define a classification of code point aliases</text>
+          </description>
+          <leaf name="name">
+            <description>
+              <text>Forwarding class name</text>
+            </description>
+            <type name="string">
+              <length value="1 .. 64"/>
+            </type>
+          </leaf>
+          <uses name="apply-advanced"/>
+          <list name="loss-priority">
+            <key value="name"/>
+            <description>
+              <text>Classify code points to a loss priority</text>
+            </description>
+            <leaf name="name">
+              <type name="enumeration">
+                <enum name="low">
+                  <description>
+                    <text>Code points to classify to loss priority low</text>
+                  </description>
+                </enum>
+                <enum name="high">
+                  <description>
+                    <text>Code points to classify to loss priority high</text>
+                  </description>
+                </enum>
+                <enum name="medium-low">
+                  <description>
+                    <text>Code points to classify to loss priority medium-low</text>
+                  </description>
+                </enum>
+                <enum name="medium-high">
+                  <description>
+                    <text>Code points to classify to loss priority medium-high</text>
+                  </description>
+                </enum>
+              </type>
+            </leaf>
+            <leaf-list name="code-points">
+              <ordered-by value="user"/>
+              <description>
+                <text>List of code point aliases and/or bit strings</text>
+              </description>
+              <type name="string"/>
+            </leaf-list>
+          </list>
+        </list>
+      </list>
+      <list name="exp">
+        <key value="name"/>
+        <ordered-by value="user"/>
+        <description>
+          <text>MPLS EXP classifier</text>
+        </description>
+        <leaf name="name">
+          <description>
+            <text>Classifier name</text>
+          </description>
+          <type name="string">
+            <length value="1 .. 64"/>
+          </type>
+        </leaf>
+        <uses name="apply-advanced"/>
+        <leaf name="import">
+          <description>
+            <text>Include this classifier in this definition</text>
+          </description>
+          <type name="union">
+            <type name="string">
+              <pattern value="default"/>
+            </type>
+            <type name="string">
+              <length value="1 .. 64"/>
+            </type>
+          </type>
+        </leaf>
+        <list name="forwarding-class">
+          <key value="name"/>
+          <description>
+            <text>Define a classification of code point aliases</text>
+          </description>
+          <leaf name="name">
+            <description>
+              <text>Forwarding class name</text>
+            </description>
+            <type name="string">
+              <length value="1 .. 64"/>
+            </type>
+          </leaf>
+          <uses name="apply-advanced"/>
+          <list name="loss-priority">
+            <key value="name"/>
+            <description>
+              <text>Classify code points to a loss priority</text>
+            </description>
+            <leaf name="name">
+              <type name="enumeration">
+                <enum name="low">
+                  <description>
+                    <text>Code points to classify to loss priority low</text>
+                  </description>
+                </enum>
+                <enum name="high">
+                  <description>
+                    <text>Code points to classify to loss priority high</text>
+                  </description>
+                </enum>
+                <enum name="medium-low">
+                  <description>
+                    <text>Code points to classify to loss priority medium-low</text>
+                  </description>
+                </enum>
+                <enum name="medium-high">
+                  <description>
+                    <text>Code points to classify to loss priority medium-high</text>
+                  </description>
+                </enum>
+              </type>
+            </leaf>
+            <leaf-list name="code-points">
+              <ordered-by value="user"/>
+              <description>
+                <text>List of code point aliases and/or bit strings</text>
+              </description>
+              <type name="string"/>
+            </leaf-list>
+          </list>
+        </list>
+      </list>
+      <list name="ieee-802.1">
+        <key value="name"/>
+        <ordered-by value="user"/>
+        <description>
+          <text>IEEE-802.1 classifier</text>
+        </description>
+        <leaf name="name">
+          <description>
+            <text>Classifier name</text>
+          </description>
+          <type name="string">
+            <length value="1 .. 64"/>
+          </type>
+        </leaf>
+        <uses name="apply-advanced"/>
+        <leaf name="import">
+          <description>
+            <text>Include this classifier in this definition</text>
+          </description>
+          <type name="union">
+            <type name="string">
+              <pattern value="default"/>
+            </type>
+            <type name="string">
+              <length value="1 .. 64"/>
+            </type>
+          </type>
+        </leaf>
+        <list name="forwarding-class">
+          <key value="name"/>
+          <description>
+            <text>Define a classification of code point aliases</text>
+          </description>
+          <leaf name="name">
+            <description>
+              <text>Forwarding class name</text>
+            </description>
+            <type name="string">
+              <length value="1 .. 64"/>
+            </type>
+          </leaf>
+          <uses name="apply-advanced"/>
+          <list name="loss-priority">
+            <key value="name"/>
+            <description>
+              <text>Classify code points to a loss priority</text>
+            </description>
+            <leaf name="name">
+              <type name="enumeration">
+                <enum name="low">
+                  <description>
+                    <text>Code points to classify to loss priority low</text>
+                  </description>
+                </enum>
+                <enum name="high">
+                  <description>
+                    <text>Code points to classify to loss priority high</text>
+                  </description>
+                </enum>
+                <enum name="medium-low">
+                  <description>
+                    <text>Code points to classify to loss priority medium-low</text>
+                  </description>
+                </enum>
+                <enum name="medium-high">
+                  <description>
+                    <text>Code points to classify to loss priority medium-high</text>
+                  </description>
+                </enum>
+              </type>
+            </leaf>
+            <leaf-list name="code-points">
+              <ordered-by value="user"/>
+              <description>
+                <text>List of code point aliases and/or bit strings</text>
+              </description>
+              <type name="string"/>
+            </leaf-list>
+          </list>
+        </list>
+      </list>
+      <list name="inet-precedence">
+        <key value="name"/>
+        <ordered-by value="user"/>
+        <description>
+          <text>IPv4 precedence classifier</text>
+        </description>
+        <leaf name="name">
+          <description>
+            <text>Classifier name</text>
+          </description>
+          <type name="string">
+            <length value="1 .. 64"/>
+          </type>
+        </leaf>
+        <uses name="apply-advanced"/>
+        <leaf name="import">
+          <description>
+            <text>Include this classifier in this definition</text>
+          </description>
+          <type name="union">
+            <type name="string">
+              <pattern value="default"/>
+            </type>
+            <type name="string">
+              <length value="1 .. 64"/>
+            </type>
+          </type>
+        </leaf>
+        <list name="forwarding-class">
+          <key value="name"/>
+          <description>
+            <text>Define a classification of code point aliases</text>
+          </description>
+          <leaf name="name">
+            <description>
+              <text>Forwarding class name</text>
+            </description>
+            <type name="string">
+              <length value="1 .. 64"/>
+            </type>
+          </leaf>
+          <uses name="apply-advanced"/>
+          <list name="loss-priority">
+            <key value="name"/>
+            <description>
+              <text>Classify code points to a loss priority</text>
+            </description>
+            <leaf name="name">
+              <type name="enumeration">
+                <enum name="low">
+                  <description>
+                    <text>Code points to classify to loss priority low</text>
+                  </description>
+                </enum>
+                <enum name="high">
+                  <description>
+                    <text>Code points to classify to loss priority high</text>
+                  </description>
+                </enum>
+                <enum name="medium-low">
+                  <description>
+                    <text>Code points to classify to loss priority medium-low</text>
+                  </description>
+                </enum>
+                <enum name="medium-high">
+                  <description>
+                    <text>Code points to classify to loss priority medium-high</text>
+                  </description>
+                </enum>
+              </type>
+            </leaf>
+            <leaf-list name="code-points">
+              <ordered-by value="user"/>
+              <description>
+                <text>List of code point aliases and/or bit strings</text>
+              </description>
+              <type name="string"/>
+            </leaf-list>
+          </list>
+        </list>
+      </list>
+      <list name="ieee-802.1ad">
+        <key value="name"/>
+        <ordered-by value="user"/>
+        <description>
+          <text>IEEE-802.1ad (DEI) classifier</text>
+        </description>
+        <leaf name="name">
+          <description>
+            <text>Classifier name</text>
+          </description>
+          <type name="string">
+            <length value="1 .. 64"/>
+          </type>
+        </leaf>
+        <uses name="apply-advanced"/>
+        <leaf name="import">
+          <description>
+            <text>Include this classifier in this definition</text>
+          </description>
+          <type name="union">
+            <type name="string">
+              <pattern value="default"/>
+            </type>
+            <type name="string">
+              <length value="1 .. 64"/>
+            </type>
+          </type>
+        </leaf>
+        <list name="forwarding-class">
+          <key value="name"/>
+          <description>
+            <text>Define a classification of code point aliases</text>
+          </description>
+          <leaf name="name">
+            <description>
+              <text>Forwarding class name</text>
+            </description>
+            <type name="string">
+              <length value="1 .. 64"/>
+            </type>
+          </leaf>
+          <uses name="apply-advanced"/>
+          <list name="loss-priority">
+            <key value="name"/>
+            <description>
+              <text>Classify code points to a loss priority</text>
+            </description>
+            <leaf name="name">
+              <type name="enumeration">
+                <enum name="low">
+                  <description>
+                    <text>Code points to classify to loss priority low</text>
+                  </description>
+                </enum>
+                <enum name="high">
+                  <description>
+                    <text>Code points to classify to loss priority high</text>
+                  </description>
+                </enum>
+                <enum name="medium-low">
+                  <description>
+                    <text>Code points to classify to loss priority medium-low</text>
+                  </description>
+                </enum>
+                <enum name="medium-high">
+                  <description>
+                    <text>Code points to classify to loss priority medium-high</text>
+                  </description>
+                </enum>
+              </type>
+            </leaf>
+            <leaf-list name="code-points">
+              <ordered-by value="user"/>
+              <description>
+                <text>List of code point aliases and/or bit strings</text>
+              </description>
+              <type name="string"/>
+            </leaf-list>
+          </list>
+        </list>
+      </list>
+    </container>
+    <container name="traffic-class-map">
+      <description>
+        <text>Packet input priority map based on incoming packets code point</text>
+      </description>
+      <uses name="apply-advanced"/>
+    </container>
+    <list name="policy-map">
+      <key value="name"/>
+      <description>
+        <text>Policy-map describing the packet marking rule</text>
+      </description>
+      <max-elements value="65535"/>
+      <leaf name="name">
+        <description>
+          <text>Policy-map name</text>
+        </description>
+        <type name="string">
+          <length value="1 .. 64"/>
+        </type>
+      </leaf>
+      <uses name="apply-advanced"/>
+    </list>
+    <container name="loss-priority-maps">
+      <description>
+        <text>Map loss priority of incoming packets based on code point value</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <list name="frame-relay-de">
+        <key value="name"/>
+        <description>
+          <text>Frame relay discard eligible bit loss priority map</text>
+        </description>
+        <leaf name="name">
+          <description>
+            <text>Loss priority map name</text>
+          </description>
+          <type name="string">
+            <length value="1 .. 64"/>
+          </type>
+        </leaf>
+        <uses name="apply-advanced"/>
+        <list name="loss-priority">
+          <key value="name"/>
+          <description>
+            <text>Map code points to a loss priority</text>
+          </description>
+          <leaf name="name">
+            <type name="enumeration">
+              <enum name="low">
+                <description>
+                  <text>Code points to classify to low loss priority</text>
+                </description>
+              </enum>
+              <enum name="high">
+                <description>
+                  <text>Code points to classify to high loss priority</text>
+                </description>
+              </enum>
+              <enum name="medium-low">
+                <description>
+                  <text>Code points to classify to medium-low loss priority</text>
+                </description>
+              </enum>
+              <enum name="medium-high">
+                <description>
+                  <text>Code points to classify to medium-high loss priority</text>
+                </description>
+              </enum>
+            </type>
+          </leaf>
+          <leaf-list name="code-points">
+            <ordered-by value="user"/>
+            <description>
+              <text>List of bit strings</text>
+            </description>
+            <type name="string"/>
+          </leaf-list>
+        </list>
+      </list>
+    </container>
+    <container name="loss-priority-rewrites">
+      <description>
+        <text>Rewrite code point of outgoing packet based on loss priority</text>
+      </description>
+      <uses name="apply-advanced"/>
+    </container>
+    <container name="code-point-aliases">
+      <description>
+        <text>Mapping of code point aliases to bit strings</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <list name="dscp">
+        <key value="name"/>
+        <description>
+          <text>Differentiated Services code point aliases</text>
+        </description>
+        <leaf name="name">
+          <description>
+            <text>DSCP alias name</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+        <leaf name="bits">
+          <description>
+            <text>DSCP 6-bit pattern</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+      </list>
+      <list name="dscp-ipv6">
+        <key value="name"/>
+        <description>
+          <text>Differentiated Services code point aliases IPv6</text>
+        </description>
+        <leaf name="name">
+          <description>
+            <text>DSCP IPv6 alias name</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+        <leaf name="bits">
+          <description>
+            <text>DSCP 6-bit pattern</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+      </list>
+      <list name="exp">
+        <key value="name"/>
+        <description>
+          <text>MPLS EXP code point aliases</text>
+        </description>
+        <leaf name="name">
+          <description>
+            <text>EXP alias name</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+        <leaf name="bits">
+          <description>
+            <text>EXP 3-bit pattern</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+      </list>
+      <list name="ieee-802.1">
+        <key value="name"/>
+        <description>
+          <text>IEEE-802.1 code point aliases</text>
+        </description>
+        <leaf name="name">
+          <description>
+            <text>IEEE-802.1 alias name</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+        <leaf name="bits">
+          <description>
+            <text>IEEE-802.1 3-bit pattern</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+      </list>
+      <list name="inet-precedence">
+        <key value="name"/>
+        <description>
+          <text>IPv4 precedence code point aliases</text>
+        </description>
+        <leaf name="name">
+          <description>
+            <text>IPv4 precedence alias name</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+        <leaf name="bits">
+          <description>
+            <text>IPv4 precedence 3-bit pattern</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+      </list>
+      <list name="ieee-802.1ad">
+        <key value="name"/>
+        <description>
+          <text>IEEE-802.1ad (DEI) code point aliases</text>
+        </description>
+        <leaf name="name">
+          <description>
+            <text>IEEE-802.1ad (DEI) alias name</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+        <leaf name="bits">
+          <description>
+            <text>IEEE-802.1ad (DEI) 4-bit pattern</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+      </list>
+    </container>
+    <container name="translation-table">
+      <description>
+        <text>Translation table</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <list name="to-802.1p-from-dscp">
+        <key value="name"/>
+        <description>
+          <text>DSCP to 802.1 translation table</text>
+        </description>
+        <leaf name="name">
+          <description>
+            <text>Translation table name</text>
+          </description>
+          <type name="string">
+            <length value="1 .. 64"/>
+          </type>
+        </leaf>
+        <uses name="apply-advanced"/>
+        <list name="to-code-point">
+          <key value="name"/>
+          <description>
+            <text>IEEE 802.1 code point</text>
+          </description>
+          <leaf name="name">
+            <description>
+              <text>IEEE 802.1 code point</text>
+            </description>
+            <type name="string"/>
+          </leaf>
+          <leaf-list name="from-code-points">
+            <ordered-by value="user"/>
+            <description>
+              <text>DSCP code point</text>
+            </description>
+            <type name="string"/>
+          </leaf-list>
+        </list>
+      </list>
+    </container>
+    <container name="host-outbound-traffic">
+      <description>
+        <text>Classify and mark host traffic to forwarding engine</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <leaf name="forwarding-class">
+        <description>
+          <text>Classification of host traffic to forwarding engine</text>
+        </description>
+        <type name="string">
+          <length value="1 .. 64"/>
+        </type>
+      </leaf>
+      <leaf name="dscp-code-point">
+        <description>
+          <text>Static DSCP code point of egress host traffic</text>
+        </description>
+        <type name="string"/>
+      </leaf>
+      <leaf name="override-firewall">
+        <description>
+          <text>Override firewall filter actions for RE generated traffic</text>
+        </description>
+        <type name="empty"/>
+      </leaf>
+      <container name="translation-table">
+        <description>
+          <text>Translation table for host outbound packets</text>
+        </description>
+        <leaf name="to-802.1p-from-dscp">
+          <description>
+            <text>DSCP to 802.1 translation table</text>
+          </description>
+          <type name="string">
+            <length value="1 .. 64"/>
+          </type>
+        </leaf>
+      </container>
+      <container name="tcp">
+        <presence value="enable tcp"/>
+        <description>
+          <text>Settings for host outbound TCP packets</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <leaf name="raise-internet-control-priority">
+          <description>
+            <text>Place packets with IP Precedence set to Internet control into Q3 (network-control)</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </container>
+      <container name="ieee-802.1">
+        <presence value="enable ieee-802.1"/>
+        <description>
+          <text>Mark IEEE 802.1p for host output traffic</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <leaf name="rewrite-rules">
+          <description>
+            <text>Mark IEEE 802.1p for host outbound traffic using rewrite-rules</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+        <leaf name="default">
+          <description>
+            <text>Mark IEEE 802.1p for host outbound traffic default value</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+      </container>
+      <container name="protocol">
+        <description>
+          <text>Settings for specific host outbound protocol packets</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <container name="isis-over-gre">
+          <description>
+            <text>Settings for ISIS over GRE packets</text>
+          </description>
+          <uses name="apply-advanced"/>
+          <leaf name="dscp-code-point">
+            <description>
+              <text>Static DSCP code point of egress host traffic</text>
+            </description>
+            <type name="string"/>
+          </leaf>
+        </container>
+      </container>
+    </container>
+    <list name="drop-profiles">
+      <key value="name"/>
+      <description>
+        <text>Random Early Drop (RED) data point map</text>
+      </description>
+      <leaf name="name">
+        <description>
+          <text>Drop profile name</text>
+        </description>
+        <type name="string">
+          <length value="1 .. 64"/>
+        </type>
+      </leaf>
+      <uses name="apply-advanced"/>
+      <list name="fill-level">
+        <key value="name"/>
+        <description>
+          <text>Fill-level value of data point</text>
+        </description>
+        <leaf name="name">
+          <description>
+            <text>Percentage the queue is full</text>
+          </description>
+          <type name="union">
+            <type name="string">
+              <pattern value="&lt;.*&gt;|$.*"/>
+            </type>
+            <type name="uint32">
+              <range value="0 .. 100"/>
+            </type>
+          </type>
+        </leaf>
+        <leaf name="drop-probability">
+          <description>
+            <text>Probability packet will be dropped</text>
+          </description>
+          <type name="union">
+            <type name="string">
+              <pattern value="&lt;.*&gt;|$.*"/>
+            </type>
+            <type name="uint32">
+              <range value="0 .. 100"/>
+            </type>
+          </type>
+        </leaf>
+      </list>
+      <container name="interpolate">
+        <description>
+          <text>Data points interpolated</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <leaf-list name="fill-level">
+          <ordered-by value="user"/>
+          <description>
+            <text>Data points for queue full percentage</text>
+          </description>
+          <type name="union">
+            <type name="string">
+              <pattern value="&lt;.*&gt;|$.*"/>
+            </type>
+            <type name="uint32">
+              <range value="0 .. 100"/>
+            </type>
+          </type>
+        </leaf-list>
+        <leaf-list name="drop-probability">
+          <ordered-by value="user"/>
+          <description>
+            <text>Data points for packet drop probability</text>
+          </description>
+          <type name="union">
+            <type name="string">
+              <pattern value="&lt;.*&gt;|$.*"/>
+            </type>
+            <type name="uint32">
+              <range value="0 .. 100"/>
+            </type>
+          </type>
+        </leaf-list>
+      </container>
+    </list>
+    <list name="adaptive-shapers">
+      <key value="name"/>
+      <description>
+        <text>Define the list of trigger types and associated rates</text>
+      </description>
+      <leaf name="name">
+        <description>
+          <text>Adaptive shaper name</text>
+        </description>
+        <type name="string">
+          <length value="1 .. 64"/>
+        </type>
+      </leaf>
+      <uses name="apply-advanced"/>
+      <list name="trigger">
+        <key value="name"/>
+        <description>
+          <text>List of trigger types</text>
+        </description>
+        <leaf name="name">
+          <type name="enumeration">
+            <enum name="becn">
+              <description>
+                <text>Backward explicit congestion notification</text>
+              </description>
+            </enum>
+          </type>
+        </leaf>
+        <container name="shaping-rate">
+          <description>
+            <text>Shaping rate for the trigger</text>
+          </description>
+          <choice name="rate-choice">
+            <case name="case_1">
+              <leaf name="absolute-rate">
+                <description>
+                  <text>Shaping rate as an absolute rate</text>
+                </description>
+                <units name="bits per second"/>
+                <type name="string"/>
+              </leaf>
+            </case>
+            <case name="case_2">
+              <leaf name="percent">
+                <description>
+                  <text>Shaping rate as a percentage</text>
+                </description>
+                <type name="union">
+                  <type name="string">
+                    <pattern value="&lt;.*&gt;|$.*"/>
+                  </type>
+                  <type name="uint32">
+                    <range value="1 .. 100"/>
+                  </type>
+                </type>
+              </leaf>
+            </case>
+          </choice>
+        </container>
+      </list>
+    </list>
+    <list name="virtual-channels">
+      <key value="name"/>
+      <description>
+        <text>Define the list of virtual channels</text>
+      </description>
+      <leaf name="name">
+        <description>
+          <text>Virtual channel name</text>
+        </description>
+        <type name="string">
+          <length value="1 .. 64"/>
+        </type>
+      </leaf>
+      <uses name="apply-advanced"/>
+    </list>
+    <list name="virtual-channel-groups">
+      <key value="name"/>
+      <description>
+        <text>Define list of virtual channel groups</text>
+      </description>
+      <leaf name="name">
+        <description>
+          <text>Virtual channel group name</text>
+        </description>
+        <type name="string">
+          <length value="1 .. 64"/>
+        </type>
+      </leaf>
+      <uses name="apply-advanced"/>
+      <list name="channel">
+        <key value="name"/>
+        <description>
+          <text>Configure virtual channel for this group</text>
+        </description>
+        <leaf name="name">
+          <description>
+            <text>Virtual channel group name</text>
+          </description>
+          <type name="string">
+            <length value="1 .. 64"/>
+          </type>
+        </leaf>
+        <uses name="apply-advanced"/>
+        <leaf name="scheduler-map">
+          <description>
+            <text>Scheduler map applied to this virtual channel</text>
+          </description>
+          <type name="string">
+            <length value="1 .. 64"/>
+          </type>
+        </leaf>
+        <container name="shaping-rate">
+          <description>
+            <text>Shaping rate for the trigger</text>
+          </description>
+          <choice name="rate-choice">
+            <case name="case_1">
+              <leaf name="absolute-rate">
+                <description>
+                  <text>Adaptive shaping rate as an absolute rate</text>
+                </description>
+                <units name="bits per second"/>
+                <type name="string"/>
+              </leaf>
+            </case>
+            <case name="case_2">
+              <leaf name="percent">
+                <description>
+                  <text>Adaptive shaping rate as a percentage</text>
+                </description>
+                <type name="union">
+                  <type name="string">
+                    <pattern value="&lt;.*&gt;|$.*"/>
+                  </type>
+                  <type name="uint32">
+                    <range value="1 .. 100"/>
+                  </type>
+                </type>
+              </leaf>
+            </case>
+          </choice>
+        </container>
+        <leaf name="default">
+          <description>
+            <text>Default virtual channel</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </list>
+    </list>
+    <leaf name="tri-color">
+      <description>
+        <text>Enable tricolor marking</text>
+      </description>
+      <type name="empty"/>
+    </leaf>
+    <leaf name="non-strict-priority-scheduling">
+      <description>
+        <text>Enable non-strict-priority scheduling</text>
+      </description>
+      <type name="empty"/>
+    </leaf>
+    <container name="forwarding-classes">
+      <description>
+        <text>One or more mappings of forwarding class to queue number</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <list name="class">
+        <key value="name"/>
+        <description>
+          <text>Forwarding class to map to queue number</text>
+        </description>
+        <max-elements value="16"/>
+        <leaf name="name">
+          <description>
+            <text>Name of forwarding class</text>
+          </description>
+          <type name="string">
+            <length value="1 .. 64"/>
+          </type>
+        </leaf>
+        <leaf name="queue-num">
+          <description>
+            <text>Queue number</text>
+          </description>
+          <type name="union">
+            <type name="string">
+              <pattern value="&lt;.*&gt;|$.*"/>
+            </type>
+            <type name="uint32"/>
+          </type>
+        </leaf>
+        <leaf name="priority">
+          <description>
+            <text>Fabric priority</text>
+          </description>
+          <type name="enumeration">
+            <enum name="low">
+              <description>
+                <text>Low fabric priority</text>
+              </description>
+            </enum>
+            <enum name="high">
+              <description>
+                <text>High fabric priority</text>
+              </description>
+            </enum>
+          </type>
+        </leaf>
+        <leaf name="spu-priority">
+          <description>
+            <text>SPU priority</text>
+          </description>
+          <type name="enumeration">
+            <enum name="low">
+              <description>
+                <text>Low spu priority</text>
+              </description>
+            </enum>
+            <enum name="high">
+              <description>
+                <text>High spu priority</text>
+              </description>
+            </enum>
+            <enum name="medium-low">
+              <description>
+                <text>Medium-low spu priority</text>
+              </description>
+            </enum>
+            <enum name="medium-high">
+              <description>
+                <text>Medium-high spu priority</text>
+              </description>
+            </enum>
+            <enum name="medium">
+              <description>
+                <text>Medium spu priority</text>
+              </description>
+            </enum>
+          </type>
+        </leaf>
+      </list>
+      <list name="queue">
+        <key value="name"/>
+        <description>
+          <text>Queue number to map to forwarding class</text>
+        </description>
+        <leaf name="name">
+          <description>
+            <text>Queue number</text>
+          </description>
+          <type name="union">
+            <type name="string">
+              <pattern value="&lt;.*&gt;|$.*"/>
+            </type>
+            <type name="uint32"/>
+          </type>
+        </leaf>
+        <leaf name="class-name">
+          <description>
+            <text>Forwarding class name</text>
+          </description>
+          <type name="string">
+            <length value="1 .. 64"/>
+          </type>
+        </leaf>
+        <leaf name="priority">
+          <description>
+            <text>Fabric priority</text>
+          </description>
+          <type name="enumeration">
+            <enum name="low">
+              <description>
+                <text>Fabric priority low</text>
+              </description>
+            </enum>
+            <enum name="high">
+              <description>
+                <text>Fabric priority high</text>
+              </description>
+            </enum>
+          </type>
+        </leaf>
+      </list>
+    </container>
+    <list name="traffic-control-profiles">
+      <key value="name"/>
+      <description>
+        <text>Traffic shaping and scheduling profiles</text>
+      </description>
+      <leaf name="name">
+        <description>
+          <text>Traffic control profile name</text>
+        </description>
+        <type name="string">
+          <length value="1 .. 64"/>
+        </type>
+      </leaf>
+      <uses name="apply-advanced"/>
+      <leaf name="scheduler-map">
+        <description>
+          <text>Mapping of forwarding classes to packet schedulers</text>
+        </description>
+        <type name="string">
+          <length value="1 .. 64"/>
+        </type>
+      </leaf>
+      <leaf name="atm-service">
+        <description>
+          <text>ATM service category</text>
+        </description>
+        <type name="enumeration">
+          <enum name="cbr">
+            <description>
+              <text>Constant bit rate</text>
+            </description>
+          </enum>
+          <enum name="rtvbr">
+            <description>
+              <text>Real-time variable bit rate</text>
+            </description>
+          </enum>
+          <enum name="nrtvbr">
+            <description>
+              <text>Non-real-time variable bit rate</text>
+            </description>
+          </enum>
+        </type>
+      </leaf>
+      <leaf name="peak-rate">
+        <description>
+          <text>ATM Peak Cell Rate (PCR)</text>
+        </description>
+        <units name="cps"/>
+        <type name="string"/>
+      </leaf>
+      <leaf name="sustained-rate">
+        <description>
+          <text>ATM Sustained Cell Rate (SCR)</text>
+        </description>
+        <units name="cps"/>
+        <type name="string"/>
+      </leaf>
+      <leaf name="max-burst-size">
+        <description>
+          <text>ATM Maximum Burst Size (MBS)</text>
+        </description>
+        <units name="cells"/>
+        <type name="union">
+          <type name="string">
+            <pattern value="&lt;.*&gt;|$.*"/>
+          </type>
+          <type name="uint64">
+            <range value="1 .. 4000"/>
+          </type>
+        </type>
+      </leaf>
+      <container name="shaping-rate">
+        <description>
+          <text>Shaping rate</text>
+        </description>
+        <choice name="shaping_rate_choice">
+          <case name="case_1">
+            <leaf name="rate">
+              <description>
+                <text>Shaping rate as an absolute rate</text>
+              </description>
+              <units name="bits per second"/>
+              <type name="string"/>
+            </leaf>
+          </case>
+          <case name="case_2">
+            <leaf name="percent">
+              <description>
+                <text>Shaping rate as a percentage</text>
+              </description>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="1 .. 100"/>
+                </type>
+              </type>
+            </leaf>
+          </case>
+        </choice>
+      </container>
+      <container name="overhead-accounting">
+        <description>
+          <text>Overhead accounting</text>
+        </description>
+        <leaf name="mode">
+          <type name="string">
+            <length value="1 .. 64"/>
+          </type>
+        </leaf>
+        <leaf name="bytes">
+          <description>
+            <text>Byte adjust value</text>
+          </description>
+          <type name="union">
+            <type name="string">
+              <pattern value="&lt;.*&gt;|$.*"/>
+            </type>
+            <type name="int32">
+              <range value="-120 .. 124"/>
+            </type>
+          </type>
+        </leaf>
+        <leaf name="frame-mode-bytes">
+          <description>
+            <text>Overhead bytes when in frame-mode</text>
+          </description>
+          <type name="union">
+            <type name="string">
+              <pattern value="&lt;.*&gt;|$.*"/>
+            </type>
+            <type name="int32">
+              <range value="-120 .. 124"/>
+            </type>
+          </type>
+        </leaf>
+        <leaf name="cell-mode-bytes">
+          <description>
+            <text>Overhead bytes when in cell-mode</text>
+          </description>
+          <type name="union">
+            <type name="string">
+              <pattern value="&lt;.*&gt;|$.*"/>
+            </type>
+            <type name="int32">
+              <range value="-120 .. 124"/>
+            </type>
+          </type>
+        </leaf>
+      </container>
+      <container name="shaping-rate-priority-strict-high">
+        <description>
+          <text>Shaping rate for strict high priority traffic</text>
+        </description>
+        <choice name="shaping_rate_choice">
+          <case name="case_1">
+            <leaf name="rate">
+              <description>
+                <text>Shaping rate in bits per second</text>
+              </description>
+              <units name="bits per second"/>
+              <type name="string"/>
+            </leaf>
+          </case>
+          <case name="case_2">
+            <leaf name="percent">
+              <description>
+                <text>Shaping rate as a percentage</text>
+              </description>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="1 .. 100"/>
+                </type>
+              </type>
+            </leaf>
+          </case>
+        </choice>
+        <leaf name="burst-size">
+          <description>
+            <text>Shaping rate burst size</text>
+          </description>
+          <units name="bytes"/>
+          <type name="string"/>
+        </leaf>
+      </container>
+      <container name="shaping-rate-priority-high">
+        <description>
+          <text>Shaping rate for high priority traffic</text>
+        </description>
+        <choice name="shaping_rate_choice">
+          <case name="case_1">
+            <leaf name="rate">
+              <description>
+                <text>Shaping rate in bits per second</text>
+              </description>
+              <units name="bits per second"/>
+              <type name="string"/>
+            </leaf>
+          </case>
+          <case name="case_2">
+            <leaf name="percent">
+              <description>
+                <text>Shaping rate as a percentage</text>
+              </description>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="1 .. 100"/>
+                </type>
+              </type>
+            </leaf>
+          </case>
+        </choice>
+        <leaf name="burst-size">
+          <description>
+            <text>Shaping rate burst size</text>
+          </description>
+          <units name="bytes"/>
+          <type name="string"/>
+        </leaf>
+      </container>
+      <container name="shaping-rate-priority-medium">
+        <description>
+          <text>Shaping rate for medium priority traffic</text>
+        </description>
+        <choice name="shaping_rate_choice">
+          <case name="case_1">
+            <leaf name="rate">
+              <description>
+                <text>Shaping rate in bits per second</text>
+              </description>
+              <units name="bits per second"/>
+              <type name="string"/>
+            </leaf>
+          </case>
+          <case name="case_2">
+            <leaf name="percent">
+              <description>
+                <text>Shaping rate as a percentage</text>
+              </description>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="1 .. 100"/>
+                </type>
+              </type>
+            </leaf>
+          </case>
+        </choice>
+        <leaf name="burst-size">
+          <description>
+            <text>Shaping rate burst size</text>
+          </description>
+          <units name="bytes"/>
+          <type name="string"/>
+        </leaf>
+      </container>
+      <container name="shaping-rate-priority-medium-low">
+        <description>
+          <text>Shaping rate for medium low priority traffic</text>
+        </description>
+        <choice name="shaping_rate_choice">
+          <case name="case_1">
+            <leaf name="rate">
+              <description>
+                <text>Shaping rate in bits per second</text>
+              </description>
+              <units name="bits per second"/>
+              <type name="string"/>
+            </leaf>
+          </case>
+          <case name="case_2">
+            <leaf name="percent">
+              <description>
+                <text>Shaping rate as a percentage</text>
+              </description>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="1 .. 100"/>
+                </type>
+              </type>
+            </leaf>
+          </case>
+        </choice>
+        <leaf name="burst-size">
+          <description>
+            <text>Shaping rate burst size</text>
+          </description>
+          <units name="bytes"/>
+          <type name="string"/>
+        </leaf>
+      </container>
+      <container name="shaping-rate-priority-low">
+        <description>
+          <text>Shaping rate for low priority traffic</text>
+        </description>
+        <choice name="shaping_rate_choice">
+          <case name="case_1">
+            <leaf name="rate">
+              <description>
+                <text>Shaping rate in bits per second</text>
+              </description>
+              <units name="bits per second"/>
+              <type name="string"/>
+            </leaf>
+          </case>
+          <case name="case_2">
+            <leaf name="percent">
+              <description>
+                <text>Shaping rate as a percentage</text>
+              </description>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="1 .. 100"/>
+                </type>
+              </type>
+            </leaf>
+          </case>
+        </choice>
+        <leaf name="burst-size">
+          <description>
+            <text>Shaping rate burst size</text>
+          </description>
+          <units name="bytes"/>
+          <type name="string"/>
+        </leaf>
+      </container>
+      <container name="shaping-rate-excess-high">
+        <description>
+          <text>Shaping rate for excess high traffic</text>
+        </description>
+        <choice name="shaping_rate_choice">
+          <case name="case_1">
+            <leaf name="rate">
+              <description>
+                <text>Shaping rate in bits per second</text>
+              </description>
+              <units name="bits per second"/>
+              <type name="string"/>
+            </leaf>
+          </case>
+          <case name="case_2">
+            <leaf name="percent">
+              <description>
+                <text>Shaping rate as a percentage</text>
+              </description>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="1 .. 100"/>
+                </type>
+              </type>
+            </leaf>
+          </case>
+        </choice>
+        <leaf name="burst-size">
+          <description>
+            <text>Shaping rate burst size</text>
+          </description>
+          <units name="bytes"/>
+          <type name="string"/>
+        </leaf>
+      </container>
+      <container name="shaping-rate-excess-low">
+        <description>
+          <text>Shaping rate for excess low traffic</text>
+        </description>
+        <choice name="shaping_rate_choice">
+          <case name="case_1">
+            <leaf name="rate">
+              <description>
+                <text>Shaping rate in bits per second</text>
+              </description>
+              <units name="bits per second"/>
+              <type name="string"/>
+            </leaf>
+          </case>
+          <case name="case_2">
+            <leaf name="percent">
+              <description>
+                <text>Shaping rate as a percentage</text>
+              </description>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="1 .. 100"/>
+                </type>
+              </type>
+            </leaf>
+          </case>
+        </choice>
+        <leaf name="burst-size">
+          <description>
+            <text>Shaping rate burst size</text>
+          </description>
+          <units name="bytes"/>
+          <type name="string"/>
+        </leaf>
+      </container>
+      <container name="shaping-rate-excess-medium-high">
+        <description>
+          <text>Shaping rate for excess medium-high traffic</text>
+        </description>
+        <choice name="shaping_rate_choice">
+          <case name="case_1">
+            <leaf name="rate">
+              <description>
+                <text>Shaping rate in bits per second</text>
+              </description>
+              <units name="bits per second"/>
+              <type name="string"/>
+            </leaf>
+          </case>
+          <case name="case_2">
+            <leaf name="percent">
+              <description>
+                <text>Shaping rate as a percentage</text>
+              </description>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="1 .. 100"/>
+                </type>
+              </type>
+            </leaf>
+          </case>
+        </choice>
+        <leaf name="burst-size">
+          <description>
+            <text>Shaping rate burst size</text>
+          </description>
+          <units name="bytes"/>
+          <type name="string"/>
+        </leaf>
+      </container>
+      <container name="shaping-rate-excess-medium-low">
+        <description>
+          <text>Shaping rate for excess medium-low traffic</text>
+        </description>
+        <choice name="shaping_rate_choice">
+          <case name="case_1">
+            <leaf name="rate">
+              <description>
+                <text>Shaping rate in bits per second</text>
+              </description>
+              <units name="bits per second"/>
+              <type name="string"/>
+            </leaf>
+          </case>
+          <case name="case_2">
+            <leaf name="percent">
+              <description>
+                <text>Shaping rate as a percentage</text>
+              </description>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="1 .. 100"/>
+                </type>
+              </type>
+            </leaf>
+          </case>
+        </choice>
+        <leaf name="burst-size">
+          <description>
+            <text>Shaping rate burst size</text>
+          </description>
+          <units name="bytes"/>
+          <type name="string"/>
+        </leaf>
+      </container>
+      <container name="guaranteed-rate">
+        <description>
+          <text>Guaranteed rate</text>
+        </description>
+        <choice name="guaranteed_rate_choice">
+          <case name="case_1">
+            <leaf name="rate">
+              <description>
+                <text>Guaranteed rate as an absolute rate</text>
+              </description>
+              <units name="bits per second"/>
+              <type name="string"/>
+            </leaf>
+          </case>
+          <case name="case_2">
+            <leaf name="percent">
+              <description>
+                <text>Guaranteed rate as a percentage</text>
+              </description>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="1 .. 100"/>
+                </type>
+              </type>
+            </leaf>
+          </case>
+        </choice>
+      </container>
+      <container name="excess-rate">
+        <description>
+          <text>Excess bandwidth sharing proportion</text>
+        </description>
+        <choice name="excess_rate_choice">
+          <case name="case_1">
+            <leaf name="proportion">
+              <description>
+                <text>Excess rate as a proportion</text>
+              </description>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="0 .. 1000"/>
+                </type>
+              </type>
+            </leaf>
+          </case>
+          <case name="case_2">
+            <leaf name="percent">
+              <description>
+                <text>Excess rate as a percentage</text>
+              </description>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="1 .. 100"/>
+                </type>
+              </type>
+            </leaf>
+          </case>
+        </choice>
+      </container>
+      <container name="excess-rate-high">
+        <description>
+          <text>Excess bandwidth sharing for excess-high priority</text>
+        </description>
+        <choice name="excess_rate_choice">
+          <case name="case_1">
+            <leaf name="proportion">
+              <description>
+                <text>Excess rate as a proportion</text>
+              </description>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="0 .. 1000"/>
+                </type>
+              </type>
+            </leaf>
+          </case>
+          <case name="case_2">
+            <leaf name="percent">
+              <description>
+                <text>Excess rate as a percentage</text>
+              </description>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="1 .. 100"/>
+                </type>
+              </type>
+            </leaf>
+          </case>
+        </choice>
+      </container>
+      <container name="excess-rate-medium-high">
+        <description>
+          <text>Excess bandwidth sharing for excess-medium-high priority</text>
+        </description>
+        <choice name="excess_rate_choice">
+          <case name="case_1">
+            <leaf name="proportion">
+              <description>
+                <text>Excess rate as a proportion</text>
+              </description>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="0 .. 1000"/>
+                </type>
+              </type>
+            </leaf>
+          </case>
+          <case name="case_2">
+            <leaf name="percent">
+              <description>
+                <text>Excess rate as a percentage</text>
+              </description>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="1 .. 100"/>
+                </type>
+              </type>
+            </leaf>
+          </case>
+        </choice>
+      </container>
+      <container name="excess-rate-low">
+        <description>
+          <text>Excess bandwidth sharing for excess-low priority</text>
+        </description>
+        <choice name="excess_rate_choice">
+          <case name="case_1">
+            <leaf name="proportion">
+              <description>
+                <text>Excess rate as a proportion</text>
+              </description>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="0 .. 1000"/>
+                </type>
+              </type>
+            </leaf>
+          </case>
+          <case name="case_2">
+            <leaf name="percent">
+              <description>
+                <text>Excess rate as a percentage</text>
+              </description>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="1 .. 100"/>
+                </type>
+              </type>
+            </leaf>
+          </case>
+        </choice>
+      </container>
+      <container name="excess-rate-medium-low">
+        <description>
+          <text>Excess bandwidth sharing for excess-medium-low priority</text>
+        </description>
+        <choice name="excess_rate_choice">
+          <case name="case_1">
+            <leaf name="proportion">
+              <description>
+                <text>Excess rate as a proportion</text>
+              </description>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="0 .. 1000"/>
+                </type>
+              </type>
+            </leaf>
+          </case>
+          <case name="case_2">
+            <leaf name="percent">
+              <description>
+                <text>Excess rate as a percentage</text>
+              </description>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="1 .. 100"/>
+                </type>
+              </type>
+            </leaf>
+          </case>
+        </choice>
+      </container>
+      <choice name="delay_buffer_sizing">
+        <case name="case_1">
+          <container name="delay-buffer-rate">
+            <description>
+              <text>Delay buffer rate</text>
+            </description>
+            <choice name="delay_buffer_rate_choice">
+              <case name="case_1">
+                <leaf name="rate">
+                  <description>
+                    <text>Delay buffer rate as an absolute rate</text>
+                  </description>
+                  <units name="bits per second"/>
+                  <type name="string"/>
+                </leaf>
+              </case>
+              <case name="case_2">
+                <leaf name="percent">
+                  <description>
+                    <text>Delay buffer rate as a percentage</text>
+                  </description>
+                  <type name="union">
+                    <type name="string">
+                      <pattern value="&lt;.*&gt;|$.*"/>
+                    </type>
+                    <type name="uint32">
+                      <range value="1 .. 100"/>
+                    </type>
+                  </type>
+                </leaf>
+              </case>
+              <case name="case_3">
+                <leaf name="cps">
+                  <description>
+                    <text>Delay buffer rate as an absolute cells per second rate</text>
+                  </description>
+                  <units name="cells per second"/>
+                  <type name="string"/>
+                </leaf>
+              </case>
+            </choice>
+          </container>
+        </case>
+      </choice>
+    </list>
+    <list name="forwarding-class-sets">
+      <key value="name"/>
+      <description>
+        <text>Forwarding class sets</text>
+      </description>
+      <leaf name="name">
+        <description>
+          <text>Forwarding class set</text>
+        </description>
+        <type name="string">
+          <length value="1 .. 64"/>
+        </type>
+      </leaf>
+      <uses name="apply-advanced"/>
+      <list name="class">
+        <key value="name"/>
+        <description>
+          <text>Forwarding class</text>
+        </description>
+        <leaf name="name">
+          <description>
+            <text>Class name</text>
+          </description>
+          <type name="string">
+            <length value="1 .. 64"/>
+          </type>
+        </leaf>
+        <uses name="apply-advanced"/>
+      </list>
+    </list>
+    <container name="system-defaults">
+      <description>
+        <text>System defaults</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <container name="traffic-control-profiles">
+        <description>
+          <text>Default traffic control profiles</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <container name="interface-set-input">
+          <description>
+            <text>Default input traffic control profile for dynamic interface-set</text>
+          </description>
+          <leaf name="profile-name">
+            <description>
+              <text>Name of traffic control profile</text>
+            </description>
+            <type name="string">
+              <length value="1 .. 64"/>
+            </type>
+          </leaf>
+        </container>
+        <container name="interface-set-output">
+          <description>
+            <text>Default output traffic control profile for dynamic interface-set</text>
+          </description>
+          <leaf name="profile-name">
+            <description>
+              <text>Name of traffic control profile</text>
+            </description>
+            <type name="string">
+              <length value="1 .. 64"/>
+            </type>
+          </leaf>
+        </container>
+      </container>
+    </container>
+    <container name="interfaces">
+      <description>
+        <text>Apply class-of-service options to interfaces</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <list name="interface-set">
+        <key value="name"/>
+        <description>
+          <text>Interface set traffic-control-profile attachment</text>
+        </description>
+        <leaf name="name">
+          <description>
+            <text>Name of the interface set</text>
+          </description>
+          <type name="string">
+            <length value="1 .. 64"/>
+          </type>
+        </leaf>
+        <uses name="apply-advanced"/>
+        <leaf name="internal-node">
+          <description>
+            <text>Internal node</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+        <container name="input-excess-bandwidth-share">
+          <description>
+            <text>Input Excess bandwidth sharing policy</text>
+          </description>
+          <choice name="input_excess_bandwidth_share">
+            <case name="case_1">
+              <leaf name="proportional">
+                <description>
+                  <text>Maximum Queue Bandwidth</text>
+                </description>
+                <units name="bits per second"/>
+                <type name="string"/>
+              </leaf>
+            </case>
+            <case name="case_2">
+              <leaf name="equal">
+                <description>
+                  <text>Equal sharing of excess bandwidth</text>
+                </description>
+                <type name="empty"/>
+              </leaf>
+            </case>
+          </choice>
+        </container>
+        <container name="excess-bandwidth-share">
+          <description>
+            <text>Output Excess bandwidth sharing policy</text>
+          </description>
+          <choice name="output_excess_bandwidth_share">
+            <case name="case_1">
+              <leaf name="proportional">
+                <description>
+                  <text>Maximum Queue Bandwidth</text>
+                </description>
+                <units name="bits per second"/>
+                <type name="string"/>
+              </leaf>
+            </case>
+            <case name="case_2">
+              <leaf name="equal">
+                <description>
+                  <text>Equal sharing of excess bandwidth</text>
+                </description>
+                <type name="empty"/>
+              </leaf>
+            </case>
+          </choice>
+        </container>
+        <container name="input-traffic-control-profile">
+          <description>
+            <text>Input traffic control profile for the interface set</text>
+          </description>
+          <leaf name="profile-name">
+            <description>
+              <text>Name of the input traffic control profile associated with the interface set</text>
+            </description>
+            <type name="string">
+              <length value="1 .. 64"/>
+            </type>
+          </leaf>
+        </container>
+        <container name="input-traffic-control-profile-remaining">
+          <description>
+            <text>Input traffic control profile for the remaining traffic on an interface set</text>
+          </description>
+          <leaf name="profile-name">
+            <description>
+              <text>Name of the input traffic control profile associated with the remaining traffic for the interface set</text>
+            </description>
+            <type name="string">
+              <length value="1 .. 64"/>
+            </type>
+          </leaf>
+        </container>
+        <container name="output-traffic-control-profile">
+          <description>
+            <text>Output traffic control profile for the interface set</text>
+          </description>
+          <leaf name="profile-name">
+            <description>
+              <text>Name of the output traffic control profile associated with the interface set</text>
+            </description>
+            <type name="string">
+              <length value="1 .. 64"/>
+            </type>
+          </leaf>
+        </container>
+        <container name="output-traffic-control-profile-remaining">
+          <description>
+            <text>Output traffic control profile for the remaining traffic on an interface set</text>
+          </description>
+          <leaf name="profile-name">
+            <description>
+              <text>Name of the output traffic control profile associated with the remaining traffic for the interface set</text>
+            </description>
+            <type name="string">
+              <length value="1 .. 64"/>
+            </type>
+          </leaf>
+        </container>
+      </list>
+      <list name="interface">
+        <key value="name"/>
+        <uses name="cos_interfaces_type"/>
+      </list>
+    </container>
+    <container name="rewrite-rules">
+      <description>
+        <text>Write code point value of outgoing packets</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <list name="dscp">
+        <key value="name"/>
+        <ordered-by value="user"/>
+        <description>
+          <text>Differentiated Services code point rewrite rule</text>
+        </description>
+        <leaf name="name">
+          <description>
+            <text>Rewrite rule name</text>
+          </description>
+          <type name="string">
+            <length value="1 .. 64"/>
+          </type>
+        </leaf>
+        <uses name="apply-advanced"/>
+        <leaf name="import">
+          <description>
+            <text>Include this rewrite rule in this definition</text>
+          </description>
+          <type name="union">
+            <type name="string">
+              <pattern value="default"/>
+            </type>
+            <type name="string">
+              <length value="1 .. 64"/>
+            </type>
+          </type>
+        </leaf>
+        <list name="forwarding-class">
+          <key value="name"/>
+          <description>
+            <text>Markings for named forwarding class</text>
+          </description>
+          <leaf name="name">
+            <description>
+              <text>Forwarding class name</text>
+            </description>
+            <type name="string">
+              <length value="1 .. 64"/>
+            </type>
+          </leaf>
+          <uses name="apply-advanced"/>
+          <list name="loss-priority">
+            <key value="name"/>
+            <description>
+              <text>Code point marking based on loss priority</text>
+            </description>
+            <leaf name="name">
+              <type name="enumeration">
+                <enum name="low">
+                  <description>
+                    <text>Marking when loss priority is low</text>
+                  </description>
+                </enum>
+                <enum name="high">
+                  <description>
+                    <text>Marking when loss priority is high</text>
+                  </description>
+                </enum>
+                <enum name="medium-low">
+                  <description>
+                    <text>Marking when loss priority is medium-low</text>
+                  </description>
+                </enum>
+                <enum name="medium-high">
+                  <description>
+                    <text>Marking when loss priority is medium-high</text>
+                  </description>
+                </enum>
+              </type>
+            </leaf>
+            <leaf name="code-point">
+              <description>
+                <text>Code point aliases or bit string</text>
+              </description>
+              <type name="string"/>
+            </leaf>
+          </list>
+        </list>
+      </list>
+      <list name="dscp-ipv6">
+        <key value="name"/>
+        <ordered-by value="user"/>
+        <description>
+          <text>Differentiated Services code point rewrite rule IPv6</text>
+        </description>
+        <leaf name="name">
+          <description>
+            <text>Rewrite rule name</text>
+          </description>
+          <type name="string">
+            <length value="1 .. 64"/>
+          </type>
+        </leaf>
+        <uses name="apply-advanced"/>
+        <leaf name="import">
+          <description>
+            <text>Include this rewrite rule in this definition</text>
+          </description>
+          <type name="union">
+            <type name="string">
+              <pattern value="default"/>
+            </type>
+            <type name="string">
+              <length value="1 .. 64"/>
+            </type>
+          </type>
+        </leaf>
+        <list name="forwarding-class">
+          <key value="name"/>
+          <description>
+            <text>Markings for named forwarding class</text>
+          </description>
+          <leaf name="name">
+            <description>
+              <text>Forwarding class name</text>
+            </description>
+            <type name="string">
+              <length value="1 .. 64"/>
+            </type>
+          </leaf>
+          <uses name="apply-advanced"/>
+          <list name="loss-priority">
+            <key value="name"/>
+            <description>
+              <text>Code point marking based on loss priority</text>
+            </description>
+            <leaf name="name">
+              <type name="enumeration">
+                <enum name="low">
+                  <description>
+                    <text>Marking when loss priority is low</text>
+                  </description>
+                </enum>
+                <enum name="high">
+                  <description>
+                    <text>Marking when loss priority is high</text>
+                  </description>
+                </enum>
+                <enum name="medium-low">
+                  <description>
+                    <text>Marking when loss priority is medium-low</text>
+                  </description>
+                </enum>
+                <enum name="medium-high">
+                  <description>
+                    <text>Marking when loss priority is medium-high</text>
+                  </description>
+                </enum>
+              </type>
+            </leaf>
+            <leaf name="code-point">
+              <description>
+                <text>Code point aliases or bit string</text>
+              </description>
+              <type name="string"/>
+            </leaf>
+          </list>
+        </list>
+      </list>
+      <list name="exp">
+        <key value="name"/>
+        <ordered-by value="user"/>
+        <description>
+          <text>MPLS EXP rewrite rule</text>
+        </description>
+        <leaf name="name">
+          <description>
+            <text>Rewrite rule name</text>
+          </description>
+          <type name="string">
+            <length value="1 .. 64"/>
+          </type>
+        </leaf>
+        <uses name="apply-advanced"/>
+        <leaf name="import">
+          <description>
+            <text>Include this rewrite rule in this definition</text>
+          </description>
+          <type name="union">
+            <type name="string">
+              <pattern value="default"/>
+            </type>
+            <type name="string">
+              <length value="1 .. 64"/>
+            </type>
+          </type>
+        </leaf>
+        <list name="forwarding-class">
+          <key value="name"/>
+          <description>
+            <text>Markings for named forwarding class</text>
+          </description>
+          <leaf name="name">
+            <description>
+              <text>Forwarding class name</text>
+            </description>
+            <type name="string">
+              <length value="1 .. 64"/>
+            </type>
+          </leaf>
+          <uses name="apply-advanced"/>
+          <list name="loss-priority">
+            <key value="name"/>
+            <description>
+              <text>Code point marking based on loss priority</text>
+            </description>
+            <leaf name="name">
+              <type name="enumeration">
+                <enum name="low">
+                  <description>
+                    <text>Marking when loss priority is low</text>
+                  </description>
+                </enum>
+                <enum name="high">
+                  <description>
+                    <text>Marking when loss priority is high</text>
+                  </description>
+                </enum>
+                <enum name="medium-low">
+                  <description>
+                    <text>Marking when loss priority is medium-low</text>
+                  </description>
+                </enum>
+                <enum name="medium-high">
+                  <description>
+                    <text>Marking when loss priority is medium-high</text>
+                  </description>
+                </enum>
+              </type>
+            </leaf>
+            <leaf name="code-point">
+              <description>
+                <text>Code point aliases or bit string</text>
+              </description>
+              <type name="string"/>
+            </leaf>
+          </list>
+        </list>
+      </list>
+      <list name="ieee-802.1">
+        <key value="name"/>
+        <ordered-by value="user"/>
+        <description>
+          <text>IEEE-802.1 rewrite rule</text>
+        </description>
+        <leaf name="name">
+          <description>
+            <text>Rewrite rule name</text>
+          </description>
+          <type name="string">
+            <length value="1 .. 64"/>
+          </type>
+        </leaf>
+        <uses name="apply-advanced"/>
+        <leaf name="import">
+          <description>
+            <text>Include this rewrite rule in this definition</text>
+          </description>
+          <type name="union">
+            <type name="string">
+              <pattern value="default"/>
+            </type>
+            <type name="string">
+              <length value="1 .. 64"/>
+            </type>
+          </type>
+        </leaf>
+        <list name="forwarding-class">
+          <key value="name"/>
+          <description>
+            <text>Markings for named forwarding class</text>
+          </description>
+          <leaf name="name">
+            <description>
+              <text>Forwarding class name</text>
+            </description>
+            <type name="string">
+              <length value="1 .. 64"/>
+            </type>
+          </leaf>
+          <uses name="apply-advanced"/>
+          <list name="loss-priority">
+            <key value="name"/>
+            <description>
+              <text>Code point marking based on loss priority</text>
+            </description>
+            <leaf name="name">
+              <type name="enumeration">
+                <enum name="low">
+                  <description>
+                    <text>Marking when loss priority is low</text>
+                  </description>
+                </enum>
+                <enum name="high">
+                  <description>
+                    <text>Marking when loss priority is high</text>
+                  </description>
+                </enum>
+                <enum name="medium-low">
+                  <description>
+                    <text>Marking when loss priority is medium-low</text>
+                  </description>
+                </enum>
+                <enum name="medium-high">
+                  <description>
+                    <text>Marking when loss priority is medium-high</text>
+                  </description>
+                </enum>
+              </type>
+            </leaf>
+            <leaf name="code-point">
+              <description>
+                <text>Code point aliases or bit string</text>
+              </description>
+              <type name="string"/>
+            </leaf>
+          </list>
+        </list>
+      </list>
+      <list name="inet-precedence">
+        <key value="name"/>
+        <ordered-by value="user"/>
+        <description>
+          <text>IPv4 precedence rewrite rule</text>
+        </description>
+        <leaf name="name">
+          <description>
+            <text>Rewrite rule name</text>
+          </description>
+          <type name="string">
+            <length value="1 .. 64"/>
+          </type>
+        </leaf>
+        <uses name="apply-advanced"/>
+        <leaf name="import">
+          <description>
+            <text>Include this rewrite rule in this definition</text>
+          </description>
+          <type name="union">
+            <type name="string">
+              <pattern value="default"/>
+            </type>
+            <type name="string">
+              <length value="1 .. 64"/>
+            </type>
+          </type>
+        </leaf>
+        <list name="forwarding-class">
+          <key value="name"/>
+          <description>
+            <text>Markings for named forwarding class</text>
+          </description>
+          <leaf name="name">
+            <description>
+              <text>Forwarding class name</text>
+            </description>
+            <type name="string">
+              <length value="1 .. 64"/>
+            </type>
+          </leaf>
+          <uses name="apply-advanced"/>
+          <list name="loss-priority">
+            <key value="name"/>
+            <description>
+              <text>Code point marking based on loss priority</text>
+            </description>
+            <leaf name="name">
+              <type name="enumeration">
+                <enum name="low">
+                  <description>
+                    <text>Marking when loss priority is low</text>
+                  </description>
+                </enum>
+                <enum name="high">
+                  <description>
+                    <text>Marking when loss priority is high</text>
+                  </description>
+                </enum>
+                <enum name="medium-low">
+                  <description>
+                    <text>Marking when loss priority is medium-low</text>
+                  </description>
+                </enum>
+                <enum name="medium-high">
+                  <description>
+                    <text>Marking when loss priority is medium-high</text>
+                  </description>
+                </enum>
+              </type>
+            </leaf>
+            <leaf name="code-point">
+              <description>
+                <text>Code point aliases or bit string</text>
+              </description>
+              <type name="string"/>
+            </leaf>
+          </list>
+        </list>
+      </list>
+      <list name="frame-relay-de">
+        <key value="name"/>
+        <ordered-by value="user"/>
+        <description>
+          <text>Frame relay discard eligible bit rewrite rule</text>
+        </description>
+        <leaf name="name">
+          <description>
+            <text>Rewrite rule name</text>
+          </description>
+          <type name="string">
+            <length value="1 .. 64"/>
+          </type>
+        </leaf>
+        <uses name="apply-advanced"/>
+        <leaf name="import">
+          <description>
+            <text>Include this rewrite rule in this definition</text>
+          </description>
+          <type name="union">
+            <type name="string">
+              <pattern value="default"/>
+            </type>
+            <type name="string">
+              <length value="1 .. 64"/>
+            </type>
+          </type>
+        </leaf>
+        <list name="forwarding-class">
+          <key value="name"/>
+          <description>
+            <text>Markings for named forwarding class</text>
+          </description>
+          <leaf name="name">
+            <description>
+              <text>Forwarding class name</text>
+            </description>
+            <type name="string">
+              <length value="1 .. 64"/>
+            </type>
+          </leaf>
+          <uses name="apply-advanced"/>
+          <list name="loss-priority">
+            <key value="name"/>
+            <description>
+              <text>Code point marking based on loss priority</text>
+            </description>
+            <leaf name="name">
+              <type name="enumeration">
+                <enum name="low">
+                  <description>
+                    <text>Marking when loss priority is low</text>
+                  </description>
+                </enum>
+                <enum name="high">
+                  <description>
+                    <text>Marking when loss priority is high</text>
+                  </description>
+                </enum>
+                <enum name="medium-low">
+                  <description>
+                    <text>Marking when loss priority is medium-low</text>
+                  </description>
+                </enum>
+                <enum name="medium-high">
+                  <description>
+                    <text>Marking when loss priority is medium-high</text>
+                  </description>
+                </enum>
+              </type>
+            </leaf>
+            <leaf name="code-point">
+              <description>
+                <text>Code point aliases or bit string</text>
+              </description>
+              <type name="string"/>
+            </leaf>
+          </list>
+        </list>
+      </list>
+      <list name="ieee-802.1ad">
+        <key value="name"/>
+        <ordered-by value="user"/>
+        <description>
+          <text>IEEE-802.1ad (DEI) rewrite rule</text>
+        </description>
+        <leaf name="name">
+          <description>
+            <text>Rewrite rule name</text>
+          </description>
+          <type name="string">
+            <length value="1 .. 64"/>
+          </type>
+        </leaf>
+        <uses name="apply-advanced"/>
+        <leaf name="import">
+          <description>
+            <text>Include this rewrite rule in this definition</text>
+          </description>
+          <type name="union">
+            <type name="string">
+              <pattern value="default"/>
+            </type>
+            <type name="string">
+              <length value="1 .. 64"/>
+            </type>
+          </type>
+        </leaf>
+        <list name="forwarding-class">
+          <key value="name"/>
+          <description>
+            <text>Markings for named forwarding class</text>
+          </description>
+          <leaf name="name">
+            <description>
+              <text>Forwarding class name</text>
+            </description>
+            <type name="string">
+              <length value="1 .. 64"/>
+            </type>
+          </leaf>
+          <uses name="apply-advanced"/>
+          <list name="loss-priority">
+            <key value="name"/>
+            <description>
+              <text>Code point marking based on loss priority</text>
+            </description>
+            <leaf name="name">
+              <type name="enumeration">
+                <enum name="low">
+                  <description>
+                    <text>Marking when loss priority is low</text>
+                  </description>
+                </enum>
+                <enum name="high">
+                  <description>
+                    <text>Marking when loss priority is high</text>
+                  </description>
+                </enum>
+                <enum name="medium-low">
+                  <description>
+                    <text>Marking when loss priority is medium-low</text>
+                  </description>
+                </enum>
+                <enum name="medium-high">
+                  <description>
+                    <text>Marking when loss priority is medium-high</text>
+                  </description>
+                </enum>
+              </type>
+            </leaf>
+            <leaf name="code-point">
+              <description>
+                <text>Code point aliases or bit string</text>
+              </description>
+              <type name="string"/>
+            </leaf>
+          </list>
+        </list>
+      </list>
+    </container>
+    <container name="fabric">
+      <description>
+        <text>Define CoS parameters of switch fabric</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <container name="scheduler-map">
+        <description>
+          <text>Mapping of fabric traffic to packet schedulers</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <list name="priority">
+          <key value="name"/>
+          <description>
+            <text>Fabric traffic priority</text>
+          </description>
+          <leaf name="name">
+            <type name="enumeration">
+              <enum name="low">
+                <description>
+                  <text>Low priority fabric traffic</text>
+                </description>
+              </enum>
+              <enum name="high">
+                <description>
+                  <text>High priority fabric traffic</text>
+                </description>
+              </enum>
+            </type>
+          </leaf>
+          <leaf name="scheduler">
+            <description>
+              <text>Scheduler name</text>
+            </description>
+            <type name="string">
+              <length value="1 .. 64"/>
+            </type>
+          </leaf>
+        </list>
+      </container>
+    </container>
+    <list name="scheduler-maps">
+      <key value="name"/>
+      <description>
+        <text>Mapping of forwarding classes to packet schedulers</text>
+      </description>
+      <leaf name="name">
+        <description>
+          <text>Scheduler map name</text>
+        </description>
+        <type name="string">
+          <length value="1 .. 64"/>
+        </type>
+      </leaf>
+      <uses name="apply-advanced"/>
+      <list name="forwarding-class">
+        <key value="name"/>
+        <description>
+          <text>Forwarding class name to map to scheduler</text>
+        </description>
+        <leaf name="name">
+          <description>
+            <text>Forwarding class name</text>
+          </description>
+          <type name="string">
+            <length value="1 .. 64"/>
+          </type>
+        </leaf>
+        <leaf name="scheduler">
+          <description>
+            <text>Scheduler name</text>
+          </description>
+          <type name="string">
+            <length value="1 .. 64"/>
+          </type>
+        </leaf>
+      </list>
+    </list>
+    <list name="fragmentation-maps">
+      <key value="name"/>
+      <description>
+        <text>Mapping of forwarding class to fragmentation options</text>
+      </description>
+      <leaf name="name">
+        <description>
+          <text>Fragmentation map name</text>
+        </description>
+        <type name="string">
+          <length value="1 .. 64"/>
+        </type>
+      </leaf>
+      <uses name="apply-advanced"/>
+      <list name="forwarding-class">
+        <key value="name"/>
+        <description>
+          <text>Forwarding class name to map to fragmentation options</text>
+        </description>
+        <leaf name="name">
+          <description>
+            <text>Forwarding class name</text>
+          </description>
+          <type name="string">
+            <length value="1 .. 64"/>
+          </type>
+        </leaf>
+        <uses name="apply-advanced"/>
+        <choice name="fragmentation-control">
+          <case name="case_1">
+            <leaf name="fragment-threshold">
+              <description>
+                <text>Fragmentation threshold</text>
+              </description>
+              <units name="bytes"/>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint16">
+                  <range value="64 .. 9192"/>
+                </type>
+              </type>
+            </leaf>
+          </case>
+          <case name="case_2">
+            <leaf name="no-fragmentation">
+              <description>
+                <text>Don't allow fragmentation</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+          </case>
+        </choice>
+        <leaf name="multilink-class">
+          <description>
+            <text>Multilink-Class assigned to the forwarding class</text>
+          </description>
+          <type name="union">
+            <type name="string">
+              <pattern value="&lt;.*&gt;|$.*"/>
+            </type>
+            <type name="uint16">
+              <range value="0 .. 7"/>
+            </type>
+          </type>
+        </leaf>
+        <leaf name="drop-timeout">
+          <description>
+            <text>Drop timeout</text>
+          </description>
+          <units name="milliseconds"/>
+          <type name="union">
+            <type name="string">
+              <pattern value="&lt;.*&gt;|$.*"/>
+            </type>
+            <type name="uint16">
+              <range value="0 .. 2000"/>
+            </type>
+          </type>
+        </leaf>
+      </list>
+    </list>
+    <list name="schedulers">
+      <key value="name"/>
+      <description>
+        <text>Packet schedulers</text>
+      </description>
+      <leaf name="name">
+        <description>
+          <text>Scheduler name</text>
+        </description>
+        <type name="string">
+          <length value="1 .. 64"/>
+        </type>
+      </leaf>
+      <uses name="apply-advanced"/>
+      <container name="transmit-rate">
+        <description>
+          <text>Transmit rate</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <choice name="transmit_rate_choice">
+          <case name="case_1">
+            <leaf name="rate">
+              <description>
+                <text>Transmit rate as rate</text>
+              </description>
+              <units name="bits per second"/>
+              <type name="string"/>
+            </leaf>
+          </case>
+          <case name="case_2">
+            <leaf name="percent">
+              <description>
+                <text>Transmit rate as percentage</text>
+              </description>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="0 .. 100"/>
+                </type>
+              </type>
+            </leaf>
+          </case>
+          <case name="case_3">
+            <container name="remainder">
+              <presence value="enable remainder"/>
+              <description>
+                <text>Remainder available</text>
+              </description>
+              <uses name="apply-advanced"/>
+              <leaf name="percent">
+                <default value="0"/>
+                <type name="union">
+                  <type name="string">
+                    <pattern value="&lt;.*&gt;|$.*"/>
+                  </type>
+                  <type name="uint32">
+                    <range value="0 .. 100"/>
+                  </type>
+                </type>
+              </leaf>
+            </container>
+          </case>
+        </choice>
+        <choice name="rate_limit_choice">
+          <case name="case_1">
+            <leaf name="exact">
+              <description>
+                <text>Enforce exact transmit rate</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+          </case>
+          <case name="case_2"/>
+        </choice>
+      </container>
+      <container name="shaping-rate">
+        <description>
+          <text>Shaping rate</text>
+        </description>
+        <choice name="shaping_rate_choice">
+          <case name="case_1">
+            <leaf name="rate">
+              <description>
+                <text>Shaping rate as an absolute rate</text>
+              </description>
+              <units name="bits per second"/>
+              <type name="string"/>
+            </leaf>
+          </case>
+          <case name="case_2">
+            <leaf name="percent">
+              <description>
+                <text>Shaping rate as a percentage</text>
+              </description>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="1 .. 100"/>
+                </type>
+              </type>
+            </leaf>
+          </case>
+        </choice>
+      </container>
+      <container name="buffer-size">
+        <description>
+          <text>Queue transmission buffer size</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <choice name="buffer_size_choice">
+          <case name="case_1">
+            <leaf name="percent">
+              <description>
+                <text>Buffer size as a percentage</text>
+              </description>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="0 .. 100"/>
+                </type>
+              </type>
+            </leaf>
+          </case>
+          <case name="case_2">
+            <container name="remainder">
+              <presence value="enable remainder"/>
+              <description>
+                <text>Remainder of buffer size available</text>
+              </description>
+              <uses name="apply-advanced"/>
+              <leaf name="percent">
+                <default value="0"/>
+                <type name="union">
+                  <type name="string">
+                    <pattern value="&lt;.*&gt;|$.*"/>
+                  </type>
+                  <type name="uint32">
+                    <range value="0 .. 100"/>
+                  </type>
+                </type>
+              </leaf>
+            </container>
+          </case>
+          <case name="case_3"/>
+          <case name="case_4">
+            <leaf name="temporal">
+              <description>
+                <text>Buffer size as temporal value</text>
+              </description>
+              <units name="microseconds"/>
+              <type name="string"/>
+            </leaf>
+          </case>
+        </choice>
+        <choice name="buffer_limit">
+          <case name="case_1">
+            <leaf name="exact">
+              <description>
+                <text>Enforce exact buffer size</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+          </case>
+        </choice>
+        <container name="buffer-partition">
+          <presence value="enable buffer-partition"/>
+          <description>
+            <text>Partition buffer size among multicast and unicast</text>
+          </description>
+          <uses name="apply-advanced"/>
+          <container name="multicast">
+            <presence value="enable multicast"/>
+            <description>
+              <text>Specify multicast fraction of reserved buffer</text>
+            </description>
+            <uses name="apply-advanced"/>
+            <leaf name="percent">
+              <default value="50"/>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="0 .. 100"/>
+                </type>
+              </type>
+            </leaf>
+          </container>
+        </container>
+      </container>
+      <container name="shared-buffer">
+        <description>
+          <text>Queue transmission shared-buffer</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <container name="maximum">
+          <presence value="enable maximum"/>
+          <description>
+            <text>Control the amount of shared buffer a given queue can consume</text>
+          </description>
+          <uses name="apply-advanced"/>
+          <leaf name="percent">
+            <description>
+              <text>Maximum shared buffer size as a percentage</text>
+            </description>
+            <default value="0"/>
+            <type name="union">
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+              <type name="uint32">
+                <range value="0 .. 100"/>
+              </type>
+            </type>
+          </leaf>
+          <container name="multicast">
+            <presence value="enable multicast"/>
+            <description>
+              <text>Control the amount of shared buffer mcast pkts consume</text>
+            </description>
+            <uses name="apply-advanced"/>
+            <leaf name="percent">
+              <description>
+                <text>Maximum shared buffer size as a percentage</text>
+              </description>
+              <default value="0"/>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="0 .. 100"/>
+                </type>
+              </type>
+            </leaf>
+          </container>
+        </container>
+      </container>
+      <leaf name="priority">
+        <description>
+          <text>Scheduling priority</text>
+        </description>
+        <type name="string">
+          <length value="1 .. 64"/>
+        </type>
+      </leaf>
+      <leaf name="excess-priority">
+        <description>
+          <text>Priority in the excess region</text>
+        </description>
+        <type name="string">
+          <length value="1 .. 64"/>
+        </type>
+      </leaf>
+      <list name="drop-profile-map">
+        <key value="loss-priority protocol"/>
+        <description>
+          <text>Assign drop profile to a loss priority and protocol</text>
+        </description>
+        <leaf name="loss-priority">
+          <description>
+            <text>Loss priority value</text>
+          </description>
+          <type name="enumeration">
+            <enum name="low">
+              <description>
+                <text>Loss priority low</text>
+              </description>
+            </enum>
+            <enum name="high">
+              <description>
+                <text>Loss priority high</text>
+              </description>
+            </enum>
+            <enum name="medium-low">
+              <description>
+                <text>Loss priority medium-low</text>
+              </description>
+            </enum>
+            <enum name="medium-high">
+              <description>
+                <text>Loss priority medium-high</text>
+              </description>
+            </enum>
+            <enum name="any">
+              <description>
+                <text>Ignore loss priority when assigning drop profile</text>
+              </description>
+            </enum>
+          </type>
+        </leaf>
+        <leaf name="protocol">
+          <description>
+            <text>Protocol type</text>
+          </description>
+          <type name="enumeration">
+            <enum name="tcp">
+              <description>
+                <text>TCP protocol only</text>
+              </description>
+            </enum>
+            <enum name="non-tcp">
+              <description>
+                <text>Non-TCP protocols only</text>
+              </description>
+            </enum>
+            <enum name="any">
+              <description>
+                <text>Ignore protocol type when assigning drop profile</text>
+              </description>
+            </enum>
+          </type>
+        </leaf>
+        <leaf name="drop-profile">
+          <description>
+            <text>Name of drop profile to apply</text>
+          </description>
+          <type name="string">
+            <length value="1 .. 64"/>
+          </type>
+        </leaf>
+      </list>
+    </list>
+    <container name="traceoptions">
+      <description>
+        <text>Trace options for class-of-service process</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <leaf name="no-remote-trace">
+        <description>
+          <text>Disable remote tracing</text>
+        </description>
+        <type name="empty"/>
+      </leaf>
+      <container name="file">
+        <description>
+          <text>Trace file information</text>
+        </description>
+        <leaf name="filename">
+          <description>
+            <text>Name of file in which to write trace information</text>
+          </description>
+          <type name="string">
+            <length value="1 .. 1024"/>
+          </type>
+        </leaf>
+        <leaf name="size">
+          <description>
+            <text>Maximum trace file size</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+        <leaf name="files">
+          <description>
+            <text>Maximum number of trace files</text>
+          </description>
+          <default value="3"/>
+          <type name="union">
+            <type name="string">
+              <pattern value="&lt;.*&gt;|$.*"/>
+            </type>
+            <type name="uint32">
+              <range value="2 .. 1000"/>
+            </type>
+          </type>
+        </leaf>
+        <choice name="world-readable-choice">
+          <leaf name="world-readable">
+            <description>
+              <text>Allow any user to read the log file</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="no-world-readable">
+            <description>
+              <text>Don't allow any user to read the log file</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+        </choice>
+        <leaf name="match">
+          <description>
+            <text>Regular expression for lines to be logged</text>
+          </description>
+          <type name="jt:regular-expression"/>
+        </leaf>
+      </container>
+      <list name="flag">
+        <key value="name"/>
+        <description>
+          <text>Tracing parameters</text>
+        </description>
+        <leaf name="name">
+          <type name="enumeration">
+            <enum name="init">
+              <description>
+                <text>Trace initialization events</text>
+              </description>
+            </enum>
+            <enum name="show">
+              <description>
+                <text>Trace show command servicing</text>
+              </description>
+            </enum>
+            <enum name="route-socket">
+              <description>
+                <text>Trace route-socket events</text>
+              </description>
+            </enum>
+            <enum name="parse">
+              <description>
+                <text>Trace parser processing</text>
+              </description>
+            </enum>
+            <enum name="process">
+              <description>
+                <text>Trace configuration processing</text>
+              </description>
+            </enum>
+            <enum name="util">
+              <description>
+                <text>Trace utilities</text>
+              </description>
+            </enum>
+            <enum name="restart">
+              <description>
+                <text>Trace restart processing</text>
+              </description>
+            </enum>
+            <enum name="snmp">
+              <description>
+                <text>Trace SNMP-related processing</text>
+              </description>
+            </enum>
+            <enum name="hardware-database">
+              <description>
+                <text>Trace chassis hardware database related processing</text>
+              </description>
+            </enum>
+            <enum name="asynch">
+              <description>
+                <text>Trace asynchronous configuration processing</text>
+              </description>
+            </enum>
+            <enum name="dynamic">
+              <description>
+                <text>Trace dynamic CoS functions</text>
+              </description>
+            </enum>
+            <enum name="cos-adjustment">
+              <description>
+                <text>Trace CoS rate adjustments</text>
+              </description>
+            </enum>
+            <enum name="performance-monitor">
+              <description>
+                <text>Trace performance monitor counters</text>
+              </description>
+            </enum>
+            <enum name="chassis-scheduler">
+              <description>
+                <text>Trace chassis stream scheduler processing</text>
+              </description>
+            </enum>
+            <enum name="cn-util">
+              <description>
+                <text>Trace utilities for congestion-notification</text>
+              </description>
+            </enum>
+            <enum name="snmp-timeouts">
+              <description>
+                <text>Trace SNMP COSD kernel timeouts</text>
+              </description>
+            </enum>
+            <enum name="all">
+              <description>
+                <text>Trace everything</text>
+              </description>
+            </enum>
+            <enum name="feature-capability">
+              <description>
+                <text>Trace feature capability</text>
+              </description>
+            </enum>
+            <enum name="application">
+              <description>
+                <text>Trace Junos application programming</text>
+              </description>
+            </enum>
+            <enum name="jvision">
+              <description>
+                <text>Cos Junos Jvision traces</text>
+              </description>
+            </enum>
+          </type>
+        </leaf>
+      </list>
+    </container>
+    <container name="application-traffic-control">
+      <presence value="enable application-traffic-control"/>
+      <description>
+        <text>Application classifier configuration</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <container name="traceoptions">
+        <description>
+          <text>Trace options for application classifier</text>
+        </description>
+        <uses name="appqos-traceoptions-type"/>
+      </container>
+      <list name="rate-limiters">
+        <key value="name"/>
+        <ordered-by value="user"/>
+        <description>
+          <text>Configure application-traffic-control rate limiters</text>
+        </description>
+        <leaf name="name">
+          <description>
+            <text>Application classifier rate-limiter name</text>
+          </description>
+          <type name="string">
+            <length value="1 .. 63"/>
+          </type>
+        </leaf>
+        <uses name="apply-advanced"/>
+        <leaf name="bandwidth-limit">
+          <description>
+            <text>Bandwidth limit</text>
+          </description>
+          <units name="kbps"/>
+          <type name="union">
+            <type name="string">
+              <pattern value="&lt;.*&gt;|$.*"/>
+            </type>
+            <type name="uint32">
+              <range value="64 .. 10485760"/>
+            </type>
+          </type>
+        </leaf>
+        <leaf name="burst-size-limit">
+          <description>
+            <text>Burst size limit (default with bandwidth-limit and no larger than 6400 * bandwidth)</text>
+          </description>
+          <units name="bytes"/>
+          <type name="union">
+            <type name="string">
+              <pattern value="&lt;.*&gt;|$.*"/>
+            </type>
+            <type name="uint32">
+              <range value="1 .. 1342177280"/>
+            </type>
+          </type>
+        </leaf>
+      </list>
+      <list name="rule-sets">
+        <key value="name"/>
+        <ordered-by value="user"/>
+        <description>
+          <text>Configure application-traffic-control rule-sets</text>
+        </description>
+        <leaf name="name">
+          <description>
+            <text>Application classifier rule-set name</text>
+          </description>
+          <type name="string">
+            <length value="1 .. 63"/>
+          </type>
+        </leaf>
+        <uses name="apply-advanced"/>
+        <list name="rule">
+          <key value="name"/>
+          <ordered-by value="user"/>
+          <description>
+            <text>Rule</text>
+          </description>
+          <uses name="appqos_rule_type"/>
+        </list>
+      </list>
+    </container>
+    <container name="forwarding-policy">
+      <description>
+        <text>Class-of-service forwarding policy</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <list name="next-hop-map">
+        <key value="name"/>
+        <ordered-by value="user"/>
+        <description>
+          <text>Class-of-service next-hop map</text>
+        </description>
+        <leaf name="name">
+          <description>
+            <text>Name to identify next-hop map</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+        <uses name="apply-advanced"/>
+        <list name="forwarding-class">
+          <key value="name"/>
+          <ordered-by value="user"/>
+          <description>
+            <text>Forwarding class from which to map</text>
+          </description>
+          <leaf name="name">
+            <description>
+              <text>Forwarding class</text>
+            </description>
+            <type name="string"/>
+          </leaf>
+          <uses name="apply-advanced"/>
+          <leaf-list name="next-hop">
+            <ordered-by value="user"/>
+            <description>
+              <text>Next-hop identifier to which to map</text>
+            </description>
+            <type name="union">
+              <type name="jt:ipaddr-or-interface"/>
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+            </type>
+          </leaf-list>
+          <leaf-list name="lsp-next-hop">
+            <ordered-by value="user"/>
+            <description>
+              <text>Regular expression for LSP next hop</text>
+            </description>
+            <type name="string"/>
+          </leaf-list>
+          <leaf name="non-lsp-next-hop">
+            <description>
+              <text>Any non-RSVP LSP next hop</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="non-labelled-next-hop">
+            <description>
+              <text>Any non-labelled next hop</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="discard">
+            <description>
+              <text>Discard next hop</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+        </list>
+        <container name="forwarding-class-default">
+          <description>
+            <text>Next Hop For traffic which does not meet any FC in the next-hop-map</text>
+          </description>
+          <uses name="apply-advanced"/>
+          <leaf-list name="next-hop">
+            <ordered-by value="user"/>
+            <description>
+              <text>Next-hop identifier to which to map</text>
+            </description>
+            <type name="union">
+              <type name="jt:ipaddr-or-interface"/>
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+            </type>
+          </leaf-list>
+          <leaf-list name="lsp-next-hop">
+            <ordered-by value="user"/>
+            <description>
+              <text>Regular expression for LSP next hop</text>
+            </description>
+            <type name="string"/>
+          </leaf-list>
+          <leaf name="non-lsp-next-hop">
+            <description>
+              <text>Any non-RSVP LSP next hop</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="non-labelled-next-hop">
+            <description>
+              <text>Any non-labelled next hop</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="discard">
+            <description>
+              <text>Discard next hop</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+        </container>
+      </list>
+      <list name="class">
+        <key value="name"/>
+        <ordered-by value="user"/>
+        <description>
+          <text>Class-of-service description</text>
+        </description>
+        <leaf name="name">
+          <description>
+            <text>Name to identify class of service</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+        <uses name="apply-advanced"/>
+        <container name="classification-override">
+          <description>
+            <text>Define classification overrides</text>
+          </description>
+          <uses name="apply-advanced"/>
+          <leaf name="forwarding-class">
+            <description>
+              <text>Forwarding class name</text>
+            </description>
+            <type name="string"/>
+          </leaf>
+        </container>
+      </list>
+    </container>
+  </grouping>
+  <grouping name="apply-advanced">
+    <description>
+      <text>Apply advanced configuration logic</text>
+    </description>
+    <leaf-list name="apply-groups">
+      <ordered-by value="user"/>
+      <description>
+        <text>Groups from which to inherit configuration data</text>
+      </description>
+      <type name="string"/>
+    </leaf-list>
+    <leaf-list name="apply-groups-except">
+      <ordered-by value="user"/>
+      <description>
+        <text>Don't inherit configuration data from these groups</text>
+      </description>
+      <type name="string"/>
+    </leaf-list>
+    <list name="apply-macro">
+      <key value="name"/>
+      <ordered-by value="user"/>
+      <description>
+        <text>Macro and parameters for commit script expansion</text>
+      </description>
+      <uses name="apply-macro-type"/>
+    </list>
+  </grouping>
+  <grouping name="apply-macro-type">
+    <description>
+      <text>Macro data for commit-script expansion</text>
+    </description>
+    <leaf name="name">
+      <description>
+        <text>Name of the macro to be expanded</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <list name="data">
+      <key value="name"/>
+      <uses name="macro-data-type"/>
+    </list>
+  </grouping>
+  <grouping name="appqos-traceoptions-type">
+    <description>
+      <text>Trace options for application classifier</text>
+    </description>
+    <uses name="apply-advanced"/>
+    <leaf name="no-remote-trace">
+      <description>
+        <text>Disable remote tracing</text>
+      </description>
+      <type name="empty"/>
+    </leaf>
+    <container name="file">
+      <description>
+        <text>Trace file information</text>
+      </description>
+      <leaf name="filename">
+        <description>
+          <text>Name of file in which to write trace information</text>
+        </description>
+        <type name="string">
+          <length value="1 .. 1024"/>
+        </type>
+      </leaf>
+      <leaf name="size">
+        <description>
+          <text>Maximum trace file size</text>
+        </description>
+        <type name="string"/>
+      </leaf>
+      <leaf name="files">
+        <description>
+          <text>Maximum number of trace files</text>
+        </description>
+        <default value="3"/>
+        <type name="union">
+          <type name="string">
+            <pattern value="&lt;.*&gt;|$.*"/>
+          </type>
+          <type name="uint32">
+            <range value="2 .. 1000"/>
+          </type>
+        </type>
+      </leaf>
+      <choice name="world-readable-choice">
+        <leaf name="world-readable">
+          <description>
+            <text>Allow any user to read the log file</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+        <leaf name="no-world-readable">
+          <description>
+            <text>Don't allow any user to read the log file</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </choice>
+      <leaf name="match">
+        <description>
+          <text>Regular expression for lines to be logged</text>
+        </description>
+        <type name="jt:regular-expression"/>
+      </leaf>
+    </container>
+    <list name="flag">
+      <key value="name"/>
+      <ordered-by value="user"/>
+      <description>
+        <text>Events and other information to include in trace output</text>
+      </description>
+      <leaf name="name">
+        <description>
+          <text>Flag name to include in trace output</text>
+        </description>
+        <type name="enumeration">
+          <enum name="all">
+            <description>
+              <text>All events</text>
+            </description>
+          </enum>
+        </type>
+      </leaf>
+    </list>
+    <leaf name="level">
+      <description>
+        <text>Level of debugging output</text>
+      </description>
+      <default value="error"/>
+      <type name="enumeration">
+        <enum name="error">
+          <description>
+            <text>Match error conditions</text>
+          </description>
+        </enum>
+        <enum name="warning">
+          <description>
+            <text>Match warning messages</text>
+          </description>
+        </enum>
+        <enum name="notice">
+          <description>
+            <text>Match conditions that should be handled specially</text>
+          </description>
+        </enum>
+        <enum name="info">
+          <description>
+            <text>Match informational messages</text>
+          </description>
+        </enum>
+        <enum name="verbose">
+          <description>
+            <text>Match verbose messages</text>
+          </description>
+        </enum>
+        <enum name="all">
+          <description>
+            <text>Match all levels</text>
+          </description>
+        </enum>
+      </type>
+    </leaf>
+  </grouping>
+  <grouping name="appqos_rule_type">
+    <leaf name="name">
+      <description>
+        <text>Rule name</text>
+      </description>
+      <type name="string">
+        <length value="1 .. 63"/>
+      </type>
+    </leaf>
+    <uses name="apply-advanced"/>
+    <container name="match">
+      <description>
+        <text>Specify application traffic control rule match-criteria</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <leaf name="application-any">
+        <description>
+          <text>Any applications</text>
+        </description>
+        <type name="empty"/>
+      </leaf>
+      <leaf name="application-unknown">
+        <description>
+          <text>Uknown applcations</text>
+        </description>
+        <status value="deprecated"/>
+        <type name="empty"/>
+      </leaf>
+      <leaf name="application-known">
+        <description>
+          <text>Identifiable applications</text>
+        </description>
+        <type name="empty"/>
+      </leaf>
+      <leaf-list name="application">
+        <ordered-by value="user"/>
+        <description>
+          <text>Specify application name to match</text>
+        </description>
+        <type name="string">
+          <length value="1 .. 63"/>
+        </type>
+      </leaf-list>
+      <leaf-list name="application-group">
+        <ordered-by value="user"/>
+        <description>
+          <text>Specify application group name to match</text>
+        </description>
+        <type name="string">
+          <length value="1 .. 63"/>
+        </type>
+      </leaf-list>
+    </container>
+    <container name="then">
+      <description>
+        <text>Specify rule action to take when packet match criteria</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <leaf name="forwarding-class">
+        <description>
+          <text>Forwarding class for outgoing packets</text>
+        </description>
+        <type name="string"/>
+      </leaf>
+      <leaf name="dscp-code-point">
+        <description>
+          <text>DSCP code point bitmap or alias</text>
+        </description>
+        <type name="string"/>
+      </leaf>
+      <leaf name="loss-priority">
+        <description>
+          <text>Packet loss priority</text>
+        </description>
+        <type name="enumeration">
+          <enum name="low">
+            <description>
+              <text>Low loss priority</text>
+            </description>
+          </enum>
+          <enum name="medium-low">
+            <description>
+              <text>Medium-low loss priority</text>
+            </description>
+          </enum>
+          <enum name="medium-high">
+            <description>
+              <text>Medium-high loss priority</text>
+            </description>
+          </enum>
+          <enum name="high">
+            <description>
+              <text>High loss priority</text>
+            </description>
+          </enum>
+        </type>
+      </leaf>
+      <container name="rate-limit">
+        <description>
+          <text>Apply rate limiters</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <leaf name="client-to-server">
+          <description>
+            <text>Client-to-server rate limiter</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+        <leaf name="server-to-client">
+          <description>
+            <text>Server-to-client rate limiter</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+        <leaf name="loss-priority-high">
+          <description>
+            <text>Set Rate limiter's action Loss-Priority to high</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </container>
+      <leaf name="log">
+        <description>
+          <text>Log the action</text>
+        </description>
+        <type name="empty"/>
+      </leaf>
+    </container>
+  </grouping>
+  <grouping name="cos_interfaces_type">
+    <description>
+      <text>Physical interface</text>
+    </description>
+    <leaf name="name">
+      <description>
+        <text>Interface name (or wildcard)</text>
+      </description>
+      <type name="union">
+        <type name="jt:interface-device-wildcard"/>
+        <type name="string">
+          <pattern value="&lt;.*&gt;|$.*"/>
+        </type>
+      </type>
+    </leaf>
+    <uses name="apply-advanced"/>
+    <leaf name="scheduler-map">
+      <description>
+        <text>Output scheduler map</text>
+      </description>
+      <type name="string">
+        <length value="1 .. 64"/>
+      </type>
+    </leaf>
+    <container name="shaping-rate">
+      <description>
+        <text>Output shaping rate</text>
+      </description>
+      <leaf name="rate">
+        <description>
+          <text>Shaping rate as an absolute rate</text>
+        </description>
+        <units name="bits per second"/>
+        <type name="string"/>
+      </leaf>
+      <leaf name="overhead">
+        <description>
+          <text>Shaping overhead bytes to be accounted in egress</text>
+        </description>
+        <units name="bytes"/>
+        <type name="union">
+          <type name="string">
+            <pattern value="&lt;.*&gt;|$.*"/>
+          </type>
+          <type name="int32">
+            <range value="-62 .. 192"/>
+          </type>
+        </type>
+      </leaf>
+    </container>
+    <container name="input-excess-bandwidth-share">
+      <description>
+        <text>Input Excess bandwidth sharing policy</text>
+      </description>
+      <choice name="input_excess_bandwidth_share">
+        <case name="case_1">
+          <leaf name="proportional">
+            <description>
+              <text>Maximum Queue Bandwidth</text>
+            </description>
+            <units name="bits per second"/>
+            <type name="string"/>
+          </leaf>
+        </case>
+        <case name="case_2">
+          <leaf name="equal">
+            <description>
+              <text>Equal sharing of excess bandwidth</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+        </case>
+      </choice>
+    </container>
+    <container name="input-traffic-control-profile">
+      <description>
+        <text>Input traffic control profile</text>
+      </description>
+      <leaf name="profile-name">
+        <description>
+          <text>Name of the traffic control profile</text>
+        </description>
+        <type name="string">
+          <length value="1 .. 64"/>
+        </type>
+      </leaf>
+    </container>
+    <container name="input-traffic-control-profile-remaining">
+      <description>
+        <text>Input traffic control profile for remaining traffic on the ifd</text>
+      </description>
+      <leaf name="profile-name">
+        <description>
+          <text>Name of the traffic control profile</text>
+        </description>
+        <type name="string">
+          <length value="1 .. 64"/>
+        </type>
+      </leaf>
+    </container>
+    <container name="output-traffic-control-profile">
+      <description>
+        <text>Output traffic control profile</text>
+      </description>
+      <leaf name="profile-name">
+        <description>
+          <text>Name of the traffic control profile</text>
+        </description>
+        <type name="string">
+          <length value="1 .. 64"/>
+        </type>
+      </leaf>
+    </container>
+    <container name="output-traffic-control-profile-remaining">
+      <description>
+        <text>Output traffic control profile for remaining traffic on the ifd</text>
+      </description>
+      <leaf name="profile-name">
+        <description>
+          <text>Name of the traffic control profile</text>
+        </description>
+        <type name="string">
+          <length value="1 .. 64"/>
+        </type>
+      </leaf>
+    </container>
+    <container name="member-link-scheduler">
+      <description>
+        <text>Scheduler parameter model for member link</text>
+      </description>
+      <choice name="model">
+        <case name="case_1">
+          <leaf name="scale">
+            <description>
+              <text>Scale scheduler parameters on aggregate interface</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+        </case>
+        <case name="case_2">
+          <leaf name="replicate">
+            <description>
+              <text>Copy scheduler parameters from aggregate interface</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+        </case>
+      </choice>
+    </container>
+    <container name="exclude-queue-overhead-bytes">
+      <presence value="enable exclude-queue-overhead-bytes"/>
+      <description>
+        <text>Exclude the overhead bytes from the queue statistics</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <leaf name="include-hierarchy">
+        <description>
+          <text>Perform overhead adjustment on IFD and all children</text>
+        </description>
+        <type name="empty"/>
+      </leaf>
+    </container>
+    <container name="logical-interface-aggregate-statistics">
+      <presence value="enable logical-interface-aggregate-statistics"/>
+      <description>
+        <text>Logical interface aggregate queue statistics</text>
+      </description>
+    </container>
+    <list name="unit">
+      <key value="name"/>
+      <description>
+        <text>Logical interface unit (or wildcard)</text>
+      </description>
+      <leaf name="name">
+        <description>
+          <text>Logical unit number</text>
+        </description>
+        <type name="union">
+          <type name="string">
+            <pattern value="\*"/>
+          </type>
+          <type name="union">
+            <type name="string">
+              <pattern value="&lt;.*&gt;|$.*"/>
+            </type>
+            <type name="uint32">
+              <range value="0 .. 1073741823"/>
+            </type>
+          </type>
+        </type>
+      </leaf>
+      <uses name="apply-advanced"/>
+      <leaf name="forwarding-class">
+        <description>
+          <text>Forwarding class assigned to incoming packets</text>
+        </description>
+        <type name="string">
+          <length value="1 .. 64"/>
+        </type>
+      </leaf>
+      <leaf name="virtual-channel-group">
+        <description>
+          <text>Virtual channel group applied to this logical interface</text>
+        </description>
+        <type name="string">
+          <length value="1 .. 64"/>
+        </type>
+      </leaf>
+      <leaf name="vc-shared-scheduler">
+        <description>
+          <text>Virtual channel group shared scheduler indicator</text>
+        </description>
+        <type name="empty"/>
+      </leaf>
+      <leaf name="scheduler-map">
+        <description>
+          <text>Output scheduler map</text>
+        </description>
+        <type name="string">
+          <length value="1 .. 64"/>
+        </type>
+      </leaf>
+      <leaf name="fragmentation-map">
+        <description>
+          <text>Fragmentation map applied to this logical interface</text>
+        </description>
+        <type name="string">
+          <length value="1 .. 64"/>
+        </type>
+      </leaf>
+      <leaf name="adaptive-shaper">
+        <description>
+          <text>Adaptive shaper applied to this logical interface</text>
+        </description>
+        <type name="string">
+          <length value="1 .. 64"/>
+        </type>
+      </leaf>
+      <container name="shaping-rate">
+        <presence value="enable shaping-rate"/>
+        <description>
+          <text>Output shaping rate</text>
+        </description>
+        <choice name="shaping_rate_choice">
+          <case name="case_1">
+            <leaf name="rate">
+              <description>
+                <text>Shaping rate as an absolute rate</text>
+              </description>
+              <units name="bits per second"/>
+              <type name="string"/>
+            </leaf>
+          </case>
+          <case name="case_2">
+            <leaf name="percent">
+              <description>
+                <text>Shaping rate as a percentage</text>
+              </description>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="0 .. 100"/>
+                </type>
+              </type>
+            </leaf>
+          </case>
+        </choice>
+      </container>
+      <container name="input-traffic-control-profile">
+        <description>
+          <text>Input traffic control profile</text>
+        </description>
+        <leaf name="profile-name">
+          <description>
+            <text>Name of traffic control profile</text>
+          </description>
+          <type name="string">
+            <length value="1 .. 64"/>
+          </type>
+        </leaf>
+        <leaf name="shared-instance">
+          <description>
+            <text>Name of the shared instance</text>
+          </description>
+          <type name="string">
+            <length value="1 .. 64"/>
+          </type>
+        </leaf>
+      </container>
+      <container name="output-traffic-control-profile">
+        <description>
+          <text>Output traffic control profile</text>
+        </description>
+        <leaf name="profile-name">
+          <description>
+            <text>Name of the traffic control profile</text>
+          </description>
+          <type name="string">
+            <length value="1 .. 64"/>
+          </type>
+        </leaf>
+        <leaf name="shared-instance">
+          <description>
+            <text>Name of the shared instance</text>
+          </description>
+          <type name="string">
+            <length value="1 .. 64"/>
+          </type>
+        </leaf>
+      </container>
+      <container name="output-traffic-control-profile-remaining">
+        <description>
+          <text>Output traffic control profile for remaining traffic on the ifl</text>
+        </description>
+        <leaf name="profile-name">
+          <description>
+            <text>Name of the traffic control profile</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+      </container>
+      <container name="report-ingress-shaping-rate">
+        <description>
+          <text>Report ingress shaping rate</text>
+        </description>
+        <choice name="report_ingress_shaping_rate_choice">
+          <case name="case_1">
+            <leaf name="rate">
+              <description>
+                <text>Ingress shaping rate as an absolute value</text>
+              </description>
+              <units name="bits per second"/>
+              <type name="string"/>
+            </leaf>
+          </case>
+        </choice>
+      </container>
+      <container name="classifiers">
+        <description>
+          <text>Classifiers applied to incoming packets</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <list name="dscp">
+          <key value="name"/>
+          <description>
+            <text>Differentiated Services code point classifier</text>
+          </description>
+          <leaf name="name">
+            <description>
+              <text>Name of classifier to be applied</text>
+            </description>
+            <type name="union">
+              <type name="string">
+                <pattern value="default"/>
+              </type>
+              <type name="string">
+                <length value="1 .. 64"/>
+              </type>
+            </type>
+          </leaf>
+          <uses name="apply-advanced"/>
+          <leaf-list name="family">
+            <ordered-by value="user"/>
+            <description>
+              <text>Family for DSCP classifier</text>
+            </description>
+            <type name="string"/>
+          </leaf-list>
+        </list>
+        <list name="dscp-ipv6">
+          <key value="name"/>
+          <description>
+            <text>Differentiated Services code point classifier IPv6</text>
+          </description>
+          <leaf name="name">
+            <description>
+              <text>Name of classifier to be applied</text>
+            </description>
+            <type name="union">
+              <type name="string">
+                <pattern value="default"/>
+              </type>
+              <type name="string">
+                <length value="1 .. 64"/>
+              </type>
+            </type>
+          </leaf>
+          <uses name="apply-advanced"/>
+          <leaf-list name="family">
+            <ordered-by value="user"/>
+            <description>
+              <text>Family for DSCP Ipv6 classifier</text>
+            </description>
+            <type name="string"/>
+          </leaf-list>
+        </list>
+        <container name="exp">
+          <description>
+            <text>EXP classifier</text>
+          </description>
+          <leaf name="classifier-name">
+            <description>
+              <text>Name of classifier to be applied</text>
+            </description>
+            <type name="union">
+              <type name="string">
+                <pattern value="default"/>
+              </type>
+              <type name="string">
+                <length value="1 .. 64"/>
+              </type>
+            </type>
+          </leaf>
+        </container>
+        <container name="ieee-802.1">
+          <description>
+            <text>IEEE-802.1 classifier</text>
+          </description>
+          <leaf name="classifier-name">
+            <description>
+              <text>Name of classifier to be applied</text>
+            </description>
+            <type name="union">
+              <type name="string">
+                <pattern value="default"/>
+              </type>
+              <type name="string">
+                <length value="1 .. 64"/>
+              </type>
+            </type>
+          </leaf>
+        </container>
+        <container name="inet-precedence">
+          <description>
+            <text>IPv4 precedence classifier</text>
+          </description>
+          <leaf name="classifier-name">
+            <description>
+              <text>Name of classifier to be applied</text>
+            </description>
+            <type name="union">
+              <type name="string">
+                <pattern value="default"/>
+              </type>
+              <type name="string">
+                <length value="1 .. 64"/>
+              </type>
+            </type>
+          </leaf>
+        </container>
+        <container name="ieee-802.1ad">
+          <description>
+            <text>IEEE-802.1ad (DEI) classifier</text>
+          </description>
+          <leaf name="classifier-name">
+            <description>
+              <text>Name of classifier to be applied</text>
+            </description>
+            <type name="union">
+              <type name="string">
+                <pattern value="default"/>
+              </type>
+              <type name="string">
+                <length value="1 .. 64"/>
+              </type>
+            </type>
+          </leaf>
+        </container>
+      </container>
+      <container name="loss-priority-maps">
+        <description>
+          <text>Loss priority maps applied to incoming packets</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <container name="frame-relay-de">
+          <description>
+            <text>Frame Relay discard eligible bit loss priority map</text>
+          </description>
+          <leaf name="lpmap-name">
+            <description>
+              <text>Name of loss priority map to be applied</text>
+            </description>
+            <type name="union">
+              <type name="string">
+                <pattern value="default"/>
+              </type>
+              <type name="string">
+                <length value="1 .. 64"/>
+              </type>
+            </type>
+          </leaf>
+        </container>
+      </container>
+      <container name="rewrite-rules">
+        <description>
+          <text>Rewrite rules applied to outgoing packets</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <list name="dscp">
+          <key value="name"/>
+          <description>
+            <text>Differentiated Services code point rewrite rule</text>
+          </description>
+          <leaf name="name">
+            <description>
+              <text>Name of rewrite rule to be applied</text>
+            </description>
+            <type name="union">
+              <type name="string">
+                <pattern value="default"/>
+              </type>
+              <type name="string">
+                <length value="1 .. 64"/>
+              </type>
+            </type>
+          </leaf>
+          <leaf-list name="protocol">
+            <ordered-by value="user"/>
+            <description>
+              <text>Specify protocol matching criteria</text>
+            </description>
+            <type name="enumeration">
+              <enum name="mpls">
+                <description>
+                  <text>Apply to IPv4 packets entering MPLS tunnel</text>
+                </description>
+              </enum>
+              <enum name="gtp-inet-outer">
+                <description>
+                  <text>Apply to outer IP header</text>
+                </description>
+              </enum>
+              <enum name="gtp-inet-both">
+                <description>
+                  <text>Apply to both IP header</text>
+                </description>
+              </enum>
+              <enum name="inet-outer">
+                <description>
+                  <text>Apply to outer IP header</text>
+                </description>
+              </enum>
+              <enum name="inet-both">
+                <description>
+                  <text>Apply to both IP header</text>
+                </description>
+              </enum>
+            </type>
+          </leaf-list>
+        </list>
+        <list name="dscp-ipv6">
+          <key value="name"/>
+          <description>
+            <text>Differentiated Services code point rewrite rule IPv6</text>
+          </description>
+          <leaf name="name">
+            <description>
+              <text>Name of rewrite rule to be applied</text>
+            </description>
+            <type name="union">
+              <type name="string">
+                <pattern value="default"/>
+              </type>
+              <type name="string">
+                <length value="1 .. 64"/>
+              </type>
+            </type>
+          </leaf>
+          <leaf-list name="protocol">
+            <ordered-by value="user"/>
+            <description>
+              <text>Specify protocol matching criteria</text>
+            </description>
+            <type name="enumeration">
+              <enum name="mpls">
+                <description>
+                  <text>Apply to IPv6 packets entering MPLS tunnel</text>
+                </description>
+              </enum>
+              <enum name="gtp-inet-outer">
+                <description>
+                  <text>Apply to outer IP header</text>
+                </description>
+              </enum>
+              <enum name="gtp-inet-both">
+                <description>
+                  <text>Apply to both IP header</text>
+                </description>
+              </enum>
+            </type>
+          </leaf-list>
+        </list>
+        <list name="exp">
+          <key value="name"/>
+          <description>
+            <text>EXP rewrite rule</text>
+          </description>
+          <leaf name="name">
+            <description>
+              <text>Name of rewrite rule to be applied</text>
+            </description>
+            <type name="union">
+              <type name="string">
+                <pattern value="default"/>
+              </type>
+              <type name="string">
+                <length value="1 .. 64"/>
+              </type>
+            </type>
+          </leaf>
+          <leaf-list name="protocol">
+            <ordered-by value="user"/>
+            <description>
+              <text>Specify protocol matching criteria</text>
+            </description>
+            <type name="enumeration">
+              <enum name="mpls-any">
+                <description>
+                  <text>Apply to MPLS packets, write MPLS header only</text>
+                </description>
+              </enum>
+              <enum name="mpls-inet-both">
+                <description>
+                  <text>Apply to IPv4 MPLS packets, write MPLS and IPv4 header</text>
+                </description>
+              </enum>
+              <enum name="mpls-inet-both-non-vpn">
+                <description>
+                  <text>Apply to IPv4 MPLS packets, write MPLS and IPv4 header for only non VPN traffic</text>
+                </description>
+              </enum>
+            </type>
+          </leaf-list>
+        </list>
+        <container name="ieee-802.1">
+          <description>
+            <text>IEEE-802.1 rewrite rule</text>
+          </description>
+          <leaf name="rewrite-rule-name">
+            <description>
+              <text>Name of rewrite rule to be applied</text>
+            </description>
+            <type name="union">
+              <type name="string">
+                <pattern value="default"/>
+              </type>
+              <type name="string">
+                <length value="1 .. 64"/>
+              </type>
+            </type>
+          </leaf>
+          <leaf name="vlan-tag">
+            <description>
+              <text>One or more VLAN tags to which rewrite rule applies</text>
+            </description>
+            <type name="enumeration">
+              <enum name="outer">
+                <description>
+                  <text>Rewrite rule applies to outer VLAN tag</text>
+                </description>
+              </enum>
+              <enum name="outer-and-inner">
+                <description>
+                  <text>Rewrite rule applies to both outer and inner VLAN tags</text>
+                </description>
+              </enum>
+            </type>
+          </leaf>
+        </container>
+        <list name="inet-precedence">
+          <key value="name"/>
+          <description>
+            <text>IPv4 precedence rewrite rule</text>
+          </description>
+          <leaf name="name">
+            <description>
+              <text>Name of rewrite rule to be applied</text>
+            </description>
+            <type name="union">
+              <type name="string">
+                <pattern value="default"/>
+              </type>
+              <type name="string">
+                <length value="1 .. 64"/>
+              </type>
+            </type>
+          </leaf>
+          <leaf-list name="protocol">
+            <ordered-by value="user"/>
+            <description>
+              <text>Specify protocol matching criteria</text>
+            </description>
+            <type name="enumeration">
+              <enum name="mpls">
+                <description>
+                  <text>Apply to IPv4 packets entering MPLS tunnel</text>
+                </description>
+              </enum>
+              <enum name="gtp-inet-outer">
+                <description>
+                  <text>Apply to outer IP header</text>
+                </description>
+              </enum>
+              <enum name="gtp-inet-both">
+                <description>
+                  <text>Apply to both IP header</text>
+                </description>
+              </enum>
+              <enum name="inet-outer">
+                <description>
+                  <text>Apply to outer IP header</text>
+                </description>
+              </enum>
+              <enum name="inet-both">
+                <description>
+                  <text>Apply to both IP header</text>
+                </description>
+              </enum>
+            </type>
+          </leaf-list>
+        </list>
+        <container name="frame-relay-de">
+          <description>
+            <text>Frame relay discard eligible bit rewrite rule</text>
+          </description>
+          <leaf name="rewrite-rule-name">
+            <description>
+              <text>Name of rewrite rule to be applied</text>
+            </description>
+            <type name="union">
+              <type name="string">
+                <pattern value="default"/>
+              </type>
+              <type name="string">
+                <length value="1 .. 64"/>
+              </type>
+            </type>
+          </leaf>
+        </container>
+        <container name="ieee-802.1ad">
+          <description>
+            <text>IEEE-802.1ad (DEI) rewrite rule</text>
+          </description>
+          <uses name="apply-advanced"/>
+          <leaf name="rewrite-rule-name">
+            <description>
+              <text>Name of rewrite rule to be applied</text>
+            </description>
+            <type name="union">
+              <type name="string">
+                <pattern value="default"/>
+              </type>
+              <type name="string">
+                <length value="1 .. 64"/>
+              </type>
+            </type>
+          </leaf>
+          <leaf name="vlan-tag">
+            <description>
+              <text>One or more VLAN tags to which rewrite rule applies</text>
+            </description>
+            <type name="enumeration">
+              <enum name="outer">
+                <description>
+                  <text>Rewrite rule applies to outer VLAN tag</text>
+                </description>
+              </enum>
+              <enum name="outer-and-inner">
+                <description>
+                  <text>Rewrite rule applies to both outer and inner VLAN tags</text>
+                </description>
+              </enum>
+            </type>
+          </leaf>
+        </container>
+      </container>
+    </list>
+  </grouping>
+  <grouping name="macro-data-type">
+    <leaf name="name">
+      <description>
+        <text>Keyword part of the keyword-value pair</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <leaf name="value">
+      <description>
+        <text>Value part of the keyword-value pair</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+  </grouping>
+</module>

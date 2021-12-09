@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module name="junos-common-ddl-extensions"
+        xmlns="urn:ietf:params:xml:ns:yang:yin:1"
+        xmlns:junos="http://yang.juniper.net/junos/common/ddl-extensions">
+  <namespace uri="http://yang.juniper.net/junos/common/ddl-extensions"/>
+  <prefix value="junos"/>
+  <organization>
+    <text>Juniper Networks, Inc.</text>
+  </organization>
+  <contact>
+    <text>yang-support@juniper.net</text>
+  </contact>
+  <description>
+    <text>This module contains definitions for Junos YANG extensions.</text>
+  </description>
+  <revision date="2019-01-01">
+    <description>
+      <text>Junos: 21.3R1.9</text>
+    </description>
+  </revision>
+  <extension name="must">
+    <argument name="stmt-algebra"/>
+    <description>
+      <text>
+expression of configuration-statement paths having special
+keywords like any, all, unique</text>
+    </description>
+  </extension>
+  <extension name="must-message">
+    <argument name="message-string"/>
+    <description>
+      <text>
+When specifying the junos:must constraint, a must-message should
+also be specified so that when the contraint is not met,the
+warning message informs users what the constraints are.
+
+If the must-message is missing, the input file will compile,
+but the warning message will say (null) which won't be
+helpful for users to fix the problem</text>
+    </description>
+  </extension>
+  <extension name="posix-pattern">
+    <argument name="value"/>
+    <description>
+      <text>
+expression of pattern in posix format</text>
+    </description>
+  </extension>
+  <extension name="pattern-message">
+    <argument name="value"/>
+    <description>
+      <text>
+Error message in case of mismatch</text>
+    </description>
+  </extension>
+  <extension name="command">
+    <argument name="command"/>
+    <description>
+      <text>
+The junos cli command for this rpc</text>
+    </description>
+  </extension>
+  <extension name="action-execute">
+    <description>
+      <text>
+The junos action execute for rpc</text>
+    </description>
+  </extension>
+  <extension name="script">
+    <argument name="script"/>
+    <description>
+      <text>
+The junos action execute script for rpc</text>
+    </description>
+  </extension>
+  <extension name="trans-script">
+    <argument name="value"/>
+    <description>
+      <text>
+List of space seperated tranlsation scripts invoked by
+associated hierarchy</text>
+    </description>
+  </extension>
+</module>

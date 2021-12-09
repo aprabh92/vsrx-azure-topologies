@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module name="junos-es-conf-root"
+        xmlns="urn:ietf:params:xml:ns:yang:yin:1"
+        xmlns:jc="http://yang.juniper.net/junos-es/conf/root"
+        xmlns:jt="http://yang.juniper.net/junos/common/types">
+  <namespace uri="http://yang.juniper.net/junos-es/conf/root"/>
+  <prefix value="jc"/>
+  <import module="junos-common-types">
+    <prefix value="jt"/>
+    <revision-date date="2019-01-01"/>
+  </import>
+  <organization>
+    <text>Juniper Networks, Inc.</text>
+  </organization>
+  <contact>
+    <text>yang-support@juniper.net</text>
+  </contact>
+  <description>
+    <text>Junos YANG module for configuration hierarchies.</text>
+  </description>
+  <revision date="2019-01-01">
+    <description>
+      <text>Junos: 21.3R1.9</text>
+    </description>
+  </revision>
+  <container name="configuration">
+    <config value="true"/>
+    <uses name="juniper-config"/>
+    <list name="groups">
+      <key value="name"/>
+      <ordered-by value="user"/>
+      <description>
+        <text>Configuration groups</text>
+      </description>
+      <uses name="juniper-group"/>
+    </list>
+  </container>
+  <grouping name="juniper-config">
+    <leaf name="rcsid">
+      <description>
+        <text>Revision control system identifier</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <leaf name="version">
+      <description>
+        <text>Software version information</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <leaf-list name="apply-groups">
+      <ordered-by value="user"/>
+      <description>
+        <text>Groups from which to inherit configuration data</text>
+      </description>
+      <type name="string"/>
+    </leaf-list>
+    <list name="apply-macro">
+      <key value="name"/>
+      <ordered-by value="user"/>
+      <description>
+        <text>Macro and parameters for commit script expansion</text>
+      </description>
+      <uses name="apply-macro-type"/>
+    </list>
+    <container name="jsrc-partition">
+      <description>
+        <text>JSRC partition configuration</text>
+      </description>
+      <leaf name="jsrc-partition-name">
+        <description>
+          <text>JSRC partition name</text>
+        </description>
+        <type name="string">
+          <length value="1 .. 63"/>
+        </type>
+      </leaf>
+    </container>
+    <container name="jsrc">
+      <description>
+        <text>JSRC partition configuration</text>
+      </description>
+      <uses name="jsrc-options"/>
+    </container>
+  </grouping>
+  <grouping name="apply-macro-type">
+    <description>
+      <text>Macro data for commit-script expansion</text>
+    </description>
+    <leaf name="name">
+      <description>
+        <text>Name of the macro to be expanded</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <list name="data">
+      <key value="name"/>
+      <uses name="macro-data-type"/>
+    </list>
+  </grouping>
+  <grouping name="jsrc-options">
+    <uses name="apply-advanced"/>
+    <list name="partition">
+      <key value="name"/>
+      <ordered-by value="user"/>
+      <description>
+        <text>JSRC partition definition</text>
+      </description>
+      <leaf name="name">
+        <description>
+          <text>JSRC partition name</text>
+        </description>
+        <type name="string">
+          <length value="1 .. 63"/>
+        </type>
+      </leaf>
+      <uses name="apply-advanced"/>
+      <leaf name="diameter-instance">
+        <description>
+          <text>JSRC diameter instance</text>
+        </description>
+        <type name="string">
+          <length value="1 .. 63"/>
+        </type>
+        <mandatory value="true"/>
+      </leaf>
+      <leaf name="destination-realm">
+        <description>
+          <text>JSRC destination realm</text>
+        </description>
+        <type name="string">
+          <length value="1 .. 63"/>
+        </type>
+        <mandatory value="true"/>
+      </leaf>
+      <leaf name="destination-host">
+        <description>
+          <text>JSRC destination host</text>
+        </description>
+        <type name="string">
+          <length value="1 .. 63"/>
+        </type>
+        <mandatory value="true"/>
+      </leaf>
+    </list>
+  </grouping>
+  <grouping name="apply-advanced">
+    <description>
+      <text>Apply advanced configuration logic</text>
+    </description>
+    <leaf-list name="apply-groups">
+      <ordered-by value="user"/>
+      <description>
+        <text>Groups from which to inherit configuration data</text>
+      </description>
+      <type name="string"/>
+    </leaf-list>
+    <leaf-list name="apply-groups-except">
+      <ordered-by value="user"/>
+      <description>
+        <text>Don't inherit configuration data from these groups</text>
+      </description>
+      <type name="string"/>
+    </leaf-list>
+    <list name="apply-macro">
+      <key value="name"/>
+      <ordered-by value="user"/>
+      <description>
+        <text>Macro and parameters for commit script expansion</text>
+      </description>
+      <uses name="apply-macro-type"/>
+    </list>
+  </grouping>
+  <grouping name="juniper-group">
+    <description>
+      <text>Configuration groups</text>
+    </description>
+    <leaf name="name">
+      <description>
+        <text>Group name</text>
+      </description>
+      <type name="string">
+        <length value="1 .. 254"/>
+      </type>
+    </leaf>
+    <container name="when">
+      <description>
+        <text>Specify additional conditions for groups</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <container name="time">
+        <description>
+          <text>Time at which group should be effective</text>
+        </description>
+        <leaf name="start-time">
+          <description>
+            <text>Start time([yyyy-mm-dd.]hh:mm)</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+        <container name="to">
+          <description>
+            <text>End time</text>
+          </description>
+          <uses name="apply-advanced"/>
+          <leaf name="end-time">
+            <description>
+              <text>End time([yyyy-mm-dd.]hh:mm)</text>
+            </description>
+            <type name="string"/>
+          </leaf>
+        </container>
+      </container>
+      <leaf-list name="peers">
+        <ordered-by value="user"/>
+        <description>
+          <text>Hosts on which this group should be effective</text>
+        </description>
+        <type name="string">
+          <length value="1 .. 255"/>
+        </type>
+      </leaf-list>
+      <leaf name="chassis">
+        <description>
+          <text>Chassis id</text>
+        </description>
+        <type name="enumeration">
+          <enum name="lcc0">
+            <description>
+              <text>Chassis lcc0</text>
+            </description>
+          </enum>
+          <enum name="lcc1">
+            <description>
+              <text>Chassis lcc1</text>
+            </description>
+          </enum>
+          <enum name="lcc2">
+            <description>
+              <text>Chassis lcc2</text>
+            </description>
+          </enum>
+          <enum name="lcc3">
+            <description>
+              <text>Chassis lcc3</text>
+            </description>
+          </enum>
+          <enum name="lcc4">
+            <description>
+              <text>Chassis lcc4</text>
+            </description>
+          </enum>
+          <enum name="lcc5">
+            <description>
+              <text>Chassis lcc5</text>
+            </description>
+          </enum>
+          <enum name="lcc6">
+            <description>
+              <text>Chassis lcc6</text>
+            </description>
+          </enum>
+          <enum name="lcc7">
+            <description>
+              <text>Chassis lcc7</text>
+            </description>
+          </enum>
+          <enum name="scc">
+            <description>
+              <text>Chassis scc</text>
+            </description>
+          </enum>
+          <enum name="sfc0">
+            <description>
+              <text>Chassis sfc0</text>
+            </description>
+          </enum>
+        </type>
+      </leaf>
+      <leaf name="model">
+        <description>
+          <text>Model name</text>
+        </description>
+        <type name="string"/>
+      </leaf>
+      <leaf name="routing-engine">
+        <description>
+          <text>Routing Engine</text>
+        </description>
+        <type name="enumeration">
+          <enum name="re0">
+            <description>
+              <text>RE0</text>
+            </description>
+          </enum>
+          <enum name="re1">
+            <description>
+              <text>RE1</text>
+            </description>
+          </enum>
+        </type>
+      </leaf>
+      <leaf name="member">
+        <description>
+          <text>Member of virtual chassis</text>
+        </description>
+        <type name="string"/>
+      </leaf>
+      <leaf name="node">
+        <description>
+          <text>Node of cluster</text>
+        </description>
+        <type name="enumeration">
+          <enum name="node0">
+            <description>
+              <text>Node0</text>
+            </description>
+          </enum>
+          <enum name="node1">
+            <description>
+              <text>Node1</text>
+            </description>
+          </enum>
+        </type>
+      </leaf>
+    </container>
+    <uses name="juniper-config"/>
+  </grouping>
+  <grouping name="macro-data-type">
+    <leaf name="name">
+      <description>
+        <text>Keyword part of the keyword-value pair</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <leaf name="value">
+      <description>
+        <text>Value part of the keyword-value pair</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+  </grouping>
+</module>

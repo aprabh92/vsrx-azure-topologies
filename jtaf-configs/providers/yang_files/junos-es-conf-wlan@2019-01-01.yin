@@ -1,0 +1,3453 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module name="junos-es-conf-wlan"
+        xmlns="urn:ietf:params:xml:ns:yang:yin:1"
+        xmlns:jc-wlan="http://yang.juniper.net/junos-es/conf/wlan"
+        xmlns:jt="http://yang.juniper.net/junos/common/types"
+        xmlns:jc="http://yang.juniper.net/junos-es/conf/root">
+  <namespace uri="http://yang.juniper.net/junos-es/conf/wlan"/>
+  <prefix value="jc-wlan"/>
+  <import module="junos-common-types">
+    <prefix value="jt"/>
+    <revision-date date="2019-01-01"/>
+  </import>
+  <import module="junos-es-conf-root">
+    <prefix value="jc"/>
+    <revision-date date="2019-01-01"/>
+  </import>
+  <organization>
+    <text>Juniper Networks, Inc.</text>
+  </organization>
+  <contact>
+    <text>yang-support@juniper.net</text>
+  </contact>
+  <description>
+    <text>Junos wlan configuration module</text>
+  </description>
+  <revision date="2019-01-01">
+    <description>
+      <text>Junos: 21.3R1.9</text>
+    </description>
+  </revision>
+  <augment target-node="/jc:configuration">
+    <uses name="wlan-group"/>
+  </augment>
+  <augment target-node="/jc:configuration/jc:groups">
+    <uses name="wlan-group"/>
+  </augment>
+  <grouping name="wlan-group">
+    <container name="wlan">
+      <presence value="enable wlan"/>
+      <description>
+        <text>Wireless access point configuration</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <container name="admin-authentication">
+        <description>
+          <text>Authentication information for WLAN access points</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <leaf name="encrypted-password">
+          <description>
+            <text>Encrypted password</text>
+          </description>
+          <type name="jt:unreadable"/>
+        </leaf>
+      </container>
+      <list name="access-point">
+        <key value="name"/>
+        <ordered-by value="user"/>
+        <description>
+          <text>WLAN access point configuration</text>
+        </description>
+        <leaf name="name">
+          <description>
+            <text>Specify the access point name</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+        <uses name="apply-advanced"/>
+        <leaf name="description">
+          <description>
+            <text>Specify the access point description</text>
+          </description>
+          <type name="string">
+            <length value="1 .. 64"/>
+          </type>
+        </leaf>
+        <list name="interface">
+          <key value="name"/>
+          <ordered-by value="user"/>
+          <description>
+            <text>Interface device name</text>
+          </description>
+          <uses name="ap-interface-list-type"/>
+        </list>
+        <leaf name="mac-address">
+          <description>
+            <text>Access point ethernet port MAC address</text>
+          </description>
+          <type name="jt:mac-unicast"/>
+        </leaf>
+        <leaf name="location">
+          <description>
+            <text>Location of the access point</text>
+          </description>
+          <type name="string">
+            <length value="1 .. 64"/>
+          </type>
+        </leaf>
+        <choice name="access-point-type">
+          <case name="case_1">
+            <container name="external">
+              <presence value="enable external"/>
+              <description>
+                <text>External type access point</text>
+              </description>
+              <uses name="apply-advanced"/>
+              <container name="system">
+                <description>
+                  <text>System information</text>
+                </description>
+                <uses name="apply-advanced"/>
+                <leaf name="ntp-server">
+                  <description>
+                    <text>NTP server name</text>
+                  </description>
+                  <status value="deprecated"/>
+                  <type name="string">
+                    <length value="1 .. 256"/>
+                  </type>
+                </leaf>
+                <container name="ports">
+                  <description>
+                    <text>Port configuration</text>
+                  </description>
+                  <uses name="apply-advanced"/>
+                  <container name="ethernet">
+                    <description>
+                      <text>Ethernet settings</text>
+                    </description>
+                    <uses name="apply-advanced"/>
+                    <leaf name="management-vlan">
+                      <description>
+                        <text>Management VLAN identifier</text>
+                      </description>
+                      <default value="1"/>
+                      <type name="union">
+                        <type name="string">
+                          <pattern value="&lt;.*&gt;|$.*"/>
+                        </type>
+                        <type name="int32">
+                          <range value="1 .. 4094"/>
+                        </type>
+                      </type>
+                    </leaf>
+                    <leaf name="untagged-vlan">
+                      <description>
+                        <text>Untagged VLAN identifier</text>
+                      </description>
+                      <default value="1"/>
+                      <type name="union">
+                        <type name="string">
+                          <pattern value="&lt;.*&gt;|$.*"/>
+                        </type>
+                        <type name="int32">
+                          <range value="1 .. 4094"/>
+                        </type>
+                      </type>
+                    </leaf>
+                    <choice name="inet-address">
+                      <case name="case_1">
+                        <container name="static">
+                          <presence value="enable static"/>
+                          <description>
+                            <text>Specify static parameters</text>
+                          </description>
+                          <uses name="apply-advanced"/>
+                          <leaf name="address">
+                            <description>
+                              <text>Static IP address</text>
+                            </description>
+                            <type name="jt:ipv4prefix"/>
+                          </leaf>
+                          <leaf name="default-gateway">
+                            <description>
+                              <text>Default gateway IP</text>
+                            </description>
+                            <type name="jt:ipaddr"/>
+                          </leaf>
+                        </container>
+                      </case>
+                    </choice>
+                    <leaf-list name="name-server">
+                      <ordered-by value="user"/>
+                      <description>
+                        <text>Domain name server IP address</text>
+                      </description>
+                      <type name="jt:ipaddr"/>
+                      <max-elements value="2"/>
+                    </leaf-list>
+                  </container>
+                </container>
+                <container name="console">
+                  <uses name="apply-advanced"/>
+                  <leaf name="baud-rate">
+                    <description>
+                      <text>Baud-rate values are 9600,19200,38400,57600,115200</text>
+                    </description>
+                    <default value="115200"/>
+                    <type name="union">
+                      <type name="int32"/>
+                      <type name="string">
+                        <pattern value="&lt;.*&gt;|$.*"/>
+                      </type>
+                    </type>
+                  </leaf>
+                </container>
+                <container name="services">
+                  <description>
+                    <text>System services configuration</text>
+                  </description>
+                  <uses name="apply-advanced"/>
+                  <leaf name="ssh">
+                    <description>
+                      <text>Enable SSH service on the access point</text>
+                    </description>
+                    <type name="empty"/>
+                  </leaf>
+                </container>
+              </container>
+              <container name="dot1x-supplicant">
+                <uses name="apply-advanced"/>
+                <leaf name="username">
+                  <description>
+                    <text>Username</text>
+                  </description>
+                  <type name="string">
+                    <length value="1 .. 64"/>
+                  </type>
+                </leaf>
+                <leaf name="password">
+                  <description>
+                    <text>Dot1x supplicant mode password</text>
+                  </description>
+                  <type name="string">
+                    <length value="1 .. 64"/>
+                  </type>
+                </leaf>
+              </container>
+            </container>
+          </case>
+        </choice>
+        <container name="access-point-options">
+          <description>
+            <text>Configure access point options</text>
+          </description>
+          <uses name="ap-options-type"/>
+        </container>
+        <container name="logging-options">
+          <description>
+            <text>Configure access point logging options</text>
+          </description>
+          <uses name="log-options-type"/>
+        </container>
+        <container name="captive-portal">
+          <presence value="enable captive-portal"/>
+          <description>
+            <text>Access point captive portal settings</text>
+          </description>
+          <uses name="apply-advanced"/>
+          <container name="authentication">
+            <description>
+              <text>Authentication settings for captive portal</text>
+            </description>
+            <presence value="enable authentication"/>
+            <uses name="captive-portal-auth-type"/>
+          </container>
+          <container name="dhcp">
+            <presence value="enable dhcp"/>
+            <description>
+              <text>DHCP settings</text>
+            </description>
+            <uses name="apply-advanced"/>
+            <leaf name="gateway">
+              <description>
+                <text>Set DHCP server IP address</text>
+              </description>
+              <type name="jt:ipaddr"/>
+            </leaf>
+            <leaf name="port">
+              <description>
+                <text>Set DHCP server port</text>
+              </description>
+              <default value="67"/>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint16">
+                  <range value="1 .. 65535"/>
+                </type>
+              </type>
+            </leaf>
+            <leaf name="relay-agent">
+              <description>
+                <text>Set DHCP relay agent</text>
+              </description>
+              <type name="jt:ipprefix"/>
+            </leaf>
+          </container>
+          <container name="splash-page">
+            <presence value="enable splash-page"/>
+            <description>
+              <text>Splash page settings</text>
+            </description>
+            <uses name="apply-advanced"/>
+            <container name="title">
+              <description>
+                <text>Specify the title of splash page</text>
+              </description>
+              <presence value="enable title"/>
+              <uses name="splash-page-title-type"/>
+            </container>
+            <container name="header">
+              <description>
+                <text>Specify the header of splash page</text>
+              </description>
+              <presence value="enable header"/>
+              <uses name="splash-page-header-type"/>
+            </container>
+            <container name="footer">
+              <description>
+                <text>Specify the footer of splash page</text>
+              </description>
+              <presence value="enable footer"/>
+              <uses name="splash-page-footer-type"/>
+            </container>
+            <leaf name="background-color">
+              <description>
+                <text>Specify the background color of splash page</text>
+              </description>
+              <type name="string"/>
+            </leaf>
+            <container name="logo-image">
+              <description>
+                <text>Specify the logo image for splash page</text>
+              </description>
+              <presence value="enable logo-image"/>
+              <uses name="splash-page-logo-image-type"/>
+            </container>
+          </container>
+          <container name="ssl">
+            <presence value="enable ssl"/>
+            <description>
+              <text>SSL settings</text>
+            </description>
+            <uses name="apply-advanced"/>
+            <choice name="enable-ssl">
+              <case name="case_1">
+                <leaf name="on">
+                  <description>
+                    <text>Turn on ssl</text>
+                  </description>
+                  <type name="empty"/>
+                </leaf>
+              </case>
+              <case name="case_2">
+                <leaf name="off">
+                  <description>
+                    <text>Turn off ssl</text>
+                  </description>
+                  <type name="empty"/>
+                </leaf>
+              </case>
+            </choice>
+            <leaf name="cert-file">
+              <description>
+                <text>Specify the certification file</text>
+              </description>
+              <type name="string"/>
+            </leaf>
+          </container>
+          <leaf name="session-timeout">
+            <description>
+              <text>Specify the session timeout</text>
+            </description>
+            <default value="300"/>
+            <units name="seconds"/>
+            <type name="union">
+              <type name="uint32"/>
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+            </type>
+          </leaf>
+          <leaf name="idle-timeout">
+            <description>
+              <text>Specify the idle timeout</text>
+            </description>
+            <default value="180"/>
+            <units name="seconds"/>
+            <type name="union">
+              <type name="uint32"/>
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+            </type>
+          </leaf>
+        </container>
+        <list name="radio">
+          <key value="name"/>
+          <ordered-by value="user"/>
+          <description>
+            <text>Access point radio settings</text>
+          </description>
+          <max-elements value="2"/>
+          <leaf name="name">
+            <description>
+              <text>Specify radio identifier value (1: 5GHz; 2: 2.4GHz)</text>
+            </description>
+            <type name="union">
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+              <type name="int32">
+                <range value="1 .. 2"/>
+              </type>
+            </type>
+          </leaf>
+          <uses name="apply-advanced"/>
+          <container name="radio-options">
+            <description>
+              <text>Configure radio options</text>
+            </description>
+            <uses name="apply-advanced"/>
+            <leaf name="radio-off">
+              <description>
+                <text>Radio is off</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="dfs-off">
+              <description>
+                <text>Dynamic frequency selection turn off</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="disable-dot11d">
+              <description>
+                <text>Disable dot11d regulatory domain support</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="mode">
+              <description>
+                <text>Mode for radio operation</text>
+              </description>
+              <type name="enumeration">
+                <enum name="an">
+                  <description>
+                    <text>Wireless Mode a/n  (IEEE 802.11a/n)</text>
+                  </description>
+                </enum>
+                <enum name="5GHz">
+                  <description>
+                    <text>Radio Frequency -5GHz-n</text>
+                  </description>
+                </enum>
+                <enum name="2.4GHz">
+                  <description>
+                    <text>Radio Frequency -2.4GHz-n</text>
+                  </description>
+                </enum>
+                <enum name="acn">
+                  <description>
+                    <text>Wireless Mode ac/n (IEEE 802.11ac/n)</text>
+                  </description>
+                </enum>
+                <enum name="gn">
+                  <description>
+                    <text>Wireless Mode g/n (IEEE 802.11g/n)</text>
+                  </description>
+                </enum>
+                <enum name="g">
+                  <description>
+                    <text>Wireless Mode g (IEEE 802.11g)</text>
+                  </description>
+                </enum>
+              </type>
+            </leaf>
+            <container name="channel">
+              <description>
+                <text>Configure channel settings</text>
+              </description>
+              <uses name="apply-advanced"/>
+              <leaf name="number">
+                <description>
+                  <text>Provide channel selection</text>
+                </description>
+                <default value="auto"/>
+                <type name="enumeration">
+                  <enum name="1">
+                    <description>
+                      <text>Channel 1</text>
+                    </description>
+                  </enum>
+                  <enum name="2">
+                    <description>
+                      <text>Channel 2</text>
+                    </description>
+                  </enum>
+                  <enum name="3">
+                    <description>
+                      <text>Channel 3</text>
+                    </description>
+                  </enum>
+                  <enum name="4">
+                    <description>
+                      <text>Channel 4</text>
+                    </description>
+                  </enum>
+                  <enum name="5">
+                    <description>
+                      <text>Channel 5</text>
+                    </description>
+                  </enum>
+                  <enum name="6">
+                    <description>
+                      <text>Channel 6</text>
+                    </description>
+                  </enum>
+                  <enum name="7">
+                    <description>
+                      <text>Channel 7</text>
+                    </description>
+                  </enum>
+                  <enum name="8">
+                    <description>
+                      <text>Channel 8</text>
+                    </description>
+                  </enum>
+                  <enum name="9">
+                    <description>
+                      <text>Channel 9</text>
+                    </description>
+                  </enum>
+                  <enum name="10">
+                    <description>
+                      <text>Channel 10</text>
+                    </description>
+                  </enum>
+                  <enum name="11">
+                    <description>
+                      <text>Channel 11</text>
+                    </description>
+                  </enum>
+                  <enum name="12">
+                    <description>
+                      <text>Channel 12</text>
+                    </description>
+                  </enum>
+                  <enum name="13">
+                    <description>
+                      <text>Channel 13</text>
+                    </description>
+                  </enum>
+                  <enum name="36">
+                    <description>
+                      <text>Channel 36</text>
+                    </description>
+                  </enum>
+                  <enum name="40">
+                    <description>
+                      <text>Channel 40</text>
+                    </description>
+                  </enum>
+                  <enum name="44">
+                    <description>
+                      <text>Channel 44</text>
+                    </description>
+                  </enum>
+                  <enum name="48">
+                    <description>
+                      <text>Channel 48</text>
+                    </description>
+                  </enum>
+                  <enum name="52">
+                    <description>
+                      <text>Channel 52</text>
+                    </description>
+                  </enum>
+                  <enum name="56">
+                    <description>
+                      <text>Channel 56</text>
+                    </description>
+                  </enum>
+                  <enum name="60">
+                    <description>
+                      <text>Channel 60</text>
+                    </description>
+                  </enum>
+                  <enum name="64">
+                    <description>
+                      <text>Channel 64</text>
+                    </description>
+                  </enum>
+                  <enum name="100">
+                    <description>
+                      <text>Channel 100</text>
+                    </description>
+                  </enum>
+                  <enum name="104">
+                    <description>
+                      <text>Channel 104</text>
+                    </description>
+                  </enum>
+                  <enum name="108">
+                    <description>
+                      <text>Channel 108</text>
+                    </description>
+                  </enum>
+                  <enum name="112">
+                    <description>
+                      <text>Channel 112</text>
+                    </description>
+                  </enum>
+                  <enum name="116">
+                    <description>
+                      <text>Channel 116</text>
+                    </description>
+                  </enum>
+                  <enum name="120">
+                    <description>
+                      <text>Channel 120</text>
+                    </description>
+                  </enum>
+                  <enum name="124">
+                    <description>
+                      <text>Channel 124</text>
+                    </description>
+                  </enum>
+                  <enum name="128">
+                    <description>
+                      <text>Channel 128</text>
+                    </description>
+                  </enum>
+                  <enum name="132">
+                    <description>
+                      <text>Channel 132</text>
+                    </description>
+                  </enum>
+                  <enum name="136">
+                    <description>
+                      <text>Channel 136</text>
+                    </description>
+                  </enum>
+                  <enum name="140">
+                    <description>
+                      <text>Channel 140</text>
+                    </description>
+                  </enum>
+                  <enum name="144">
+                    <description>
+                      <text>Channel 144</text>
+                    </description>
+                  </enum>
+                  <enum name="149">
+                    <description>
+                      <text>Channel 149</text>
+                    </description>
+                  </enum>
+                  <enum name="153">
+                    <description>
+                      <text>Channel 153</text>
+                    </description>
+                  </enum>
+                  <enum name="157">
+                    <description>
+                      <text>Channel 157</text>
+                    </description>
+                  </enum>
+                  <enum name="161">
+                    <description>
+                      <text>Channel 161</text>
+                    </description>
+                  </enum>
+                  <enum name="165">
+                    <description>
+                      <text>Channel 165</text>
+                    </description>
+                  </enum>
+                  <enum name="auto">
+                    <description>
+                      <text>Automatically selected</text>
+                    </description>
+                  </enum>
+                </type>
+              </leaf>
+              <leaf name="bandwidth">
+                <description>
+                  <text>Provide channel bandwidth in MHz(2.4G: 20/40; 5G: 20/40/80)</text>
+                </description>
+                <type name="union">
+                  <type name="int32"/>
+                  <type name="string">
+                    <pattern value="&lt;.*&gt;|$.*"/>
+                  </type>
+                </type>
+              </leaf>
+              <leaf name="primary">
+                <description>
+                  <text>Select primary channel</text>
+                </description>
+                <type name="enumeration">
+                  <enum name="lower">
+                    <description>
+                      <text>Set lower channel as primary</text>
+                    </description>
+                  </enum>
+                  <enum name="upper">
+                    <description>
+                      <text>Set upper channel as primary</text>
+                    </description>
+                  </enum>
+                </type>
+              </leaf>
+            </container>
+            <leaf name="space-time-block-coding">
+              <description>
+                <text>Enable space time block coding</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="protection">
+              <description>
+                <text>Select protection mode</text>
+              </description>
+              <type name="enumeration">
+                <enum name="auto">
+                  <description>
+                    <text>Protection mode- AUTO</text>
+                  </description>
+                </enum>
+                <enum name="off">
+                  <description>
+                    <text>Protection mode- OFF</text>
+                  </description>
+                </enum>
+              </type>
+            </leaf>
+            <leaf name="beacon-interval">
+              <description>
+                <text>Set the beacon interval</text>
+              </description>
+              <default value="100"/>
+              <units name="milliseconds"/>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="int32">
+                  <range value="20 .. 2000"/>
+                </type>
+              </type>
+            </leaf>
+            <leaf name="dtim-period">
+              <description>
+                <text>Set delivery traffic indication message period (beacon count)</text>
+              </description>
+              <default value="2"/>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="int32">
+                  <range value="1 .. 255"/>
+                </type>
+              </type>
+            </leaf>
+            <leaf name="rts-threshold">
+              <description>
+                <text>Set RTS- threshold</text>
+              </description>
+              <default value="2347"/>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="int32">
+                  <range value="0 .. 2347"/>
+                </type>
+              </type>
+            </leaf>
+            <leaf name="no-short-guard-interval">
+              <description>
+                <text>Disable 802.11n short inter-symbol guard interval</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="fragmentation-threshold">
+              <description>
+                <text>Packet fragment size(even numbers)</text>
+              </description>
+              <default value="2346"/>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="int32">
+                  <range value="256 .. 2346"/>
+                </type>
+              </type>
+            </leaf>
+            <leaf name="maximum-stations">
+              <description>
+                <text>Set limit on maximum supported stations</text>
+              </description>
+              <default value="200"/>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="int32">
+                  <range value="0 .. 200"/>
+                </type>
+              </type>
+            </leaf>
+            <leaf name="transmit-power">
+              <description>
+                <text>Set transmit power</text>
+              </description>
+              <default value="100"/>
+              <units name="percent"/>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="int32">
+                  <range value="3 .. 100"/>
+                </type>
+              </type>
+            </leaf>
+            <leaf name="fixed-multicast-rate">
+              <description>
+                <text>Provide multicast rate</text>
+              </description>
+              <type name="enumeration">
+                <enum name="auto">
+                  <description>
+                    <text>Auto rate selection</text>
+                  </description>
+                </enum>
+                <enum name="1">
+                  <description>
+                    <text>Rate-1Mbps </text>
+                  </description>
+                </enum>
+                <enum name="2">
+                  <description>
+                    <text>Rate-2Mbps </text>
+                  </description>
+                </enum>
+                <enum name="5.5">
+                  <description>
+                    <text>Rate-5.5Mbps </text>
+                  </description>
+                </enum>
+                <enum name="6">
+                  <description>
+                    <text>Rate-6Mbps </text>
+                  </description>
+                </enum>
+                <enum name="9">
+                  <description>
+                    <text>Rate-9Mbps </text>
+                  </description>
+                </enum>
+                <enum name="11">
+                  <description>
+                    <text>Rate-11Mbps </text>
+                  </description>
+                </enum>
+                <enum name="12">
+                  <description>
+                    <text>Rate-12Mbps </text>
+                  </description>
+                </enum>
+                <enum name="18">
+                  <description>
+                    <text>Rate-18Mbps </text>
+                  </description>
+                </enum>
+                <enum name="24">
+                  <description>
+                    <text>Rate-24Mbps </text>
+                  </description>
+                </enum>
+                <enum name="36">
+                  <description>
+                    <text>Rate-36Mbps </text>
+                  </description>
+                </enum>
+                <enum name="48">
+                  <description>
+                    <text>Rate-48Mbps </text>
+                  </description>
+                </enum>
+                <enum name="54">
+                  <description>
+                    <text>Rate-54Mbps </text>
+                  </description>
+                </enum>
+              </type>
+            </leaf>
+            <container name="transmit-rate-sets">
+              <description>
+                <text>Specify the transmit rate sets</text>
+              </description>
+              <uses name="transmit-rate-sets"/>
+            </container>
+            <container name="broadcast-multicast-rate-limit">
+              <description>
+                <text>Configure rate limit for broadcast and multicast traffic</text>
+              </description>
+              <uses name="broadcast-multicast-rate-limit"/>
+            </container>
+          </container>
+          <leaf name="station-isolation">
+            <description>
+              <text>Isolate the clients connected to the same VAP within a radio</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <list name="virtual-access-point">
+            <key value="name"/>
+            <ordered-by value="user"/>
+            <description>
+              <text>Virtual access point configuration</text>
+            </description>
+            <max-elements value="8"/>
+            <uses name="vap-type"/>
+          </list>
+          <container name="quality-of-service">
+            <description>
+              <text>Wireless quality of service configuration</text>
+            </description>
+            <uses name="qos-parameter-type"/>
+          </container>
+        </list>
+      </list>
+      <container name="syslog-options">
+        <description>
+          <text>Configure Access Point Logging options</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <leaf name="log-size">
+          <description>
+            <text>Configure Max log file size</text>
+          </description>
+          <units name="kilobytes"/>
+          <type name="union">
+            <type name="string">
+              <pattern value="&lt;.*&gt;|$.*"/>
+            </type>
+            <type name="uint32">
+              <range value="4 .. 1024"/>
+            </type>
+          </type>
+        </leaf>
+        <leaf name="period">
+          <description>
+            <text>Configure log fetch interval</text>
+          </description>
+          <units name="seconds"/>
+          <type name="union">
+            <type name="string">
+              <pattern value="&lt;.*&gt;|$.*"/>
+            </type>
+            <type name="int32">
+              <range value="60 .. 86400"/>
+            </type>
+          </type>
+        </leaf>
+      </container>
+    </container>
+  </grouping>
+  <grouping name="ap-interface-list-type">
+    <description>
+      <text>Logical interface in this cluster</text>
+    </description>
+    <leaf name="name">
+      <description>
+        <text>Interface device name</text>
+      </description>
+      <type name="union">
+        <type name="jt:interface-device"/>
+        <type name="string">
+          <pattern value="&lt;.*&gt;|$.*"/>
+        </type>
+      </type>
+    </leaf>
+    <uses name="apply-advanced"/>
+  </grouping>
+  <grouping name="ap-options-type">
+    <description>
+      <text>Configure access point options</text>
+    </description>
+    <uses name="apply-advanced"/>
+    <container name="country">
+      <description>
+        <text>Country name</text>
+      </description>
+      <uses name="country"/>
+    </container>
+    <container name="station-mac-filter">
+      <uses name="station-mac-filter"/>
+    </container>
+  </grouping>
+  <grouping name="apply-advanced">
+    <description>
+      <text>Apply advanced configuration logic</text>
+    </description>
+    <leaf-list name="apply-groups">
+      <ordered-by value="user"/>
+      <description>
+        <text>Groups from which to inherit configuration data</text>
+      </description>
+      <type name="string"/>
+    </leaf-list>
+    <leaf-list name="apply-groups-except">
+      <ordered-by value="user"/>
+      <description>
+        <text>Don't inherit configuration data from these groups</text>
+      </description>
+      <type name="string"/>
+    </leaf-list>
+    <list name="apply-macro">
+      <key value="name"/>
+      <ordered-by value="user"/>
+      <description>
+        <text>Macro and parameters for commit script expansion</text>
+      </description>
+      <uses name="apply-macro-type"/>
+    </list>
+  </grouping>
+  <grouping name="apply-macro-type">
+    <description>
+      <text>Macro data for commit-script expansion</text>
+    </description>
+    <leaf name="name">
+      <description>
+        <text>Name of the macro to be expanded</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <list name="data">
+      <key value="name"/>
+      <uses name="macro-data-type"/>
+    </list>
+  </grouping>
+  <grouping name="broadcast-multicast-rate-limit">
+    <description>
+      <text>Specify broadcast and multicast rate limit</text>
+    </description>
+    <uses name="apply-advanced"/>
+    <leaf name="rate-limit">
+      <description>
+        <text>Rate limit</text>
+      </description>
+      <default value="50"/>
+      <units name="pps"/>
+      <type name="union">
+        <type name="string">
+          <pattern value="&lt;.*&gt;|$.*"/>
+        </type>
+        <type name="int32">
+          <range value="1 .. 50"/>
+        </type>
+      </type>
+    </leaf>
+    <leaf name="rate-limit-bursts">
+      <description>
+        <text>Rate limit bursts</text>
+      </description>
+      <default value="75"/>
+      <units name="pps"/>
+      <type name="union">
+        <type name="string">
+          <pattern value="&lt;.*&gt;|$.*"/>
+        </type>
+        <type name="int32">
+          <range value="1 .. 75"/>
+        </type>
+      </type>
+    </leaf>
+  </grouping>
+  <grouping name="captive-portal-auth-type">
+    <description>
+      <text>Configure authentication settings</text>
+    </description>
+    <uses name="apply-advanced"/>
+    <choice name="authentication-type">
+      <case name="case_1">
+        <container name="simple-pass">
+          <description>
+            <text>Simple password configuration</text>
+          </description>
+          <presence value="enable simple-pass"/>
+          <uses name="simple-pass-type"/>
+        </container>
+      </case>
+      <case name="case_2">
+        <container name="external-server">
+          <description>
+            <text>External server configuration</text>
+          </description>
+          <presence value="enable external-server"/>
+          <uses name="external-server-type"/>
+        </container>
+      </case>
+    </choice>
+  </grouping>
+  <grouping name="country">
+    <uses name="apply-advanced"/>
+    <choice name="code">
+      <case name="case_1">
+        <leaf name="AE">
+          <description>
+            <text>United Arab Emirates</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_2">
+        <leaf name="AG">
+          <description>
+            <text>Antigua and Barbuda</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_3">
+        <leaf name="AN">
+          <description>
+            <text>Netherlands Antilles</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_4">
+        <leaf name="AR">
+          <description>
+            <text>Argentina</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_5">
+        <leaf name="AS">
+          <description>
+            <text>American Somoa</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_6">
+        <leaf name="AT">
+          <description>
+            <text>Austria</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_7">
+        <leaf name="AU">
+          <description>
+            <text>Australia</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_8">
+        <leaf name="AW">
+          <description>
+            <text>Aruba</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_9">
+        <leaf name="AZ">
+          <description>
+            <text>Azerbaijan</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_10">
+        <leaf name="BA">
+          <description>
+            <text>Bosnia</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_11">
+        <leaf name="BB">
+          <description>
+            <text>Barbados</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_12">
+        <leaf name="BD">
+          <description>
+            <text>Bangladesh</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_13">
+        <leaf name="BE">
+          <description>
+            <text>Belgium</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_14">
+        <leaf name="BG">
+          <description>
+            <text>Bulgaria</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_15">
+        <leaf name="BH">
+          <description>
+            <text>Bahrain</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_16">
+        <leaf name="BM">
+          <description>
+            <text>Bermuda</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_17">
+        <leaf name="BN">
+          <description>
+            <text>Brunei</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_18">
+        <leaf name="BO">
+          <description>
+            <text>Bolivia</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_19">
+        <leaf name="BR">
+          <description>
+            <text>Brazil</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_20">
+        <leaf name="BS">
+          <description>
+            <text>Bahamas</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_21">
+        <leaf name="BT">
+          <description>
+            <text>Bhutan</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_22">
+        <leaf name="BY">
+          <description>
+            <text>Belarus</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_23">
+        <leaf name="CA">
+          <description>
+            <text>Canada</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_24">
+        <leaf name="CH">
+          <description>
+            <text>Switzerland</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_25">
+        <leaf name="CL">
+          <description>
+            <text>Chile</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_26">
+        <leaf name="CN">
+          <description>
+            <text>China</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_27">
+        <leaf name="CO">
+          <description>
+            <text>Colombia</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_28">
+        <leaf name="CR">
+          <description>
+            <text>Costa Rica</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_29">
+        <leaf name="CU">
+          <description>
+            <text>Cuba</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_30">
+        <leaf name="CV">
+          <description>
+            <text>Cape Verde</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_31">
+        <leaf name="CY">
+          <description>
+            <text>Cyprus</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_32">
+        <leaf name="CZ">
+          <description>
+            <text>Czechia</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_33">
+        <leaf name="DE">
+          <description>
+            <text>Germany</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_34">
+        <leaf name="DK">
+          <description>
+            <text>Denmark</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_35">
+        <leaf name="DM">
+          <description>
+            <text>Dominica</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_36">
+        <leaf name="DO">
+          <description>
+            <text>Dominican Republic</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_37">
+        <leaf name="EC">
+          <description>
+            <text>Ecuador</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_38">
+        <leaf name="EE">
+          <description>
+            <text>Estonia</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_39">
+        <leaf name="EG">
+          <description>
+            <text>Egypt</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_40">
+        <leaf name="ES">
+          <description>
+            <text>Spain</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_41">
+        <leaf name="FI">
+          <description>
+            <text>Finland</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_42">
+        <leaf name="FK">
+          <description>
+            <text>Faulkland Islands</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_43">
+        <leaf name="FM">
+          <description>
+            <text>Federated States of Micronesia</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_44">
+        <leaf name="FR">
+          <description>
+            <text>France</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_45">
+        <leaf name="GB">
+          <description>
+            <text>United Kingdom</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_46">
+        <leaf name="GF">
+          <description>
+            <text>French Guiana</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_47">
+        <leaf name="GG">
+          <description>
+            <text>Guernsey</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_48">
+        <leaf name="GI">
+          <description>
+            <text>Gibralter</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_49">
+        <leaf name="GP">
+          <description>
+            <text>Guadeloupe</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_50">
+        <leaf name="GR">
+          <description>
+            <text>Greece</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_51">
+        <leaf name="GT">
+          <description>
+            <text>Guatemala</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_52">
+        <leaf name="GU">
+          <description>
+            <text>Guam</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_53">
+        <leaf name="HK">
+          <description>
+            <text>Hong Kong</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_54">
+        <leaf name="HN">
+          <description>
+            <text>Honduras</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_55">
+        <leaf name="HR">
+          <description>
+            <text>Croatia</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_56">
+        <leaf name="HT">
+          <description>
+            <text>Haiti</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_57">
+        <leaf name="HU">
+          <description>
+            <text>Hungary</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_58">
+        <leaf name="ID">
+          <description>
+            <text>Indonesia</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_59">
+        <leaf name="IE">
+          <description>
+            <text>Ireland</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_60">
+        <leaf name="IL">
+          <description>
+            <text>Israel</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_61">
+        <leaf name="IM">
+          <description>
+            <text>Isle of Man</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_62">
+        <leaf name="IN">
+          <description>
+            <text>India</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_63">
+        <leaf name="IR">
+          <description>
+            <text>Iran</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_64">
+        <leaf name="IS">
+          <description>
+            <text>Iceland</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_65">
+        <leaf name="IT">
+          <description>
+            <text>Italy</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_66">
+        <leaf name="JE">
+          <description>
+            <text>Jersey</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_67">
+        <leaf name="JM">
+          <description>
+            <text>Jamaica</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_68">
+        <leaf name="JO">
+          <description>
+            <text>Jordan</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_69">
+        <leaf name="JP">
+          <description>
+            <text>Japan</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_70">
+        <leaf name="KE">
+          <description>
+            <text>Kenya</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_71">
+        <leaf name="KI">
+          <description>
+            <text>Kiribati</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_72">
+        <leaf name="KR">
+          <description>
+            <text>Korea Republic</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_73">
+        <leaf name="KW">
+          <description>
+            <text>Kuwait</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_74">
+        <leaf name="KY">
+          <description>
+            <text>Cayman Islands</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_75">
+        <leaf name="LA">
+          <description>
+            <text>LAO People's Democratic Republic</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_76">
+        <leaf name="LB">
+          <description>
+            <text>Lebanon</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_77">
+        <leaf name="LI">
+          <description>
+            <text>Liechtenstein</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_78">
+        <leaf name="LK">
+          <description>
+            <text>Sri Lanka</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_79">
+        <leaf name="LS">
+          <description>
+            <text>Lesotho</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_80">
+        <leaf name="LT">
+          <description>
+            <text>Lithuania</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_81">
+        <leaf name="LU">
+          <description>
+            <text>Luxembourg</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_82">
+        <leaf name="LV">
+          <description>
+            <text>Latvia</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_83">
+        <leaf name="MA">
+          <description>
+            <text>Morocco</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_84">
+        <leaf name="MC">
+          <description>
+            <text>Monaco</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_85">
+        <leaf name="MK">
+          <description>
+            <text>Macedonia</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_86">
+        <leaf name="MO">
+          <description>
+            <text>Macao</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_87">
+        <leaf name="MP">
+          <description>
+            <text>Northern Mariana Islands</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_88">
+        <leaf name="MQ">
+          <description>
+            <text>Martinique</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_89">
+        <leaf name="MR">
+          <description>
+            <text>Mauritania</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_90">
+        <leaf name="MT">
+          <description>
+            <text>Malta</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_91">
+        <leaf name="MU">
+          <description>
+            <text>Mauritius</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_92">
+        <leaf name="MV">
+          <description>
+            <text>Maldives</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_93">
+        <leaf name="MW">
+          <description>
+            <text>Malawi</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_94">
+        <leaf name="MX">
+          <description>
+            <text>Mexico</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_95">
+        <leaf name="MY">
+          <description>
+            <text>Malaysia</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_96">
+        <leaf name="NG">
+          <description>
+            <text>Nigeria</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_97">
+        <leaf name="NI">
+          <description>
+            <text>Nicaragua</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_98">
+        <leaf name="NL">
+          <description>
+            <text>Netherlands</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_99">
+        <leaf name="NO">
+          <description>
+            <text>Norway</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_100">
+        <leaf name="NZ">
+          <description>
+            <text>New Zealand</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_101">
+        <leaf name="OM">
+          <description>
+            <text>Oman</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_102">
+        <leaf name="PA">
+          <description>
+            <text>Panama</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_103">
+        <leaf name="PE">
+          <description>
+            <text>Peru</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_104">
+        <leaf name="PG">
+          <description>
+            <text>Papua New Guinea</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_105">
+        <leaf name="PH">
+          <description>
+            <text>Philippines</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_106">
+        <leaf name="PK">
+          <description>
+            <text>Pakistan</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_107">
+        <leaf name="PL">
+          <description>
+            <text>Poland</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_108">
+        <leaf name="PM">
+          <description>
+            <text>St. Pierre and Miquelon</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_109">
+        <leaf name="PR">
+          <description>
+            <text>Puerto Rico</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_110">
+        <leaf name="PT">
+          <description>
+            <text>Portugal</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_111">
+        <leaf name="RE">
+          <description>
+            <text>Reunion</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_112">
+        <leaf name="RO">
+          <description>
+            <text>Romania</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_113">
+        <leaf name="RU">
+          <description>
+            <text>Russia</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_114">
+        <leaf name="SA">
+          <description>
+            <text>Saudi Arabia</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_115">
+        <leaf name="SE">
+          <description>
+            <text>Sweden</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_116">
+        <leaf name="SG">
+          <description>
+            <text>Singapore</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_117">
+        <leaf name="SI">
+          <description>
+            <text>Slovenia</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_118">
+        <leaf name="SK">
+          <description>
+            <text>Slovakia</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_119">
+        <leaf name="SV">
+          <description>
+            <text>El Salvador</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_120">
+        <leaf name="SY">
+          <description>
+            <text>Syria</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_121">
+        <leaf name="TH">
+          <description>
+            <text>Thailand</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_122">
+        <leaf name="TJ">
+          <description>
+            <text>Tajikistan</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_123">
+        <leaf name="TN">
+          <description>
+            <text>Tunisia</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_124">
+        <leaf name="TR">
+          <description>
+            <text>Turkey</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_125">
+        <leaf name="TT">
+          <description>
+            <text>Trinidad &amp; Tobago</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_126">
+        <leaf name="TW">
+          <description>
+            <text>Taiwan</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_127">
+        <leaf name="TZ">
+          <description>
+            <text>Tanzania</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_128">
+        <leaf name="UA">
+          <description>
+            <text>Ukraine</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_129">
+        <leaf name="UM">
+          <description>
+            <text>United States (Minor Outlying Islands)</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_130">
+        <leaf name="US">
+          <description>
+            <text>United States</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_131">
+        <leaf name="UY">
+          <description>
+            <text>Uruguay</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_132">
+        <leaf name="UZ">
+          <description>
+            <text>Uzbekistan</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_133">
+        <leaf name="VA">
+          <description>
+            <text>Holy See (Vatican City State)</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_134">
+        <leaf name="VE">
+          <description>
+            <text>Venezuela</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_135">
+        <leaf name="VG">
+          <description>
+            <text>Virgin Islands (British)</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_136">
+        <leaf name="VI">
+          <description>
+            <text>Virgin Islands (United States)</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_137">
+        <leaf name="VN">
+          <description>
+            <text>Vietnam</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_138">
+        <leaf name="YT">
+          <description>
+            <text>Mayotte</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_139">
+        <leaf name="ZA">
+          <description>
+            <text>South Africa</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_140">
+        <leaf name="ZM">
+          <description>
+            <text>Zambia</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+    </choice>
+  </grouping>
+  <grouping name="external-server-type">
+    <uses name="apply-advanced"/>
+    <leaf name="radius-server">
+      <description>
+        <text>Set RADIUS server IP address</text>
+      </description>
+      <type name="jt:ipaddr"/>
+    </leaf>
+    <leaf name="radius-port">
+      <description>
+        <text>Set RADIUS server port number</text>
+      </description>
+      <default value="1812"/>
+      <type name="union">
+        <type name="string">
+          <pattern value="&lt;.*&gt;|$.*"/>
+        </type>
+        <type name="uint16">
+          <range value="1 .. 65535"/>
+        </type>
+      </type>
+    </leaf>
+    <leaf name="radius-key">
+      <description>
+        <text>Secret RADIUS key</text>
+      </description>
+      <type name="string">
+        <length value="1 .. 64"/>
+      </type>
+    </leaf>
+    <leaf name="radius-eaptype">
+      <description>
+        <text>Set EAP type</text>
+      </description>
+      <type name="enumeration">
+        <enum name="PAP">
+          <description>
+            <text>Enable PAP</text>
+          </description>
+        </enum>
+        <enum name="CHAP">
+          <description>
+            <text>Enable CHAP</text>
+          </description>
+        </enum>
+      </type>
+    </leaf>
+  </grouping>
+  <grouping name="log-options-type">
+    <uses name="apply-advanced"/>
+    <leaf name="enable-persistent">
+      <description>
+        <text>Turn on persistent logging on the access point</text>
+      </description>
+      <type name="empty"/>
+    </leaf>
+    <leaf name="enable-remote">
+      <description>
+        <text>Turn on remote logging on the access point</text>
+      </description>
+      <type name="empty"/>
+    </leaf>
+    <leaf name="log-server-address">
+      <description>
+        <text>Remote log server IP address</text>
+      </description>
+      <type name="jt:ipv4addr"/>
+    </leaf>
+    <leaf name="log-server-port">
+      <description>
+        <text>Remote log serer port</text>
+      </description>
+      <type name="union">
+        <type name="string">
+          <pattern value="&lt;.*&gt;|$.*"/>
+        </type>
+        <type name="uint32">
+          <range value="1 .. 65536"/>
+        </type>
+      </type>
+    </leaf>
+    <leaf name="log-level">
+      <description>
+        <text>Event severity, 0 - Errors, 7 - Info</text>
+      </description>
+      <type name="union">
+        <type name="string">
+          <pattern value="&lt;.*&gt;|$.*"/>
+        </type>
+        <type name="int32">
+          <range value="0 .. 7"/>
+        </type>
+      </type>
+    </leaf>
+  </grouping>
+  <grouping name="macro-data-type">
+    <leaf name="name">
+      <description>
+        <text>Keyword part of the keyword-value pair</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <leaf name="value">
+      <description>
+        <text>Value part of the keyword-value pair</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+  </grouping>
+  <grouping name="qos-parameter-type">
+    <uses name="apply-advanced"/>
+    <leaf name="no-wifi-multimedia">
+      <description>
+        <text>Disable WIFI multimedia</text>
+      </description>
+      <type name="empty"/>
+    </leaf>
+    <leaf name="no-acknowledgement">
+      <description>
+        <text>Disable acknowledgement</text>
+      </description>
+      <type name="empty"/>
+    </leaf>
+    <leaf name="no-auto-power-save">
+      <description>
+        <text>Disable auto power save delivery</text>
+      </description>
+      <type name="empty"/>
+    </leaf>
+    <container name="access-point-queues">
+      <description>
+        <text>Configure the access point queues</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <container name="voice-queue">
+        <description>
+          <text>Configure voice queue</text>
+        </description>
+        <uses name="access-point-queue-type"/>
+      </container>
+      <container name="video-queue">
+        <description>
+          <text>Configure video queue</text>
+        </description>
+        <uses name="access-point-queue-type"/>
+      </container>
+      <container name="best-effort-queue">
+        <description>
+          <text>Configure best effort queue</text>
+        </description>
+        <uses name="access-point-queue-type"/>
+      </container>
+      <container name="background-queue">
+        <description>
+          <text>Configure background queue</text>
+        </description>
+        <uses name="access-point-queue-type"/>
+      </container>
+    </container>
+    <container name="station-queues">
+      <description>
+        <text>Configure the station queues</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <container name="voice-queue">
+        <description>
+          <text>Configure voice queue</text>
+        </description>
+        <uses name="station-queue-type"/>
+      </container>
+      <container name="video-queue">
+        <description>
+          <text>Configure video queue</text>
+        </description>
+        <uses name="station-queue-type"/>
+      </container>
+      <container name="best-effort-queue">
+        <description>
+          <text>Configure best effort queue</text>
+        </description>
+        <uses name="station-queue-type"/>
+      </container>
+      <container name="background-queue">
+        <description>
+          <text>Configure background queue</text>
+        </description>
+        <uses name="station-queue-type"/>
+      </container>
+    </container>
+  </grouping>
+  <grouping name="access-point-queue-type">
+    <description>
+      <text>Access point queue type</text>
+    </description>
+    <uses name="apply-advanced"/>
+    <leaf name="arbitration-inter-frame-space">
+      <description>
+        <text>Arbitration space between frames</text>
+      </description>
+      <type name="union">
+        <type name="string">
+          <pattern value="&lt;.*&gt;|$.*"/>
+        </type>
+        <type name="int32">
+          <range value="1 .. 255"/>
+        </type>
+      </type>
+    </leaf>
+    <container name="minimum-contention-window">
+      <description>
+        <text>Minimum contention window size</text>
+      </description>
+      <uses name="contention-window"/>
+    </container>
+    <container name="maximum-contention-window">
+      <description>
+        <text>Maximum contention window size</text>
+      </description>
+      <uses name="contention-window"/>
+    </container>
+    <leaf name="maximum-burst">
+      <description>
+        <text>Specify maximum burst</text>
+      </description>
+      <units name="microseconds"/>
+      <type name="union">
+        <type name="string">
+          <pattern value="&lt;.*&gt;|$.*"/>
+        </type>
+        <type name="int32">
+          <range value="0 .. 999900"/>
+        </type>
+      </type>
+    </leaf>
+  </grouping>
+  <grouping name="contention-window">
+    <uses name="apply-advanced"/>
+    <leaf name="window-size">
+      <description>
+        <text>Values are 1,3,7,15,31,63,127,255,511 and 1023</text>
+      </description>
+      <type name="union">
+        <type name="int32"/>
+        <type name="string">
+          <pattern value="&lt;.*&gt;|$.*"/>
+        </type>
+      </type>
+    </leaf>
+  </grouping>
+  <grouping name="simple-pass-type">
+    <uses name="apply-advanced"/>
+    <leaf name="key">
+      <description>
+        <text>Set simple password key</text>
+      </description>
+      <type name="string">
+        <length value="8 .. 64"/>
+      </type>
+    </leaf>
+  </grouping>
+  <grouping name="splash-page-footer-type">
+    <uses name="apply-advanced"/>
+    <leaf name="content">
+      <type name="string">
+        <length value="1 .. 256"/>
+      </type>
+    </leaf>
+    <leaf name="color">
+      <description>
+        <text>Set the color</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <leaf name="font-size">
+      <description>
+        <text>Set the font size</text>
+      </description>
+      <type name="union">
+        <type name="uint16"/>
+        <type name="string">
+          <pattern value="&lt;.*&gt;|$.*"/>
+        </type>
+      </type>
+    </leaf>
+  </grouping>
+  <grouping name="splash-page-header-type">
+    <uses name="apply-advanced"/>
+    <leaf name="content">
+      <type name="string">
+        <length value="1 .. 256"/>
+      </type>
+    </leaf>
+    <leaf name="color">
+      <description>
+        <text>Set the color</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <leaf name="font-size">
+      <description>
+        <text>Set the font size</text>
+      </description>
+      <type name="union">
+        <type name="uint16"/>
+        <type name="string">
+          <pattern value="&lt;.*&gt;|$.*"/>
+        </type>
+      </type>
+    </leaf>
+  </grouping>
+  <grouping name="splash-page-logo-image-type">
+    <uses name="apply-advanced"/>
+    <leaf name="filename">
+      <type name="jt:filename"/>
+    </leaf>
+  </grouping>
+  <grouping name="splash-page-title-type">
+    <uses name="apply-advanced"/>
+    <leaf name="content">
+      <type name="string">
+        <length value="1 .. 64"/>
+      </type>
+    </leaf>
+    <leaf name="color">
+      <description>
+        <text>Set the color</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <leaf name="font-size">
+      <description>
+        <text>Set the font size</text>
+      </description>
+      <type name="union">
+        <type name="uint16"/>
+        <type name="string">
+          <pattern value="&lt;.*&gt;|$.*"/>
+        </type>
+      </type>
+    </leaf>
+  </grouping>
+  <grouping name="station-mac-filter">
+    <description>
+      <text>Configure MAC filter</text>
+    </description>
+    <uses name="apply-advanced"/>
+    <container name="allow-list">
+      <description>
+        <text>Allow the MAC addresseses</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <leaf-list name="mac-address">
+        <ordered-by value="user"/>
+        <description>
+          <text>List of allowed MAC addresses</text>
+        </description>
+        <type name="jt:mac-unicast"/>
+        <max-elements value="16"/>
+      </leaf-list>
+    </container>
+    <container name="deny-list">
+      <description>
+        <text>Deny the MAC addresseses</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <leaf-list name="mac-address">
+        <ordered-by value="user"/>
+        <description>
+          <text>List of denied MAC addresses</text>
+        </description>
+        <type name="jt:mac-unicast"/>
+        <max-elements value="16"/>
+      </leaf-list>
+    </container>
+  </grouping>
+  <grouping name="station-queue-type">
+    <description>
+      <text>Station queue type</text>
+    </description>
+    <uses name="apply-advanced"/>
+    <leaf name="arbitration-inter-frame-space">
+      <description>
+        <text>Arbitration space between frames</text>
+      </description>
+      <type name="union">
+        <type name="string">
+          <pattern value="&lt;.*&gt;|$.*"/>
+        </type>
+        <type name="int32">
+          <range value="1 .. 255"/>
+        </type>
+      </type>
+    </leaf>
+    <container name="minimum-contention-window">
+      <description>
+        <text>Specify minimum contention window size</text>
+      </description>
+      <uses name="contention-window"/>
+    </container>
+    <container name="maximum-contention-window">
+      <description>
+        <text>Specify maximum contention window size</text>
+      </description>
+      <uses name="contention-window"/>
+    </container>
+    <leaf name="transmit-opportunity-limit">
+      <description>
+        <text>Specify transmission opportunity limit</text>
+      </description>
+      <type name="union">
+        <type name="string">
+          <pattern value="&lt;.*&gt;|$.*"/>
+        </type>
+        <type name="int32">
+          <range value="0 .. 65535"/>
+        </type>
+      </type>
+    </leaf>
+  </grouping>
+  <grouping name="transmit-rate-sets">
+    <description>
+      <text>Specify the transmit rate sets</text>
+    </description>
+    <uses name="apply-advanced"/>
+    <list name="supported-rates">
+      <key value="name"/>
+      <ordered-by value="user"/>
+      <description>
+        <text>List of supported rates in Mbps</text>
+      </description>
+      <max-elements value="12"/>
+      <uses name="rates"/>
+    </list>
+    <list name="supported-basic-rates">
+      <key value="name"/>
+      <ordered-by value="user"/>
+      <description>
+        <text>List of supported basic rates in Mbps</text>
+      </description>
+      <max-elements value="12"/>
+      <uses name="rates"/>
+    </list>
+  </grouping>
+  <grouping name="rates">
+    <leaf name="name">
+      <type name="enumeration">
+        <enum name="1">
+          <description>
+            <text>Rate-1Mbps </text>
+          </description>
+        </enum>
+        <enum name="2">
+          <description>
+            <text>Rate-2Mbps </text>
+          </description>
+        </enum>
+        <enum name="5.5">
+          <description>
+            <text>Rate-5.5Mbps </text>
+          </description>
+        </enum>
+        <enum name="6">
+          <description>
+            <text>Rate-6Mbps </text>
+          </description>
+        </enum>
+        <enum name="9">
+          <description>
+            <text>Rate-9Mbps </text>
+          </description>
+        </enum>
+        <enum name="11">
+          <description>
+            <text>Rate-11Mbps </text>
+          </description>
+        </enum>
+        <enum name="12">
+          <description>
+            <text>Rate-12Mbps </text>
+          </description>
+        </enum>
+        <enum name="18">
+          <description>
+            <text>Rate-18Mbps </text>
+          </description>
+        </enum>
+        <enum name="24">
+          <description>
+            <text>Rate-24Mbps </text>
+          </description>
+        </enum>
+        <enum name="36">
+          <description>
+            <text>Rate-36Mbps </text>
+          </description>
+        </enum>
+        <enum name="48">
+          <description>
+            <text>Rate-48Mbps </text>
+          </description>
+        </enum>
+        <enum name="54">
+          <description>
+            <text>Rate-54Mbps </text>
+          </description>
+        </enum>
+      </type>
+    </leaf>
+    <uses name="apply-advanced"/>
+  </grouping>
+  <grouping name="vap-type">
+    <leaf name="name">
+      <description>
+        <text>Specify VAP identifier value</text>
+      </description>
+      <type name="union">
+        <type name="string">
+          <pattern value="&lt;.*&gt;|$.*"/>
+        </type>
+        <type name="int32">
+          <range value="0 .. 7"/>
+        </type>
+      </type>
+    </leaf>
+    <uses name="apply-advanced"/>
+    <leaf name="description">
+      <description>
+        <text>Specify the virtual access point description</text>
+      </description>
+      <type name="string">
+        <length value="1 .. 64"/>
+      </type>
+    </leaf>
+    <leaf name="ssid">
+      <description>
+        <text>SSID value for the virtual access point</text>
+      </description>
+      <type name="string">
+        <length value="2 .. 32"/>
+      </type>
+    </leaf>
+    <leaf name="vlan">
+      <description>
+        <text>VLAN id for the virtual access point</text>
+      </description>
+      <type name="union">
+        <type name="string">
+          <pattern value="&lt;.*&gt;|$.*"/>
+        </type>
+        <type name="int32">
+          <range value="1 .. 4094"/>
+        </type>
+      </type>
+    </leaf>
+    <leaf name="download-limit">
+      <description>
+        <text>Download rate limit Kbps</text>
+      </description>
+      <type name="union">
+        <type name="string">
+          <pattern value="&lt;.*&gt;|$.*"/>
+        </type>
+        <type name="int32">
+          <range value="256 .. 1048576"/>
+        </type>
+      </type>
+    </leaf>
+    <leaf name="upload-limit">
+      <description>
+        <text>Upload rate limit Kbps</text>
+      </description>
+      <type name="union">
+        <type name="string">
+          <pattern value="&lt;.*&gt;|$.*"/>
+        </type>
+        <type name="int32">
+          <range value="256 .. 1048576"/>
+        </type>
+      </type>
+    </leaf>
+    <leaf name="no-broadcast-ssid">
+      <description>
+        <text>Disable broadcast SSID</text>
+      </description>
+      <type name="empty"/>
+    </leaf>
+    <container name="http-redirect">
+      <description>
+        <text>Configure HTTP redirect setting</text>
+      </description>
+      <presence value="enable http-redirect"/>
+      <uses name="http-redirect"/>
+    </container>
+    <container name="security">
+      <description>
+        <text>Configure security settings for the VAP</text>
+      </description>
+      <presence value="enable security"/>
+      <uses name="security"/>
+    </container>
+    <container name="station-mac-filter">
+      <uses name="station-mac-filter"/>
+    </container>
+    <leaf name="maximum-stations">
+      <description>
+        <text>Set limit on maximum supported stations</text>
+      </description>
+      <default value="127"/>
+      <type name="union">
+        <type name="string">
+          <pattern value="&lt;.*&gt;|$.*"/>
+        </type>
+        <type name="int32">
+          <range value="1 .. 127"/>
+        </type>
+      </type>
+    </leaf>
+    <leaf name="station-isolation">
+      <description>
+        <text>Isolate the clients connected to the same VAP</text>
+      </description>
+      <type name="empty"/>
+    </leaf>
+    <leaf name="captive-portal">
+      <description>
+        <text>Enable captive portal</text>
+      </description>
+      <type name="empty"/>
+    </leaf>
+  </grouping>
+  <grouping name="http-redirect">
+    <description>
+      <text>Configure HTTP redirect setting</text>
+    </description>
+    <uses name="apply-advanced"/>
+    <leaf name="redirect-url">
+      <description>
+        <text>Set the HTTP redirect URL address</text>
+      </description>
+      <type name="string">
+        <length value="1 .. 120"/>
+      </type>
+    </leaf>
+  </grouping>
+  <grouping name="security">
+    <description>
+      <text>Configure one of security settings for the VAP</text>
+    </description>
+    <uses name="apply-advanced"/>
+    <leaf name="mac-authentication-type">
+      <description>
+        <text>Select MAC authentication type</text>
+      </description>
+      <type name="enumeration">
+        <enum name="disabled">
+          <description>
+            <text>Disable MAC authentication</text>
+          </description>
+        </enum>
+        <enum name="local">
+          <description>
+            <text>Select local MAC authentication</text>
+          </description>
+        </enum>
+        <enum name="radius">
+          <description>
+            <text>Select RADIUS server authentication</text>
+          </description>
+        </enum>
+      </type>
+    </leaf>
+    <choice name="security-type">
+      <case name="case_1">
+        <container name="static-wep">
+          <description>
+            <text>Static WEP configuration</text>
+          </description>
+          <presence value="enable static-wep"/>
+          <uses name="static-wep"/>
+        </container>
+      </case>
+      <case name="case_2">
+        <container name="dot1x">
+          <description>
+            <text>Dot1x configuration</text>
+          </description>
+          <presence value="enable dot1x"/>
+          <uses name="dot1x"/>
+        </container>
+      </case>
+      <case name="case_3">
+        <container name="wpa-personal">
+          <description>
+            <text>Set WPA personal settings</text>
+          </description>
+          <presence value="enable wpa-personal"/>
+          <uses name="wpa-personal"/>
+        </container>
+      </case>
+      <case name="case_4">
+        <container name="wpa-enterprise">
+          <description>
+            <text>Set WAP enterprise settings</text>
+          </description>
+          <presence value="enable wpa-enterprise"/>
+          <uses name="wpa-enterprise"/>
+        </container>
+      </case>
+      <case name="case_5">
+        <leaf name="none">
+          <description>
+            <text>Unsecure plain-text communication</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+    </choice>
+  </grouping>
+  <grouping name="dot1x">
+    <uses name="apply-advanced"/>
+    <leaf name="radius-server">
+      <description>
+        <text>Set RADIUS server IP address</text>
+      </description>
+      <type name="jt:ipaddr"/>
+    </leaf>
+    <leaf name="radius-port">
+      <description>
+        <text>Set RADIUS server port number</text>
+      </description>
+      <default value="1812"/>
+      <type name="union">
+        <type name="string">
+          <pattern value="&lt;.*&gt;|$.*"/>
+        </type>
+        <type name="uint16">
+          <range value="1 .. 65535"/>
+        </type>
+      </type>
+    </leaf>
+    <leaf name="radius-key">
+      <description>
+        <text>Secret RADIUS key</text>
+      </description>
+      <type name="string">
+        <length value="1 .. 64"/>
+      </type>
+    </leaf>
+    <leaf name="broadcast-key-refresh-rate">
+      <description>
+        <text>Broadcast key refresh rate</text>
+      </description>
+      <units name="minutes"/>
+      <type name="union">
+        <type name="string">
+          <pattern value="&lt;.*&gt;|$.*"/>
+        </type>
+        <type name="int32">
+          <range value="0 .. 86400"/>
+        </type>
+      </type>
+    </leaf>
+    <leaf name="session-key-refresh-rate">
+      <description>
+        <text>Session key refresh rate</text>
+      </description>
+      <units name="minutes"/>
+      <type name="union">
+        <type name="string">
+          <pattern value="&lt;.*&gt;|$.*"/>
+        </type>
+        <type name="int32">
+          <range value="0 .. 86400"/>
+        </type>
+      </type>
+    </leaf>
+  </grouping>
+  <grouping name="static-wep">
+    <uses name="apply-advanced"/>
+    <leaf name="authentication-type">
+      <description>
+        <text>Select Static WEP authentication type</text>
+      </description>
+      <type name="enumeration">
+        <enum name="open">
+          <description>
+            <text>Open type</text>
+          </description>
+        </enum>
+        <enum name="shared">
+          <description>
+            <text>Shared type</text>
+          </description>
+        </enum>
+        <enum name="both">
+          <description>
+            <text>Both open and shared authentication</text>
+          </description>
+        </enum>
+      </type>
+    </leaf>
+    <leaf name="key-length">
+      <description>
+        <text>Specify key length (defaults to 64 bits)</text>
+      </description>
+      <type name="enumeration">
+        <enum name="64bits">
+          <description>
+            <text>Use 64 bit key (ASCII:5 chars, HEX:10 chars)</text>
+          </description>
+        </enum>
+        <enum name="128bits">
+          <description>
+            <text>Use 128 bit key (ASCII:13 chars, HEX:26 chars)</text>
+          </description>
+        </enum>
+      </type>
+    </leaf>
+    <leaf name="key-type">
+      <description>
+        <text>Specify key type (defaults to ASCII)</text>
+      </description>
+      <type name="enumeration">
+        <enum name="ascii">
+          <description>
+            <text>ASCII key (default key-length is 64 bits)</text>
+          </description>
+        </enum>
+        <enum name="hex">
+          <description>
+            <text>HEX key (default key-length is 64 bits)</text>
+          </description>
+        </enum>
+      </type>
+    </leaf>
+    <leaf name="transfer-key-index">
+      <description>
+        <text>Specify transfer key index (1-4)</text>
+      </description>
+      <default value="1"/>
+      <type name="union">
+        <type name="string">
+          <pattern value="&lt;.*&gt;|$.*"/>
+        </type>
+        <type name="int32">
+          <range value="1 .. 4"/>
+        </type>
+      </type>
+    </leaf>
+    <leaf name="wep-key-1">
+      <description>
+        <text>Specify WEP key (defaults to ASCII 64 bits, 5 chars long)</text>
+      </description>
+      <type name="jt:unreadable"/>
+    </leaf>
+    <leaf name="wep-key-2">
+      <description>
+        <text>Specify WEP key (defaults to ASCII 64 bits, 5 chars long)</text>
+      </description>
+      <type name="jt:unreadable"/>
+    </leaf>
+    <leaf name="wep-key-3">
+      <description>
+        <text>Specify WEP key (defaults to ASCII 64 bits, 5 chars long)</text>
+      </description>
+      <type name="jt:unreadable"/>
+    </leaf>
+    <leaf name="wep-key-4">
+      <description>
+        <text>Specify WEP key (defaults to ASCII 64 bits, 5 chars long)</text>
+      </description>
+      <type name="jt:unreadable"/>
+    </leaf>
+  </grouping>
+  <grouping name="wpa-enterprise">
+    <uses name="apply-advanced"/>
+    <container name="wpa-version">
+      <description>
+        <text>Set WPA version</text>
+      </description>
+      <uses name="wpa-version"/>
+    </container>
+    <container name="cipher-suites">
+      <description>
+        <text>Select the WPA cipher algorithm</text>
+      </description>
+      <uses name="cipher-suites"/>
+    </container>
+    <leaf name="pre-authenticate">
+      <description>
+        <text>Enable pre-authentication</text>
+      </description>
+      <type name="empty"/>
+    </leaf>
+    <container name="radius">
+      <description>
+        <text>RADIUS setting for WPA enterprise</text>
+      </description>
+      <presence value="enable radius"/>
+      <status value="deprecated"/>
+      <uses name="radius-deprecated"/>
+    </container>
+    <leaf name="radius-server">
+      <description>
+        <text>Set RADIUS server IP address</text>
+      </description>
+      <type name="jt:ipaddr"/>
+    </leaf>
+    <leaf name="radius-port">
+      <description>
+        <text>Set RADIUS server port number</text>
+      </description>
+      <default value="1812"/>
+      <type name="union">
+        <type name="string">
+          <pattern value="&lt;.*&gt;|$.*"/>
+        </type>
+        <type name="uint16">
+          <range value="1 .. 65535"/>
+        </type>
+      </type>
+    </leaf>
+    <leaf name="radius-key">
+      <description>
+        <text>Secret RADIUS key</text>
+      </description>
+      <type name="string">
+        <length value="1 .. 64"/>
+      </type>
+    </leaf>
+    <leaf name="broadcast-key-refresh-rate">
+      <description>
+        <text>Broadcast key refresh rate</text>
+      </description>
+      <units name="minutes"/>
+      <type name="union">
+        <type name="string">
+          <pattern value="&lt;.*&gt;|$.*"/>
+        </type>
+        <type name="int32">
+          <range value="0 .. 86400"/>
+        </type>
+      </type>
+    </leaf>
+    <leaf name="session-key-refresh-rate">
+      <description>
+        <text>Session key refresh rate</text>
+      </description>
+      <units name="minutes"/>
+      <type name="union">
+        <type name="string">
+          <pattern value="&lt;.*&gt;|$.*"/>
+        </type>
+        <type name="int32">
+          <range value="0 .. 86400"/>
+        </type>
+      </type>
+    </leaf>
+  </grouping>
+  <grouping name="cipher-suites">
+    <uses name="apply-advanced"/>
+    <choice name="suites">
+      <case name="case_1">
+        <leaf name="ccmp">
+          <description>
+            <text>CCMP</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_2">
+        <leaf name="tkip-ccmp">
+          <description>
+            <text>Use both TKIP and CCMP cipher suites</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+    </choice>
+  </grouping>
+  <grouping name="radius-deprecated">
+    <uses name="apply-advanced"/>
+    <leaf name="radius-server">
+      <description>
+        <text>Set RADIUS server IP address</text>
+      </description>
+      <type name="jt:ipaddr"/>
+    </leaf>
+    <leaf name="radius-port">
+      <description>
+        <text>Set RADIUS server port number</text>
+      </description>
+      <default value="1812"/>
+      <type name="union">
+        <type name="string">
+          <pattern value="&lt;.*&gt;|$.*"/>
+        </type>
+        <type name="uint16">
+          <range value="1 .. 65535"/>
+        </type>
+      </type>
+    </leaf>
+    <leaf name="radius-key">
+      <description>
+        <text>Secret RADIUS key</text>
+      </description>
+      <type name="string">
+        <length value="1 .. 64"/>
+      </type>
+    </leaf>
+    <leaf name="broadcast-key-refresh-rate">
+      <description>
+        <text>Broadcast key refresh rate</text>
+      </description>
+      <units name="minutes"/>
+      <type name="union">
+        <type name="string">
+          <pattern value="&lt;.*&gt;|$.*"/>
+        </type>
+        <type name="int32">
+          <range value="0 .. 86400"/>
+        </type>
+      </type>
+    </leaf>
+    <leaf name="session-key-refresh-rate">
+      <description>
+        <text>Session key refresh rate</text>
+      </description>
+      <units name="minutes"/>
+      <type name="union">
+        <type name="string">
+          <pattern value="&lt;.*&gt;|$.*"/>
+        </type>
+        <type name="int32">
+          <range value="0 .. 86400"/>
+        </type>
+      </type>
+    </leaf>
+  </grouping>
+  <grouping name="wpa-personal">
+    <uses name="apply-advanced"/>
+    <container name="wpa-version">
+      <description>
+        <text>Set WPA version</text>
+      </description>
+      <uses name="wpa-version"/>
+    </container>
+    <container name="cipher-suites">
+      <description>
+        <text>Select the WPA cipher algorithm</text>
+      </description>
+      <uses name="cipher-suites"/>
+    </container>
+    <leaf name="key">
+      <description>
+        <text>WPA shared key</text>
+      </description>
+      <type name="string">
+        <length value="8 .. 64"/>
+      </type>
+    </leaf>
+    <leaf name="key-type">
+      <description>
+        <text>Specify key type (defaults to ASCII)</text>
+      </description>
+      <type name="enumeration">
+        <enum name="ascii">
+          <description>
+            <text>ASCII key (default key-length is 64 bits)</text>
+          </description>
+        </enum>
+        <enum name="hex">
+          <description>
+            <text>HEX key (default key-length is 64 bits)</text>
+          </description>
+        </enum>
+      </type>
+    </leaf>
+    <leaf name="broadcast-key-refresh-rate">
+      <description>
+        <text>Broadcast key refresh rate</text>
+      </description>
+      <default value="0"/>
+      <units name="minutes"/>
+      <type name="union">
+        <type name="string">
+          <pattern value="&lt;.*&gt;|$.*"/>
+        </type>
+        <type name="int32">
+          <range value="0 .. 86400"/>
+        </type>
+      </type>
+    </leaf>
+  </grouping>
+  <grouping name="wpa-version">
+    <uses name="apply-advanced"/>
+    <choice name="version">
+      <case name="case_1">
+        <leaf name="v1-v2">
+          <description>
+            <text>WPA Version 1 and WPA Version 2</text>
+          </description>
+          <status value="deprecated"/>
+          <type name="empty"/>
+        </leaf>
+      </case>
+      <case name="case_2">
+        <leaf name="v2">
+          <description>
+            <text>WPA Version 2</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </case>
+    </choice>
+  </grouping>
+</module>

@@ -31,8 +31,16 @@ variable "vm2_nic2" {}
 variable "vsrx_nic2" {}
 variable "vsrx_nic3" {}
 
+terraform {
+    required_providers {
+        azurerm = {
+            source = "hashicorp/azurerm"
+            version = "=2.33.0"
+        }
+    }
+}
+
 provider "azurerm" {
-    version = "=2.33.0"
     features {}
 }
 

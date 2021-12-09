@@ -1,0 +1,1448 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module name="junos-es-conf-event-options"
+        xmlns="urn:ietf:params:xml:ns:yang:yin:1"
+        xmlns:jc-event-options="http://yang.juniper.net/junos-es/conf/event-options"
+        xmlns:jt="http://yang.juniper.net/junos/common/types"
+        xmlns:jc="http://yang.juniper.net/junos-es/conf/root">
+  <namespace uri="http://yang.juniper.net/junos-es/conf/event-options"/>
+  <prefix value="jc-event-options"/>
+  <import module="junos-common-types">
+    <prefix value="jt"/>
+    <revision-date date="2019-01-01"/>
+  </import>
+  <import module="junos-es-conf-root">
+    <prefix value="jc"/>
+    <revision-date date="2019-01-01"/>
+  </import>
+  <organization>
+    <text>Juniper Networks, Inc.</text>
+  </organization>
+  <contact>
+    <text>yang-support@juniper.net</text>
+  </contact>
+  <description>
+    <text>Junos event-options configuration module</text>
+  </description>
+  <revision date="2019-01-01">
+    <description>
+      <text>Junos: 21.3R1.9</text>
+    </description>
+  </revision>
+  <augment target-node="/jc:configuration">
+    <uses name="event-options-group"/>
+  </augment>
+  <augment target-node="/jc:configuration/jc:groups">
+    <uses name="event-options-group"/>
+  </augment>
+  <grouping name="event-options-group">
+    <container name="event-options">
+      <description>
+        <text>Event processing configuration</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <leaf name="max-policies">
+        <description>
+          <text>Number of policies that can be executed simultaneously</text>
+        </description>
+        <default value="15"/>
+        <type name="union">
+          <type name="string">
+            <pattern value="&lt;.*&gt;|$.*"/>
+          </type>
+          <type name="uint32">
+            <range value="0 .. 20"/>
+          </type>
+        </type>
+      </leaf>
+      <list name="generate-event">
+        <key value="name"/>
+        <ordered-by value="user"/>
+        <description>
+          <text>Generate an internal event</text>
+        </description>
+        <max-elements value="10"/>
+        <leaf name="name">
+          <description>
+            <text>Name of the event to be generated</text>
+          </description>
+          <type name="string">
+            <length value="1 .. 63"/>
+          </type>
+        </leaf>
+        <choice name="time_choice">
+          <case name="case_1">
+            <leaf name="time-of-day">
+              <description>
+                <text>Time of day at which to generate event (hh:mm:ss)</text>
+              </description>
+              <type name="jt:time-of-day"/>
+            </leaf>
+          </case>
+          <case name="case_2">
+            <leaf name="time-interval">
+              <description>
+                <text>Frequency for generating the event</text>
+              </description>
+              <units name="seconds"/>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="60 .. 2592000"/>
+                </type>
+              </type>
+            </leaf>
+          </case>
+        </choice>
+        <leaf name="start-time">
+          <description>
+            <text>Start-time to generate event (yyyy-mm-dd.hh:mm)</text>
+          </description>
+          <type name="jt:time"/>
+        </leaf>
+        <leaf name="no-drift">
+          <description>
+            <text>Avoid event generation delay propagating to next event</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </list>
+      <list name="policy">
+        <key value="name"/>
+        <ordered-by value="user"/>
+        <description>
+          <text>Event policy for event policy manager</text>
+        </description>
+        <leaf name="name">
+          <description>
+            <text>Name of policy</text>
+          </description>
+          <type name="string">
+            <length value="1 .. 63"/>
+          </type>
+        </leaf>
+        <uses name="apply-advanced"/>
+        <leaf-list name="events">
+          <ordered-by value="user"/>
+          <description>
+            <text>List of events that trigger this policy</text>
+          </description>
+          <type name="string"/>
+        </leaf-list>
+        <list name="within">
+          <key value="name"/>
+          <ordered-by value="user"/>
+          <description>
+            <text>List of events correlated with trigering events</text>
+          </description>
+          <leaf name="name">
+            <description>
+              <text>Time within which correlated events must occur (or not)</text>
+            </description>
+            <units name="seconds"/>
+            <type name="union">
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+              <type name="uint32">
+                <range value="1 .. 604800"/>
+              </type>
+            </type>
+          </leaf>
+          <uses name="apply-advanced"/>
+          <container name="trigger">
+            <description>
+              <text>Correlate events based on the number of occurrences</text>
+            </description>
+            <choice name="when">
+              <case name="case_1">
+                <leaf name="until">
+                  <description>
+                    <text>Trigger when occurrences of triggering event &lt; 'count'</text>
+                  </description>
+                  <type name="empty"/>
+                </leaf>
+              </case>
+              <case name="case_2">
+                <leaf name="on">
+                  <description>
+                    <text>Trigger when occurrences of triggering event = 'count'</text>
+                  </description>
+                  <type name="empty"/>
+                </leaf>
+              </case>
+              <case name="case_3">
+                <leaf name="after">
+                  <description>
+                    <text>Trigger when occurrences of triggering event &gt; 'count'</text>
+                  </description>
+                  <type name="empty"/>
+                </leaf>
+              </case>
+            </choice>
+            <leaf name="count">
+              <description>
+                <text>Number of occurrences of triggering event</text>
+              </description>
+              <type name="union">
+                <type name="uint32"/>
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+              </type>
+            </leaf>
+          </container>
+          <leaf-list name="events">
+            <ordered-by value="user"/>
+            <description>
+              <text>List of events that must occur within time interval</text>
+            </description>
+            <type name="string"/>
+          </leaf-list>
+          <container name="not">
+            <description>
+              <text>Events must not occur within time interval</text>
+            </description>
+            <leaf-list name="events">
+              <ordered-by value="user"/>
+              <description>
+                <text>List of events that must not occur within time interval</text>
+              </description>
+              <type name="string"/>
+            </leaf-list>
+          </container>
+        </list>
+        <list name="attributes-match">
+          <key value="from-event-attribute condition to-event-attribute-value"/>
+          <ordered-by value="user"/>
+          <description>
+            <text>List of attributes to compare for two events</text>
+          </description>
+          <leaf name="from-event-attribute">
+            <description>
+              <text>First attribute to compare</text>
+            </description>
+            <type name="string"/>
+          </leaf>
+          <leaf name="condition">
+            <description>
+              <text>Relationship that must hold between attributes</text>
+            </description>
+            <type name="enumeration">
+              <enum name="equals">
+                <description>
+                  <text>Attributes match</text>
+                </description>
+              </enum>
+              <enum name="starts-with">
+                <description>
+                  <text>Second attribute starts with first attribute value</text>
+                </description>
+              </enum>
+              <enum name="matches">
+                <description>
+                  <text>Regular expression matching the first attribute value</text>
+                </description>
+              </enum>
+            </type>
+          </leaf>
+          <leaf name="to-event-attribute-value">
+            <description>
+              <text>Second attribute or value to compare</text>
+            </description>
+            <type name="string"/>
+          </leaf>
+        </list>
+        <container name="then">
+          <description>
+            <text>List of actions to perform when policy matches</text>
+          </description>
+          <uses name="apply-advanced"/>
+          <leaf name="ignore">
+            <description>
+              <text>Do not log event or perform any other action</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <container name="priority-override">
+            <description>
+              <text>Change syslog priority value</text>
+            </description>
+            <uses name="apply-advanced"/>
+            <leaf name="facility">
+              <description>
+                <text>Facility type</text>
+              </description>
+              <type name="enumeration">
+                <enum name="authorization">
+                  <description>
+                    <text>Authorization system</text>
+                  </description>
+                </enum>
+                <enum name="daemon">
+                  <description>
+                    <text>Various system processes</text>
+                  </description>
+                </enum>
+                <enum name="ftp">
+                  <description>
+                    <text>FTP process</text>
+                  </description>
+                </enum>
+                <enum name="ntp">
+                  <description>
+                    <text>NTP process</text>
+                  </description>
+                </enum>
+                <enum name="security">
+                  <description>
+                    <text>Security related</text>
+                  </description>
+                </enum>
+                <enum name="kernel">
+                  <description>
+                    <text>Kernel</text>
+                  </description>
+                </enum>
+                <enum name="user">
+                  <description>
+                    <text>User processes</text>
+                  </description>
+                </enum>
+                <enum name="dfc">
+                  <description>
+                    <text>Dynamic flow capture</text>
+                  </description>
+                </enum>
+                <enum name="external">
+                  <description>
+                    <text>Local external applications</text>
+                  </description>
+                </enum>
+                <enum name="firewall">
+                  <description>
+                    <text>Firewall filtering system</text>
+                  </description>
+                </enum>
+                <enum name="pfe">
+                  <description>
+                    <text>Packet Forwarding Engine</text>
+                  </description>
+                </enum>
+                <enum name="conflict-log">
+                  <description>
+                    <text>Configuration conflict log</text>
+                  </description>
+                </enum>
+                <enum name="change-log">
+                  <description>
+                    <text>Configuration change log</text>
+                  </description>
+                </enum>
+                <enum name="interactive-commands">
+                  <description>
+                    <text>Commands executed by the UI</text>
+                  </description>
+                </enum>
+              </type>
+            </leaf>
+            <leaf name="severity">
+              <description>
+                <text>Severity type</text>
+              </description>
+              <type name="enumeration">
+                <enum name="emergency">
+                  <description>
+                    <text>Panic conditions</text>
+                  </description>
+                </enum>
+                <enum name="alert">
+                  <description>
+                    <text>Conditions that should be corrected immediately</text>
+                  </description>
+                </enum>
+                <enum name="critical">
+                  <description>
+                    <text>Critical conditions</text>
+                  </description>
+                </enum>
+                <enum name="error">
+                  <description>
+                    <text>Error conditions</text>
+                  </description>
+                </enum>
+                <enum name="warning">
+                  <description>
+                    <text>Warning messages</text>
+                  </description>
+                </enum>
+                <enum name="notice">
+                  <description>
+                    <text>Conditions that should be handled specially</text>
+                  </description>
+                </enum>
+                <enum name="info">
+                  <description>
+                    <text>Informational messages</text>
+                  </description>
+                </enum>
+              </type>
+            </leaf>
+          </container>
+          <list name="upload">
+            <key value="filename destination"/>
+            <ordered-by value="user"/>
+            <description>
+              <text>Upload file to specified destination</text>
+            </description>
+            <leaf name="filename">
+              <description>
+                <text>Name of file to upload</text>
+              </description>
+              <type name="string"/>
+            </leaf>
+            <leaf name="destination">
+              <description>
+                <text>Location to which to output file</text>
+              </description>
+              <type name="string"/>
+            </leaf>
+            <uses name="apply-advanced"/>
+            <leaf name="user-name">
+              <description>
+                <text>User under whose privileges upload action will execute</text>
+              </description>
+              <type name="string"/>
+            </leaf>
+            <leaf name="transfer-delay">
+              <description>
+                <text>Delay before uploading file to the destination</text>
+              </description>
+              <units name="seconds"/>
+              <type name="union">
+                <type name="uint32"/>
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+              </type>
+            </leaf>
+            <container name="retry-count">
+              <description>
+                <text>Upload output-filename retry attempt count</text>
+              </description>
+              <leaf name="retry">
+                <description>
+                  <text>Number of retry attempts</text>
+                </description>
+                <type name="union">
+                  <type name="string">
+                    <pattern value="&lt;.*&gt;|$.*"/>
+                  </type>
+                  <type name="uint8">
+                    <range value="0 .. 10"/>
+                  </type>
+                </type>
+              </leaf>
+              <leaf name="retry-interval">
+                <description>
+                  <text>Time interval between each retry</text>
+                </description>
+                <units name="seconds"/>
+                <type name="union">
+                  <type name="uint32"/>
+                  <type name="string">
+                    <pattern value="&lt;.*&gt;|$.*"/>
+                  </type>
+                </type>
+              </leaf>
+            </container>
+          </list>
+          <container name="change-configuration">
+            <description>
+              <text>Change configuration</text>
+            </description>
+            <uses name="apply-advanced"/>
+            <container name="retry">
+              <description>
+                <text>Change configuration retry attempt count</text>
+              </description>
+              <leaf name="count">
+                <description>
+                  <text>Number of retry attempts</text>
+                </description>
+                <type name="union">
+                  <type name="string">
+                    <pattern value="&lt;.*&gt;|$.*"/>
+                  </type>
+                  <type name="uint8">
+                    <range value="0 .. 10"/>
+                  </type>
+                </type>
+              </leaf>
+              <leaf name="interval">
+                <description>
+                  <text>Time interval between each retry</text>
+                </description>
+                <units name="seconds"/>
+                <type name="union">
+                  <type name="uint32"/>
+                  <type name="string">
+                    <pattern value="&lt;.*&gt;|$.*"/>
+                  </type>
+                </type>
+              </leaf>
+            </container>
+            <list name="commands">
+              <key value="name"/>
+              <ordered-by value="user"/>
+              <description>
+                <text>List of configuration commands</text>
+              </description>
+              <leaf name="name">
+                <description>
+                  <text>Configuration command to issue</text>
+                </description>
+                <type name="string"/>
+              </leaf>
+              <uses name="apply-advanced"/>
+            </list>
+            <leaf name="user-name">
+              <description>
+                <text>User under whose privileges configuration should be changed</text>
+              </description>
+              <type name="string"/>
+            </leaf>
+            <container name="commit-options">
+              <description>
+                <text>List of commit options</text>
+              </description>
+              <uses name="apply-advanced"/>
+              <container name="check">
+                <presence value="enable check"/>
+                <description>
+                  <text>Check correctness of syntax; do not apply changes</text>
+                </description>
+                <uses name="apply-advanced"/>
+                <leaf name="synchronize">
+                  <description>
+                    <text>Synchronize commit on both Routing Engines</text>
+                  </description>
+                  <type name="empty"/>
+                </leaf>
+              </container>
+              <leaf name="synchronize">
+                <description>
+                  <text>Synchronize commit on both Routing Engines</text>
+                </description>
+                <type name="empty"/>
+              </leaf>
+              <leaf name="force">
+                <description>
+                  <text>Force commit on other Routing Engine (ignore warnings)</text>
+                </description>
+                <type name="empty"/>
+              </leaf>
+              <leaf name="log">
+                <description>
+                  <text>Message to write to commit log</text>
+                </description>
+                <type name="string">
+                  <length value="1 .. 512"/>
+                </type>
+              </leaf>
+            </container>
+          </container>
+          <container name="execute-commands">
+            <description>
+              <text>Issue one or more CLI commands</text>
+            </description>
+            <uses name="apply-advanced"/>
+            <list name="commands">
+              <key value="name"/>
+              <ordered-by value="user"/>
+              <description>
+                <text>List of CLI commands to issue</text>
+              </description>
+              <leaf name="name">
+                <description>
+                  <text>CLI command to issue</text>
+                </description>
+                <type name="string"/>
+              </leaf>
+              <uses name="apply-advanced"/>
+            </list>
+            <leaf name="user-name">
+              <description>
+                <text>User under whose privileges command will execute</text>
+              </description>
+              <type name="string"/>
+            </leaf>
+            <leaf name="output-filename">
+              <description>
+                <text>Name of file in which to write command output</text>
+              </description>
+              <type name="string"/>
+            </leaf>
+            <list name="destination">
+              <key value="name"/>
+              <ordered-by value="user"/>
+              <description>
+                <text>Location to which to upload command output</text>
+              </description>
+              <max-elements value="1"/>
+              <leaf name="name">
+                <description>
+                  <text>Location to which to upload command output</text>
+                </description>
+                <type name="string"/>
+              </leaf>
+              <uses name="apply-advanced"/>
+              <leaf name="transfer-delay">
+                <description>
+                  <text>Delay before uploading file to the destination</text>
+                </description>
+                <units name="seconds"/>
+                <type name="union">
+                  <type name="uint32"/>
+                  <type name="string">
+                    <pattern value="&lt;.*&gt;|$.*"/>
+                  </type>
+                </type>
+              </leaf>
+              <container name="retry-count">
+                <description>
+                  <text>Upload output-filename retry attempt count</text>
+                </description>
+                <leaf name="retry">
+                  <description>
+                    <text>Number of retry attempts</text>
+                  </description>
+                  <type name="union">
+                    <type name="string">
+                      <pattern value="&lt;.*&gt;|$.*"/>
+                    </type>
+                    <type name="uint8">
+                      <range value="0 .. 10"/>
+                    </type>
+                  </type>
+                </leaf>
+                <leaf name="retry-interval">
+                  <description>
+                    <text>Time interval between each retry</text>
+                  </description>
+                  <units name="seconds"/>
+                  <type name="union">
+                    <type name="uint32"/>
+                    <type name="string">
+                      <pattern value="&lt;.*&gt;|$.*"/>
+                    </type>
+                  </type>
+                </leaf>
+              </container>
+            </list>
+            <leaf name="output-format">
+              <description>
+                <text>Format of output from CLI commands</text>
+              </description>
+              <default value="xml"/>
+              <type name="enumeration">
+                <enum name="text">
+                  <description>
+                    <text>Formatted ASCII text</text>
+                  </description>
+                </enum>
+                <enum name="xml">
+                  <description>
+                    <text>JUNOS XML tags</text>
+                  </description>
+                </enum>
+              </type>
+            </leaf>
+          </container>
+          <list name="event-script">
+            <key value="name"/>
+            <ordered-by value="user"/>
+            <description>
+              <text>Invoke event scripts</text>
+            </description>
+            <leaf name="name">
+              <description>
+                <text>Local filename of the script file</text>
+              </description>
+              <type name="string">
+                <length value="1 .. 254"/>
+              </type>
+            </leaf>
+            <uses name="apply-advanced"/>
+            <list name="arguments">
+              <key value="name"/>
+              <ordered-by value="user"/>
+              <description>
+                <text>Command line argument to the script</text>
+              </description>
+              <leaf name="name">
+                <description>
+                  <text>Name of the argument</text>
+                </description>
+                <type name="string">
+                  <length value="1 .. 254"/>
+                </type>
+              </leaf>
+              <leaf name="value">
+                <description>
+                  <text>Value of the argument</text>
+                </description>
+                <type name="string"/>
+              </leaf>
+            </list>
+            <leaf name="user-name">
+              <description>
+                <text>User under whose privileges event script will execute</text>
+              </description>
+              <type name="string"/>
+            </leaf>
+            <leaf name="output-filename">
+              <description>
+                <text>Name of file in which to write event script output</text>
+              </description>
+              <type name="string"/>
+            </leaf>
+            <list name="destination">
+              <key value="name"/>
+              <ordered-by value="user"/>
+              <description>
+                <text>Location to which to upload event script output</text>
+              </description>
+              <max-elements value="1"/>
+              <leaf name="name">
+                <description>
+                  <text>Location to which to upload event script output</text>
+                </description>
+                <type name="string"/>
+              </leaf>
+              <uses name="apply-advanced"/>
+              <leaf name="transfer-delay">
+                <description>
+                  <text>Delay before uploading files</text>
+                </description>
+                <units name="seconds"/>
+                <type name="union">
+                  <type name="uint32"/>
+                  <type name="string">
+                    <pattern value="&lt;.*&gt;|$.*"/>
+                  </type>
+                </type>
+              </leaf>
+              <container name="retry-count">
+                <description>
+                  <text>Upload output-filename retry attempt count</text>
+                </description>
+                <leaf name="retry">
+                  <description>
+                    <text>Number of retry attempts</text>
+                  </description>
+                  <type name="union">
+                    <type name="string">
+                      <pattern value="&lt;.*&gt;|$.*"/>
+                    </type>
+                    <type name="uint8">
+                      <range value="0 .. 10"/>
+                    </type>
+                  </type>
+                </leaf>
+                <leaf name="retry-interval">
+                  <description>
+                    <text>Time interval between each retry</text>
+                  </description>
+                  <units name="seconds"/>
+                  <type name="union">
+                    <type name="uint32"/>
+                    <type name="string">
+                      <pattern value="&lt;.*&gt;|$.*"/>
+                    </type>
+                  </type>
+                </leaf>
+              </container>
+            </list>
+            <leaf name="output-format">
+              <description>
+                <text>Format of output from event-script</text>
+              </description>
+              <type name="enumeration">
+                <enum name="text">
+                  <description>
+                    <text>Formatted ASCII text</text>
+                  </description>
+                </enum>
+                <enum name="xml">
+                  <description>
+                    <text>JUNOS XML tags</text>
+                  </description>
+                </enum>
+              </type>
+            </leaf>
+          </list>
+          <leaf name="raise-trap">
+            <description>
+              <text>Raise SNMP trap</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+        </container>
+      </list>
+      <container name="event-script">
+        <description>
+          <text>Configure event-scripts</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <leaf name="optional">
+          <description>
+            <text>Allow commit to succeed if the script is missing</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+        <leaf name="max-datasize">
+          <description>
+            <text>Maximum data segment size for scripts execution</text>
+          </description>
+          <units name="bytes"/>
+          <type name="string"/>
+        </leaf>
+        <container name="dampen">
+          <presence value="enable dampen"/>
+          <description>
+            <text>Run event scripts in dampen mode</text>
+          </description>
+          <uses name="apply-advanced"/>
+          <container name="dampen-options">
+            <description>
+              <text>Dampen options for event scripts</text>
+            </description>
+            <uses name="apply-advanced"/>
+            <leaf name="cpu-factor">
+              <description>
+                <text>CPU factor at which to pause</text>
+              </description>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="1 .. 100"/>
+                </type>
+              </type>
+            </leaf>
+            <leaf name="line-interval">
+              <description>
+                <text>Line interval at which to pause</text>
+              </description>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="1 .. 4294967295"/>
+                </type>
+              </type>
+            </leaf>
+            <leaf name="time-interval">
+              <description>
+                <text>Time to pause</text>
+              </description>
+              <units name="microseconds"/>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="1 .. 4294967295"/>
+                </type>
+              </type>
+            </leaf>
+          </container>
+        </container>
+        <container name="traceoptions">
+          <description>
+            <text>Trace options for event scripts</text>
+          </description>
+          <uses name="apply-advanced"/>
+          <leaf name="no-remote-trace">
+            <description>
+              <text>Disable remote tracing</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <container name="file">
+            <description>
+              <text>Trace file information</text>
+            </description>
+            <leaf name="filename">
+              <description>
+                <text>Name of file in which to write trace information</text>
+              </description>
+              <type name="string">
+                <length value="1 .. 1024"/>
+              </type>
+            </leaf>
+            <leaf name="size">
+              <description>
+                <text>Maximum trace file size</text>
+              </description>
+              <type name="string"/>
+            </leaf>
+            <leaf name="files">
+              <description>
+                <text>Maximum number of trace files</text>
+              </description>
+              <default value="3"/>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="2 .. 1000"/>
+                </type>
+              </type>
+            </leaf>
+            <choice name="world-readable-choice">
+              <leaf name="world-readable">
+                <description>
+                  <text>Allow any user to read the log file</text>
+                </description>
+                <type name="empty"/>
+              </leaf>
+              <leaf name="no-world-readable">
+                <description>
+                  <text>Don't allow any user to read the log file</text>
+                </description>
+                <type name="empty"/>
+              </leaf>
+            </choice>
+          </container>
+          <list name="flag">
+            <key value="name"/>
+            <description>
+              <text>Tracing parameters</text>
+            </description>
+            <leaf name="name">
+              <type name="enumeration">
+                <enum name="events">
+                  <description>
+                    <text>Trace important events</text>
+                  </description>
+                </enum>
+                <enum name="input">
+                  <description>
+                    <text>Trace script input data</text>
+                  </description>
+                </enum>
+                <enum name="offline">
+                  <description>
+                    <text>Generate data for offline development</text>
+                  </description>
+                </enum>
+                <enum name="output">
+                  <description>
+                    <text>Trace script output data</text>
+                  </description>
+                </enum>
+                <enum name="rpc">
+                  <description>
+                    <text>Trace script RPCs</text>
+                  </description>
+                </enum>
+                <enum name="xslt">
+                  <description>
+                    <text>Trace the XSLT library</text>
+                  </description>
+                </enum>
+                <enum name="all">
+                  <description>
+                    <text>Trace all operations</text>
+                  </description>
+                </enum>
+              </type>
+            </leaf>
+          </list>
+        </container>
+        <list name="file">
+          <key value="name"/>
+          <ordered-by value="user"/>
+          <description>
+            <text>File name for event script</text>
+          </description>
+          <leaf name="name">
+            <description>
+              <text>Local filename of the script file</text>
+            </description>
+            <type name="string">
+              <length value="1 .. 254"/>
+            </type>
+          </leaf>
+          <uses name="apply-advanced"/>
+          <leaf name="source">
+            <description>
+              <text>URL of source for this script</text>
+            </description>
+            <type name="string">
+              <length value="1 .. 254"/>
+            </type>
+          </leaf>
+          <leaf name="cert-file">
+            <description>
+              <text>Specify the certificate file name</text>
+            </description>
+            <type name="string"/>
+          </leaf>
+          <leaf name="python-script-user">
+            <description>
+              <text>Run the python event script with privileges of user</text>
+            </description>
+            <type name="string"/>
+          </leaf>
+          <container name="dampen">
+            <presence value="enable dampen"/>
+            <description>
+              <text>Run script in dampen mode</text>
+            </description>
+            <uses name="apply-advanced"/>
+            <container name="dampen-options">
+              <description>
+                <text>Dampen options for the script</text>
+              </description>
+              <uses name="apply-advanced"/>
+              <leaf name="cpu-factor">
+                <description>
+                  <text>CPU factor at which to pause</text>
+                </description>
+                <type name="union">
+                  <type name="string">
+                    <pattern value="&lt;.*&gt;|$.*"/>
+                  </type>
+                  <type name="uint32">
+                    <range value="1 .. 100"/>
+                  </type>
+                </type>
+              </leaf>
+              <leaf name="line-interval">
+                <description>
+                  <text>Line interval at which to pause</text>
+                </description>
+                <type name="union">
+                  <type name="string">
+                    <pattern value="&lt;.*&gt;|$.*"/>
+                  </type>
+                  <type name="uint32">
+                    <range value="1 .. 4294967295"/>
+                  </type>
+                </type>
+              </leaf>
+              <leaf name="time-interval">
+                <description>
+                  <text>Time to pause</text>
+                </description>
+                <units name="microseconds"/>
+                <type name="union">
+                  <type name="string">
+                    <pattern value="&lt;.*&gt;|$.*"/>
+                  </type>
+                  <type name="uint32">
+                    <range value="1 .. 4294967295"/>
+                  </type>
+                </type>
+              </leaf>
+            </container>
+          </container>
+          <leaf name="routing-instance">
+            <description>
+              <text>Routing instance</text>
+            </description>
+            <type name="string"/>
+          </leaf>
+          <leaf name="refresh">
+            <description>
+              <text>Refresh all operation scripts from their source</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="refresh-from">
+            <description>
+              <text>Refresh all operation scripts from a given base URL</text>
+            </description>
+            <type name="string">
+              <length value="1 .. 254"/>
+            </type>
+          </leaf>
+          <container name="checksum">
+            <description>
+              <text>Checksum of this script</text>
+            </description>
+            <uses name="apply-advanced"/>
+            <leaf name="sha-256">
+              <description>
+                <text>SHA-256 checksum of this script</text>
+              </description>
+              <type name="string">
+                <length value="1 .. 254"/>
+              </type>
+            </leaf>
+          </container>
+          <list name="remote-execution">
+            <key value="name"/>
+            <ordered-by value="user"/>
+            <description>
+              <text>Remote login username and password details for script</text>
+            </description>
+            <leaf name="name">
+              <description>
+                <text>Remote hostname</text>
+              </description>
+              <type name="string">
+                <length value="1 .. 255"/>
+              </type>
+            </leaf>
+            <uses name="apply-advanced"/>
+            <leaf name="username">
+              <description>
+                <text>SSH username for login into the remote host</text>
+              </description>
+              <type name="string"/>
+            </leaf>
+            <leaf name="passphrase">
+              <description>
+                <text>SSH passphrase for login into the remote host</text>
+              </description>
+              <type name="jt:unreadable"/>
+            </leaf>
+          </list>
+        </list>
+        <leaf name="refresh">
+          <description>
+            <text>Refresh all operation scripts from their source</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+        <leaf name="refresh-from">
+          <description>
+            <text>Refresh all operation scripts from a given base URL</text>
+          </description>
+          <type name="string">
+            <length value="1 .. 254"/>
+          </type>
+        </leaf>
+      </container>
+      <list name="destinations">
+        <key value="name"/>
+        <ordered-by value="user"/>
+        <description>
+          <text>List of destinations referred to in 'then' clause</text>
+        </description>
+        <leaf name="name">
+          <description>
+            <text>Destination name</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+        <uses name="apply-advanced"/>
+        <leaf name="transfer-delay">
+          <description>
+            <text>Delay before transferring files</text>
+          </description>
+          <default value="0"/>
+          <units name="seconds"/>
+          <type name="union">
+            <type name="uint32"/>
+            <type name="string">
+              <pattern value="&lt;.*&gt;|$.*"/>
+            </type>
+          </type>
+        </leaf>
+        <list name="archive-sites">
+          <key value="name"/>
+          <ordered-by value="user"/>
+          <description>
+            <text>List of archive destinations</text>
+          </description>
+          <leaf name="name">
+            <description>
+              <text>URL of destination for file</text>
+            </description>
+            <type name="string"/>
+          </leaf>
+          <leaf name="password">
+            <description>
+              <text>Password for login into the archive site</text>
+            </description>
+            <type name="jt:unreadable"/>
+          </leaf>
+        </list>
+      </list>
+      <container name="traceoptions">
+        <description>
+          <text>Trace options for the event processing daemon</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <leaf name="no-remote-trace">
+          <description>
+            <text>Disable remote tracing</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+        <container name="file">
+          <description>
+            <text>Trace file information</text>
+          </description>
+          <leaf name="filename">
+            <description>
+              <text>Name of file in which to write trace information</text>
+            </description>
+            <type name="string">
+              <length value="1 .. 1024"/>
+            </type>
+          </leaf>
+          <leaf name="size">
+            <description>
+              <text>Maximum trace file size</text>
+            </description>
+            <type name="string"/>
+          </leaf>
+          <leaf name="files">
+            <description>
+              <text>Maximum number of trace files</text>
+            </description>
+            <default value="3"/>
+            <type name="union">
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+              <type name="uint32">
+                <range value="2 .. 1000"/>
+              </type>
+            </type>
+          </leaf>
+          <choice name="world-readable-choice">
+            <leaf name="world-readable">
+              <description>
+                <text>Allow any user to read the log file</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="no-world-readable">
+              <description>
+                <text>Don't allow any user to read the log file</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+          </choice>
+          <leaf name="match">
+            <description>
+              <text>Regular expression for lines to be logged</text>
+            </description>
+            <type name="jt:regular-expression"/>
+          </leaf>
+        </container>
+        <list name="flag">
+          <key value="name"/>
+          <ordered-by value="user"/>
+          <description>
+            <text>List of event types to include in trace</text>
+          </description>
+          <leaf name="name">
+            <type name="enumeration">
+              <enum name="server">
+                <description>
+                  <text>Communication with processes that are generating events</text>
+                </description>
+              </enum>
+              <enum name="configuration">
+                <description>
+                  <text>Reading of configuration</text>
+                </description>
+              </enum>
+              <enum name="events">
+                <description>
+                  <text>Event processing</text>
+                </description>
+              </enum>
+              <enum name="timer-events">
+                <description>
+                  <text>Internally generated events</text>
+                </description>
+              </enum>
+              <enum name="database">
+                <description>
+                  <text>Events involving storage and retrieval in events database</text>
+                </description>
+              </enum>
+              <enum name="policy">
+                <description>
+                  <text>Policy processing</text>
+                </description>
+              </enum>
+              <enum name="registration">
+                <description>
+                  <text>Event registration</text>
+                </description>
+              </enum>
+              <enum name="syslogd">
+                <description>
+                  <text>Syslog related traces</text>
+                </description>
+              </enum>
+              <enum name="all">
+                <description>
+                  <text>Everything</text>
+                </description>
+              </enum>
+            </type>
+          </leaf>
+        </list>
+      </container>
+      <list name="redundancy-event">
+        <key value="name"/>
+        <ordered-by value="user"/>
+        <description>
+          <text>Events for policies to take action on</text>
+        </description>
+        <uses name="srd-events-object"/>
+      </list>
+    </container>
+  </grouping>
+  <grouping name="apply-advanced">
+    <description>
+      <text>Apply advanced configuration logic</text>
+    </description>
+    <leaf-list name="apply-groups">
+      <ordered-by value="user"/>
+      <description>
+        <text>Groups from which to inherit configuration data</text>
+      </description>
+      <type name="string"/>
+    </leaf-list>
+    <leaf-list name="apply-groups-except">
+      <ordered-by value="user"/>
+      <description>
+        <text>Don't inherit configuration data from these groups</text>
+      </description>
+      <type name="string"/>
+    </leaf-list>
+    <list name="apply-macro">
+      <key value="name"/>
+      <ordered-by value="user"/>
+      <description>
+        <text>Macro and parameters for commit script expansion</text>
+      </description>
+      <uses name="apply-macro-type"/>
+    </list>
+  </grouping>
+  <grouping name="apply-macro-type">
+    <description>
+      <text>Macro data for commit-script expansion</text>
+    </description>
+    <leaf name="name">
+      <description>
+        <text>Name of the macro to be expanded</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <list name="data">
+      <key value="name"/>
+      <uses name="macro-data-type"/>
+    </list>
+  </grouping>
+  <grouping name="macro-data-type">
+    <leaf name="name">
+      <description>
+        <text>Keyword part of the keyword-value pair</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <leaf name="value">
+      <description>
+        <text>Value part of the keyword-value pair</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+  </grouping>
+  <grouping name="srd-events-object">
+    <description>
+      <text>Events for policies to take action on</text>
+    </description>
+    <leaf name="name">
+      <description>
+        <text>Redundancy event name</text>
+      </description>
+      <type name="string">
+        <length value="1 .. 63"/>
+      </type>
+    </leaf>
+    <uses name="apply-advanced"/>
+    <container name="monitor">
+      <description>
+        <text>Interfaces to be tracked</text>
+      </description>
+      <uses name="apply-advanced"/>
+      <list name="link-down">
+        <key value="name"/>
+        <description>
+          <text>Interfaces to be monitored for link-down events</text>
+        </description>
+        <leaf name="name">
+          <description>
+            <text>Name of the interface for monitoring link-down events</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+        <uses name="apply-advanced"/>
+      </list>
+      <container name="process">
+        <description>
+          <text>Processes related events</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <container name="routing">
+          <description>
+            <text>Routing process related events</text>
+          </description>
+          <uses name="apply-advanced"/>
+          <leaf name="restart">
+            <description>
+              <text>Routing protocol restart event</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="abort">
+            <description>
+              <text>Routing protocol abort event</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+        </container>
+      </container>
+      <container name="peer">
+        <description>
+          <text>Events from remote peers</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <leaf name="event">
+          <description>
+            <text>Peer Events</text>
+          </description>
+          <type name="enumeration">
+            <enum name="mastership-release">
+              <description>
+                <text>Received mastership-release message from peer</text>
+              </description>
+            </enum>
+            <enum name="mastership-acquire">
+              <description>
+                <text>Received mastership-acquire message from peer</text>
+              </description>
+            </enum>
+          </type>
+        </leaf>
+      </container>
+    </container>
+  </grouping>
+</module>

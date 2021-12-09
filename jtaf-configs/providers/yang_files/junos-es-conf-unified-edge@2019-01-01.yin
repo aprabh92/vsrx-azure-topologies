@@ -1,0 +1,932 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module name="junos-es-conf-unified-edge"
+        xmlns="urn:ietf:params:xml:ns:yang:yin:1"
+        xmlns:jc-unified-edge="http://yang.juniper.net/junos-es/conf/unified-edge"
+        xmlns:jt="http://yang.juniper.net/junos/common/types"
+        xmlns:jc="http://yang.juniper.net/junos-es/conf/root">
+  <namespace uri="http://yang.juniper.net/junos-es/conf/unified-edge"/>
+  <prefix value="jc-unified-edge"/>
+  <import module="junos-common-types">
+    <prefix value="jt"/>
+    <revision-date date="2019-01-01"/>
+  </import>
+  <import module="junos-es-conf-root">
+    <prefix value="jc"/>
+    <revision-date date="2019-01-01"/>
+  </import>
+  <organization>
+    <text>Juniper Networks, Inc.</text>
+  </organization>
+  <contact>
+    <text>yang-support@juniper.net</text>
+  </contact>
+  <description>
+    <text>Junos unified-edge configuration module</text>
+  </description>
+  <revision date="2019-01-01">
+    <description>
+      <text>Junos: 21.3R1.9</text>
+    </description>
+  </revision>
+  <augment target-node="/jc:configuration">
+    <uses name="unified-edge-group"/>
+  </augment>
+  <augment target-node="/jc:configuration/jc:groups">
+    <uses name="unified-edge-group"/>
+  </augment>
+  <grouping name="unified-edge-group">
+    <container name="unified-edge">
+      <uses name="apply-advanced"/>
+      <container name="cos-cac">
+        <description>
+          <text>Unified Edge COS configuration</text>
+        </description>
+        <status value="deprecated"/>
+        <uses name="juniper-unified-edge-cos-options"/>
+      </container>
+      <list name="local-policies">
+        <key value="name"/>
+        <ordered-by value="user"/>
+        <description>
+          <text>Local policy profiles</text>
+        </description>
+        <status value="deprecated"/>
+        <max-elements value="8001"/>
+        <leaf name="name">
+          <description>
+            <text>Local policy profile name</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+        <uses name="apply-advanced"/>
+        <leaf name="description">
+          <description>
+            <text>Text description of local policy</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+        <leaf name="resource-threshold-profile">
+          <description>
+            <text>Resource threshold profile associated with the local policy</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+        <leaf name="classifier-profile">
+          <description>
+            <text>QoS class profile associated with the local policy</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+        <leaf name="cos-policy-profile">
+          <description>
+            <text>QoS policy profile associated with the local policy</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+        <leaf name="roamer-classifier-profile">
+          <description>
+            <text>QoS classifier profile for roamers</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+        <leaf name="roamer-cos-policy-profile">
+          <description>
+            <text>QoS policy profile for roamers</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+        <leaf name="visitor-classifier-profile">
+          <description>
+            <text>QoS classifier profile for visitor</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+        <leaf name="visitor-cos-policy-profile">
+          <description>
+            <text>QoS policy profile for visitor</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+        <leaf name="traffic-class-qci-mapping-profile">
+          <description>
+            <text>Traffic class to qci mapping profile</text>
+          </description>
+          <type name="string">
+            <length value="1 .. 128"/>
+          </type>
+        </leaf>
+        <leaf name="ul-bandwidth-pool">
+          <description>
+            <text>Bandwidth pool associated with the local policy</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+        <leaf name="dl-bandwidth-pool">
+          <description>
+            <text>Bandwidth pool associated with the local policy</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+      </list>
+    </container>
+  </grouping>
+  <grouping name="apply-advanced">
+    <description>
+      <text>Apply advanced configuration logic</text>
+    </description>
+    <leaf-list name="apply-groups">
+      <ordered-by value="user"/>
+      <description>
+        <text>Groups from which to inherit configuration data</text>
+      </description>
+      <type name="string"/>
+    </leaf-list>
+    <leaf-list name="apply-groups-except">
+      <ordered-by value="user"/>
+      <description>
+        <text>Don't inherit configuration data from these groups</text>
+      </description>
+      <type name="string"/>
+    </leaf-list>
+    <list name="apply-macro">
+      <key value="name"/>
+      <ordered-by value="user"/>
+      <description>
+        <text>Macro and parameters for commit script expansion</text>
+      </description>
+      <uses name="apply-macro-type"/>
+    </list>
+  </grouping>
+  <grouping name="apply-macro-type">
+    <description>
+      <text>Macro data for commit-script expansion</text>
+    </description>
+    <leaf name="name">
+      <description>
+        <text>Name of the macro to be expanded</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <list name="data">
+      <key value="name"/>
+      <uses name="macro-data-type"/>
+    </list>
+  </grouping>
+  <grouping name="juniper-unified-edge-cos-options">
+    <uses name="apply-advanced"/>
+    <list name="classifier-profiles">
+      <key value="name"/>
+      <ordered-by value="user"/>
+      <description>
+        <text>Classifier tables for mobile subscribers (UMTS/EPS)</text>
+      </description>
+      <max-elements value="8001"/>
+      <leaf name="name">
+        <description>
+          <text>Classification table name</text>
+        </description>
+        <type name="string"/>
+      </leaf>
+      <uses name="apply-advanced"/>
+      <leaf name="description">
+        <description>
+          <text>Text description of classifier profile</text>
+        </description>
+        <type name="string"/>
+      </leaf>
+      <list name="qos-class-identifier">
+        <key value="name"/>
+        <ordered-by value="user"/>
+        <description>
+          <text>QCI mapping to forwarding class and loss priority</text>
+        </description>
+        <leaf name="name">
+          <description>
+            <text>Qci value</text>
+          </description>
+          <type name="union">
+            <type name="string">
+              <pattern value="&lt;.*&gt;|$.*"/>
+            </type>
+            <type name="uint32">
+              <range value="1 .. 9"/>
+            </type>
+          </type>
+        </leaf>
+        <leaf name="forwarding-class">
+          <description>
+            <text>Forwarding class</text>
+          </description>
+          <type name="string"/>
+        </leaf>
+        <leaf name="loss-priority">
+          <description>
+            <text>Loss priority value</text>
+          </description>
+          <type name="enumeration">
+            <enum name="low">
+              <description>
+                <text>Loss priority low</text>
+              </description>
+            </enum>
+            <enum name="high">
+              <description>
+                <text>Loss priority high</text>
+              </description>
+            </enum>
+          </type>
+        </leaf>
+      </list>
+    </list>
+    <list name="gbr-bandwidth-pools">
+      <key value="name"/>
+      <ordered-by value="user"/>
+      <description>
+        <text>GBR bandwith pools configuration</text>
+      </description>
+      <max-elements value="8001"/>
+      <leaf name="name">
+        <description>
+          <text>GBR Bandwidth pool name</text>
+        </description>
+        <type name="string"/>
+      </leaf>
+      <uses name="apply-advanced"/>
+      <leaf name="maximum-bandwidth">
+        <description>
+          <text>Bandwidth for pool</text>
+        </description>
+        <units name="mega-bits per second"/>
+        <type name="union">
+          <type name="string">
+            <pattern value="&lt;.*&gt;|$.*"/>
+          </type>
+          <type name="uint32">
+            <range value="50000 .. 500000"/>
+          </type>
+        </type>
+      </leaf>
+      <leaf name="downgrade-gtp-v1-gbr-bearers">
+        <description>
+          <text>Downgrade GTPv1 GBR bearer traffic class to background traffic class</text>
+        </description>
+        <type name="empty"/>
+      </leaf>
+    </list>
+    <list name="resource-threshold-profiles">
+      <key value="name"/>
+      <ordered-by value="user"/>
+      <description>
+        <text>Resource threshold profiles</text>
+      </description>
+      <max-elements value="8001"/>
+      <leaf name="name">
+        <description>
+          <text>Resource threshold profile name</text>
+        </description>
+        <type name="string"/>
+      </leaf>
+      <uses name="apply-advanced"/>
+      <leaf name="description">
+        <description>
+          <text>Text description of resource threshold profile</text>
+        </description>
+        <type name="string"/>
+      </leaf>
+      <container name="bearers-load">
+        <description>
+          <text>Number of bearers load configurations</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <container name="low">
+          <description>
+            <text>Low threshold configuration</text>
+          </description>
+          <uses name="apply-advanced"/>
+          <leaf name="percentage">
+            <description>
+              <text>Low threshold</text>
+            </description>
+            <units name="Percentage"/>
+            <type name="union">
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+              <type name="uint32">
+                <range value="1 .. 100"/>
+              </type>
+            </type>
+          </leaf>
+          <leaf name="priority-level">
+            <description>
+              <text>Priority level - default 10</text>
+            </description>
+            <default value="10"/>
+            <type name="union">
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+              <type name="uint32">
+                <range value="1 .. 15"/>
+              </type>
+            </type>
+          </leaf>
+        </container>
+        <container name="high">
+          <description>
+            <text>High threshold configuration</text>
+          </description>
+          <uses name="apply-advanced"/>
+          <leaf name="percentage">
+            <description>
+              <text>High threshold</text>
+            </description>
+            <units name="Percentage"/>
+            <type name="union">
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+              <type name="uint32">
+                <range value="1 .. 100"/>
+              </type>
+            </type>
+          </leaf>
+          <leaf name="priority-level">
+            <description>
+              <text>Priority level - default 5</text>
+            </description>
+            <default value="5"/>
+            <type name="union">
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+              <type name="uint32">
+                <range value="1 .. 15"/>
+              </type>
+            </type>
+          </leaf>
+        </container>
+      </container>
+      <container name="memory">
+        <description>
+          <text>Memory load configurations</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <container name="low">
+          <description>
+            <text>Low threshold configuration</text>
+          </description>
+          <uses name="apply-advanced"/>
+          <leaf name="percentage">
+            <description>
+              <text>Low threshold</text>
+            </description>
+            <units name="Percentage"/>
+            <type name="union">
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+              <type name="uint32">
+                <range value="1 .. 100"/>
+              </type>
+            </type>
+          </leaf>
+          <leaf name="priority-level">
+            <description>
+              <text>Priority level - default 10</text>
+            </description>
+            <default value="10"/>
+            <type name="union">
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+              <type name="uint32">
+                <range value="1 .. 15"/>
+              </type>
+            </type>
+          </leaf>
+        </container>
+        <container name="high">
+          <description>
+            <text>High threshold configuration</text>
+          </description>
+          <uses name="apply-advanced"/>
+          <leaf name="percentage">
+            <description>
+              <text>High threshold</text>
+            </description>
+            <units name="Percentage"/>
+            <type name="union">
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+              <type name="uint32">
+                <range value="1 .. 100"/>
+              </type>
+            </type>
+          </leaf>
+          <leaf name="priority-level">
+            <description>
+              <text>Priority level - default 5</text>
+            </description>
+            <default value="5"/>
+            <type name="union">
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+              <type name="uint32">
+                <range value="1 .. 15"/>
+              </type>
+            </type>
+          </leaf>
+        </container>
+      </container>
+      <container name="cpu">
+        <description>
+          <text>CPU load configurations</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <container name="low">
+          <description>
+            <text>Low threshold configuration</text>
+          </description>
+          <uses name="apply-advanced"/>
+          <leaf name="percentage">
+            <description>
+              <text>Low threshold</text>
+            </description>
+            <units name="Percentage"/>
+            <type name="union">
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+              <type name="uint32">
+                <range value="1 .. 100"/>
+              </type>
+            </type>
+          </leaf>
+          <leaf name="priority-level">
+            <description>
+              <text>Priority level - default 10</text>
+            </description>
+            <default value="10"/>
+            <type name="union">
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+              <type name="uint32">
+                <range value="1 .. 15"/>
+              </type>
+            </type>
+          </leaf>
+        </container>
+        <container name="high">
+          <description>
+            <text>High threshold configuration</text>
+          </description>
+          <uses name="apply-advanced"/>
+          <leaf name="percentage">
+            <description>
+              <text>High threshold</text>
+            </description>
+            <units name="Percentage"/>
+            <type name="union">
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+              <type name="uint32">
+                <range value="1 .. 100"/>
+              </type>
+            </type>
+          </leaf>
+          <leaf name="priority-level">
+            <description>
+              <text>Priority level - default 5</text>
+            </description>
+            <default value="5"/>
+            <type name="union">
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+              <type name="uint32">
+                <range value="1 .. 15"/>
+              </type>
+            </type>
+          </leaf>
+        </container>
+      </container>
+    </list>
+    <list name="cos-policy-profiles">
+      <key value="name"/>
+      <ordered-by value="user"/>
+      <description>
+        <text>QoS policy profile</text>
+      </description>
+      <max-elements value="8001"/>
+      <leaf name="name">
+        <description>
+          <text>QoS policy profile name</text>
+        </description>
+        <type name="string"/>
+      </leaf>
+      <uses name="apply-advanced"/>
+      <leaf name="description">
+        <description>
+          <text>Text description of cos policy</text>
+        </description>
+        <type name="string"/>
+      </leaf>
+      <container name="default-bearer-qci">
+        <description>
+          <text>Default bearer qci value</text>
+        </description>
+        <leaf name="qci-value">
+          <description>
+            <text>Default bearer qci value</text>
+          </description>
+          <type name="union">
+            <type name="string">
+              <pattern value="&lt;.*&gt;|$.*"/>
+            </type>
+            <type name="uint8">
+              <range value="5 .. 9"/>
+            </type>
+          </type>
+        </leaf>
+        <leaf name="upgrade">
+          <description>
+            <text>Override qci value</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+        <leaf name="reject">
+          <description>
+            <text>Reject calls with numerially lower qci</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </container>
+      <container name="allocation-retention-priority">
+        <description>
+          <text>ARP local policy</text>
+        </description>
+        <leaf name="priority-value">
+          <description>
+            <text>ARP policy configuration</text>
+          </description>
+          <type name="union">
+            <type name="string">
+              <pattern value="&lt;.*&gt;|$.*"/>
+            </type>
+            <type name="uint8">
+              <range value="1 .. 15"/>
+            </type>
+          </type>
+        </leaf>
+        <leaf name="reject">
+          <description>
+            <text>Reject calls with higher priority value</text>
+          </description>
+          <type name="empty"/>
+        </leaf>
+      </container>
+      <container name="aggregated-qos-control">
+        <description>
+          <text>Aggregated qos control policy</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <container name="maximum-bit-rate-uplink">
+          <description>
+            <text>Maximum bit rate uplink</text>
+          </description>
+          <leaf name="mbr-uplink">
+            <units name="kbps"/>
+            <type name="union">
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+              <type name="uint32">
+                <range value="1 .. 1000000"/>
+              </type>
+            </type>
+          </leaf>
+          <leaf name="upgrade">
+            <description>
+              <text>Override maximum-bit-rate uplink value</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="reject">
+            <description>
+              <text>Reject calls with higher uplink maximum-bit-rate</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+        </container>
+        <container name="maximum-bit-rate-downlink">
+          <description>
+            <text>Maximum bit rate downlink</text>
+          </description>
+          <leaf name="mbr-downlink">
+            <units name="kbps"/>
+            <type name="union">
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+              <type name="uint32">
+                <range value="1 .. 1000000"/>
+              </type>
+            </type>
+          </leaf>
+          <leaf name="upgrade">
+            <description>
+              <text>Override maximum-bit-rate downlink value</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="reject">
+            <description>
+              <text>Reject calls with higher downlink maximum-bit-rate</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+        </container>
+      </container>
+      <container name="pdp-qos-control">
+        <description>
+          <text>PDP qos control</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <container name="maximum-bit-rate-uplink">
+          <description>
+            <text>Maximum bit rate uplink</text>
+          </description>
+          <leaf name="mbr-uplink">
+            <units name="kbps"/>
+            <type name="union">
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+              <type name="uint32">
+                <range value="1 .. 10480000"/>
+              </type>
+            </type>
+          </leaf>
+          <leaf name="upgrade">
+            <description>
+              <text>Override maximum-bit-rate uplink value</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="reject">
+            <description>
+              <text>Reject calls with higher uplink maximum-bit-rate</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+        </container>
+        <container name="maximum-bit-rate-downlink">
+          <description>
+            <text>Maximum bit rate downlink</text>
+          </description>
+          <leaf name="mbr-downlink">
+            <units name="kbps"/>
+            <type name="union">
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+              <type name="uint32">
+                <range value="1 .. 10480000"/>
+              </type>
+            </type>
+          </leaf>
+          <leaf name="upgrade">
+            <description>
+              <text>Override maximum-bit-rate downlink value</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="reject">
+            <description>
+              <text>Reject calls with higher downlink maximum-bit-rate</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+        </container>
+        <container name="guaranteed-bit-rate-uplink">
+          <description>
+            <text>Guaranteed bit rate uplink</text>
+          </description>
+          <leaf name="gbr-uplink">
+            <units name="kbps"/>
+            <type name="union">
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+              <type name="uint32">
+                <range value="1 .. 10480000"/>
+              </type>
+            </type>
+          </leaf>
+          <leaf name="upgrade">
+            <description>
+              <text>Override guaranteed-bit-rate uplink value</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="reject">
+            <description>
+              <text>Reject calls with higher uplink guaranteed-bit-rate</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+        </container>
+        <container name="guaranteed-bit-rate-downlink">
+          <description>
+            <text>Guaranteed bit rate downlink</text>
+          </description>
+          <leaf name="gbr-downlink">
+            <units name="kbps"/>
+            <type name="union">
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+              <type name="uint32">
+                <range value="1 .. 10480000"/>
+              </type>
+            </type>
+          </leaf>
+          <leaf name="upgrade">
+            <description>
+              <text>Override guaranteed-bit-rate downlink value</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+          <leaf name="reject">
+            <description>
+              <text>Reject calls with higher downlink guaranteed-bit-rate</text>
+            </description>
+            <type name="empty"/>
+          </leaf>
+        </container>
+        <list name="qci">
+          <key value="name"/>
+          <ordered-by value="user"/>
+          <description>
+            <text>PDP qos control per qci</text>
+          </description>
+          <leaf name="name">
+            <type name="union">
+              <type name="string">
+                <pattern value="&lt;.*&gt;|$.*"/>
+              </type>
+              <type name="uint8">
+                <range value="5 .. 9"/>
+              </type>
+            </type>
+          </leaf>
+          <uses name="apply-advanced"/>
+          <container name="maximum-bit-rate-uplink">
+            <description>
+              <text>Maximum bit rate uplink</text>
+            </description>
+            <leaf name="mbr-uplink">
+              <units name="kbps"/>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="1 .. 10480000"/>
+                </type>
+              </type>
+            </leaf>
+            <leaf name="upgrade">
+              <description>
+                <text>Override maximum-bit-rate uplink value</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="reject">
+              <description>
+                <text>Reject calls with higher uplink maximum-bit-rate</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+          </container>
+          <container name="maximum-bit-rate-downlink">
+            <description>
+              <text>Maximum bit rate downlink</text>
+            </description>
+            <leaf name="mbr-downlink">
+              <units name="kbps"/>
+              <type name="union">
+                <type name="string">
+                  <pattern value="&lt;.*&gt;|$.*"/>
+                </type>
+                <type name="uint32">
+                  <range value="1 .. 10480000"/>
+                </type>
+              </type>
+            </leaf>
+            <leaf name="upgrade">
+              <description>
+                <text>Override maximum-bit-rate downlink value</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+            <leaf name="reject">
+              <description>
+                <text>Reject calls with higher downlink maximum-bit-rate</text>
+              </description>
+              <type name="empty"/>
+            </leaf>
+          </container>
+        </list>
+      </container>
+      <container name="policer-action">
+        <description>
+          <text>Policer actions</text>
+        </description>
+        <uses name="apply-advanced"/>
+        <container name="non-gbr-bearer">
+          <description>
+            <text>Policer actions for non gbr bearers</text>
+          </description>
+          <uses name="apply-advanced"/>
+          <leaf name="violate-action">
+            <description>
+              <text>PDP policer violate action</text>
+            </description>
+            <type name="enumeration">
+              <enum name="set-loss-priority-high">
+                <description>
+                  <text>Violate action set loss priority high</text>
+                </description>
+              </enum>
+              <enum name="transmit">
+                <description>
+                  <text>Violate action transmit</text>
+                </description>
+              </enum>
+            </type>
+          </leaf>
+        </container>
+        <container name="gbr-bearer">
+          <description>
+            <text>Policer actions for gbr bearers</text>
+          </description>
+          <uses name="apply-advanced"/>
+          <leaf name="exceed-action">
+            <description>
+              <text>PDP policer exceed action</text>
+            </description>
+            <type name="enumeration">
+              <enum name="drop">
+                <description>
+                  <text>Exceed action drop</text>
+                </description>
+              </enum>
+              <enum name="transmit">
+                <description>
+                  <text>Exceed action transmit</text>
+                </description>
+              </enum>
+            </type>
+          </leaf>
+          <leaf name="violate-action">
+            <description>
+              <text>PDP policer violate action</text>
+            </description>
+            <type name="enumeration">
+              <enum name="set-loss-priority-high">
+                <description>
+                  <text>Violate action set loss priority high</text>
+                </description>
+              </enum>
+              <enum name="transmit">
+                <description>
+                  <text>Violate action transmit</text>
+                </description>
+              </enum>
+            </type>
+          </leaf>
+        </container>
+      </container>
+    </list>
+  </grouping>
+  <grouping name="macro-data-type">
+    <leaf name="name">
+      <description>
+        <text>Keyword part of the keyword-value pair</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+    <leaf name="value">
+      <description>
+        <text>Value part of the keyword-value pair</text>
+      </description>
+      <type name="string"/>
+    </leaf>
+  </grouping>
+</module>
